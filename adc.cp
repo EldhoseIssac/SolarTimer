@@ -1,5 +1,5 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/adc.c"
-
+#line 12 "E:/PROGAMS/hussian/SolarTimer/adc.c"
 extern int voltage,current;
 void adcInit()
 {

@@ -20,6 +20,20 @@ main
 	readCurrent
 		ADC_Read
 			Delay_22us
+	checkKey
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		strcpy
+		loadDateEdit
+			BCD2UpperCh
+			BCD2LowerCh
+		loadTimeEdit
+			BCD2UpperCh
+			BCD2LowerCh
+		voltHeigh
+		voltLow
 	displayVoltageCurrent
 		Binary2BCD
 			Div_16x16_S

@@ -1,6 +1,7 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
-char row1[] = "00:00:00 000 TUE";
-char row2[] = "00/00/00 00.0A  ";
+
+extern char lcdrow1[];
+extern char lcdrow2[];
 
 
 
@@ -13,7 +14,7 @@ extern unsigned short month;
 extern unsigned short year;
 
 extern int voltage,current;
-
+#line 35 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 void initLCD(){
  Lcd_Init();
  Lcd_Cmd(_LCD_CLEAR);
@@ -65,44 +66,90 @@ int BCD2Binary(int a)
 }
 void displayTimeDate(){
 
- row1[0] = BCD2UpperCh(hour);
- row1[1] = BCD2LowerCh(hour);
- row1[3] = BCD2UpperCh(minute);
- row1[4] = BCD2LowerCh(minute);
- row1[6] = BCD2UpperCh(second);
- row1[7] = BCD2LowerCh(second);
+ lcdrow1[0] = BCD2UpperCh(hour);
+ lcdrow1[1] = BCD2LowerCh(hour);
+ lcdrow1[3] = BCD2UpperCh(minute);
+ lcdrow1[4] = BCD2LowerCh(minute);
+ lcdrow1[6] = BCD2UpperCh(second);
+ lcdrow1[7] = BCD2LowerCh(second);
 
- row2[0] = BCD2UpperCh(day);
- row2[1] = BCD2LowerCh(day);
- row2[3] = BCD2UpperCh(month);
- row2[4] = BCD2LowerCh(month);
- row2[6] = BCD2UpperCh(year);
- row2[7] = BCD2LowerCh(year);
+ lcdrow2[0] = BCD2UpperCh(day);
+ lcdrow2[1] = BCD2LowerCh(day);
+ lcdrow2[3] = BCD2UpperCh(month);
+ lcdrow2[4] = BCD2LowerCh(month);
+ lcdrow2[6] = BCD2UpperCh(year);
+ lcdrow2[7] = BCD2LowerCh(year);
  switch(dday){
- case 1: row1[13]='S';row1[14]='u'; row1[15]='n';break;
- case 2: row1[13]='M';row1[14]='o'; row1[15]='n';break;
- case 3: row1[13]='T';row1[14]='u'; row1[15]='e';break;
- case 4: row1[13]='W';row1[14]='e'; row1[15]='d';break;
- case 5: row1[13]='T';row1[14]='h'; row1[15]='u';break;
- case 6: row1[13]='F';row1[14]='r'; row1[15]='i';break;
- case 7: row1[13]='S';row1[14]='a'; row1[15]='t';break;
+ case 1: lcdrow1[13]='S';lcdrow1[14]='u'; lcdrow1[15]='n';break;
+ case 2: lcdrow1[13]='M';lcdrow1[14]='o'; lcdrow1[15]='n';break;
+ case 3: lcdrow1[13]='T';lcdrow1[14]='u'; lcdrow1[15]='e';break;
+ case 4: lcdrow1[13]='W';lcdrow1[14]='e'; lcdrow1[15]='d';break;
+ case 5: lcdrow1[13]='T';lcdrow1[14]='h'; lcdrow1[15]='u';break;
+ case 6: lcdrow1[13]='F';lcdrow1[14]='r'; lcdrow1[15]='i';break;
+ case 7: lcdrow1[13]='S';lcdrow1[14]='a'; lcdrow1[15]='t';break;
  }
+}
+void loadTimeEdit(){
+ lcdrow2[0] = BCD2UpperCh(hour);
+ lcdrow2[1] = BCD2LowerCh(hour);
+ lcdrow2[3] = BCD2UpperCh(minute);
+ lcdrow2[4] = BCD2LowerCh(minute);
+ lcdrow2[6] = BCD2UpperCh(second);
+ lcdrow2[7] = BCD2LowerCh(second);
+}
+void loadDateEdit(){
+ lcdrow2[0] = BCD2UpperCh(day);
+ lcdrow2[1] = BCD2LowerCh(day);
+ lcdrow2[3] = BCD2UpperCh(month);
+ lcdrow2[4] = BCD2LowerCh(month);
+ lcdrow2[6] = BCD2UpperCh(year);
+ lcdrow2[7] = BCD2LowerCh(year);
+ switch(dday){
+ case 1: lcdrow2[13]='S';lcdrow2[14]='u'; lcdrow2[15]='n';break;
+ case 2: lcdrow2[13]='M';lcdrow2[14]='o'; lcdrow2[15]='n';break;
+ case 3: lcdrow2[13]='T';lcdrow2[14]='u'; lcdrow2[15]='e';break;
+ case 4: lcdrow2[13]='W';lcdrow2[14]='e'; lcdrow2[15]='d';break;
+ case 5: lcdrow2[13]='T';lcdrow2[14]='h'; lcdrow2[15]='u';break;
+ case 6: lcdrow2[13]='F';lcdrow2[14]='r'; lcdrow2[15]='i';break;
+ case 7: lcdrow2[13]='S';lcdrow2[14]='a'; lcdrow2[15]='t';break;
+ }
+}
+
+void loadEnHeighLow(int heigh,int low){
+ unsigned int disVolt = Binary2BCD(heigh);
+ unsigned int discrr= Binary2BCD(low);
+
+ if (heigh>0) {
+ lcdrow1[0] = 'O';
+ lcdrow1[1] = 'N';
+ heigh = heigh>>1;
+ lcdrow2[6] = BCD2HignerCh(disVolt);
+ lcdrow2[7] = BCD2UpperCh(disVolt);
+ lcdrow2[8] = BCD2LowerCh(disVolt);
+
+ lcdrow2[10] = BCD2HignerCh(discrr);
+ lcdrow2[11] = BCD2UpperCh(discrr);
+ lcdrow2[12] = BCD2LowerCh(discrr);
+ }else{
+ strcpy(lcdrow2, "OFF   0.0  0.0");
+ }
+
 }
 void displayVoltageCurrent(){
  unsigned int disVolt;
  unsigned int discrr;
  disVolt = Binary2BCD(voltage);
  discrr = Binary2BCD(current);
- row1[9] = BCD2HignerCh(disVolt);
- row1[10] = BCD2UpperCh(disVolt);
- row1[11] = BCD2LowerCh(disVolt);
+ lcdrow1[9] = BCD2HignerCh(disVolt);
+ lcdrow1[10] = BCD2UpperCh(disVolt);
+ lcdrow1[11] = BCD2LowerCh(disVolt);
 
- row2[9] = BCD2HignerCh(discrr);
- row2[10] = BCD2UpperCh(discrr);
- row2[12] = BCD2LowerCh(discrr);
+ lcdrow2[9] = BCD2HignerCh(discrr);
+ lcdrow2[10] = BCD2UpperCh(discrr);
+ lcdrow2[12] = BCD2LowerCh(discrr);
 
 }
  void loadRamToDisp(){
- Lcd_out(1, 1, row1);
- Lcd_out(2, 1, row2);
+ Lcd_out(1, 1, lcdrow1);
+ Lcd_out(2, 1, lcdrow2);
  }

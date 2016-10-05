@@ -82,40 +82,31 @@ L_main2:
 	CALL       _readVoltage+0
 ;SolarTimer.c,30 :: 		readCurrent();
 	CALL       _readCurrent+0
+;SolarTimer.c,31 :: 		checkKey();
+	CALL       _checkKey+0
 ;SolarTimer.c,33 :: 		if(shouldLoadDisp)
 	BTFSS      _pgmStatus+0, 0
 	GOTO       L_main4
-;SolarTimer.c,35 :: 		displayVoltageCurrent();
+;SolarTimer.c,35 :: 		if(appStatus.F0 == 0 ){
+	BTFSC      _appStatus+0, 0
+	GOTO       L_main5
+;SolarTimer.c,36 :: 		displayVoltageCurrent();
 	CALL       _displayVoltageCurrent+0
-;SolarTimer.c,36 :: 		loadTimeAndDate();
+;SolarTimer.c,37 :: 		loadTimeAndDate();
 	CALL       _loadTimeAndDate+0
-;SolarTimer.c,37 :: 		displayTimeDate();
+;SolarTimer.c,38 :: 		displayTimeDate();
 	CALL       _displayTimeDate+0
-;SolarTimer.c,38 :: 		loadRamToDisp();
-	CALL       _loadRamToDisp+0
-;SolarTimer.c,39 :: 		shouldLoadDisp = 0;
-	BCF        _pgmStatus+0, 0
-;SolarTimer.c,40 :: 		}
-L_main4:
-;SolarTimer.c,41 :: 		delay_ms(500);
-	MOVLW      6
-	MOVWF      R11+0
-	MOVLW      19
-	MOVWF      R12+0
-	MOVLW      173
-	MOVWF      R13+0
+;SolarTimer.c,39 :: 		}
 L_main5:
-	DECFSZ     R13+0, 1
-	GOTO       L_main5
-	DECFSZ     R12+0, 1
-	GOTO       L_main5
-	DECFSZ     R11+0, 1
-	GOTO       L_main5
-	NOP
-	NOP
-;SolarTimer.c,42 :: 		}
-	GOTO       L_main2
+;SolarTimer.c,41 :: 		loadRamToDisp();
+	CALL       _loadRamToDisp+0
+;SolarTimer.c,42 :: 		shouldLoadDisp = 0;
+	BCF        _pgmStatus+0, 0
 ;SolarTimer.c,43 :: 		}
+L_main4:
+;SolarTimer.c,44 :: 		}
+	GOTO       L_main2
+;SolarTimer.c,45 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

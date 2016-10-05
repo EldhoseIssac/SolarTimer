@@ -11,6 +11,8 @@ unsigned short day;
 unsigned short dday;
 unsigned short month;
 unsigned short year;
+unsigned short appStatus;
+
 
 
 unsigned short set_count = 0;
