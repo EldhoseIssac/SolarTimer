@@ -1,0 +1,286 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D0035311DA5225400E7731F /* eeprom.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D0035301DA5225400E7731F /* eeprom.c */; };
+		4D71C1161DA4B11E009ADA50 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C1151DA4B11E009ADA50 /* main.c */; };
+		4D71C1231DA4B165009ADA50 /* adc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C11D1DA4B165009ADA50 /* adc.c */; };
+		4D71C1241DA4B165009ADA50 /* lcd.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C11E1DA4B165009ADA50 /* lcd.c */; };
+		4D71C1251DA4B165009ADA50 /* Menu.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C11F1DA4B165009ADA50 /* Menu.c */; };
+		4D71C1261DA4B165009ADA50 /* rtc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C1201DA4B165009ADA50 /* rtc.c */; };
+		4D71C1271DA4B165009ADA50 /* SolarTimer.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C1211DA4B165009ADA50 /* SolarTimer.c */; };
+		4D71C1281DA4B165009ADA50 /* tmr1.c in Sources */ = {isa = PBXBuildFile; fileRef = 4D71C1221DA4B165009ADA50 /* tmr1.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D71C1101DA4B11E009ADA50 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4D0035301DA5225400E7731F /* eeprom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eeprom.c; path = ../../eeprom.c; sourceTree = "<group>"; };
+		4D71C1121DA4B11E009ADA50 /* SolarTmr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SolarTmr; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D71C1151DA4B11E009ADA50 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		4D71C11C1DA4B165009ADA50 /* Deff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Deff.h; path = ../../Deff.h; sourceTree = "<group>"; };
+		4D71C11D1DA4B165009ADA50 /* adc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = adc.c; path = ../../adc.c; sourceTree = "<group>"; };
+		4D71C11E1DA4B165009ADA50 /* lcd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lcd.c; path = ../../lcd.c; sourceTree = "<group>"; };
+		4D71C11F1DA4B165009ADA50 /* Menu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Menu.c; path = ../../Menu.c; sourceTree = "<group>"; };
+		4D71C1201DA4B165009ADA50 /* rtc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rtc.c; path = ../../rtc.c; sourceTree = "<group>"; };
+		4D71C1211DA4B165009ADA50 /* SolarTimer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SolarTimer.c; path = ../../SolarTimer.c; sourceTree = "<group>"; };
+		4D71C1221DA4B165009ADA50 /* tmr1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tmr1.c; path = ../../tmr1.c; sourceTree = "<group>"; };
+		4D71C19E1DA501B1009ADA50 /* SolarTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolarTimer.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D71C10F1DA4B11E009ADA50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D71C1091DA4B11E009ADA50 = {
+			isa = PBXGroup;
+			children = (
+				4D71C1141DA4B11E009ADA50 /* SolarTmr */,
+				4D71C1131DA4B11E009ADA50 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4D71C1131DA4B11E009ADA50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D71C1121DA4B11E009ADA50 /* SolarTmr */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4D71C1141DA4B11E009ADA50 /* SolarTmr */ = {
+			isa = PBXGroup;
+			children = (
+				4D71C1151DA4B11E009ADA50 /* main.c */,
+				4D71C11C1DA4B165009ADA50 /* Deff.h */,
+				4D71C11D1DA4B165009ADA50 /* adc.c */,
+				4D71C11E1DA4B165009ADA50 /* lcd.c */,
+				4D71C11F1DA4B165009ADA50 /* Menu.c */,
+				4D71C1201DA4B165009ADA50 /* rtc.c */,
+				4D71C1211DA4B165009ADA50 /* SolarTimer.c */,
+				4D71C1221DA4B165009ADA50 /* tmr1.c */,
+				4D0035301DA5225400E7731F /* eeprom.c */,
+				4D71C19E1DA501B1009ADA50 /* SolarTimer.h */,
+			);
+			path = SolarTmr;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D71C1111DA4B11E009ADA50 /* SolarTmr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "SolarTmr" */;
+			buildPhases = (
+				4D71C10E1DA4B11E009ADA50 /* Sources */,
+				4D71C10F1DA4B11E009ADA50 /* Frameworks */,
+				4D71C1101DA4B11E009ADA50 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SolarTmr;
+			productName = SolarTmr;
+			productReference = 4D71C1121DA4B11E009ADA50 /* SolarTmr */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4D71C10A1DA4B11E009ADA50 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = Isletsystems;
+				TargetAttributes = {
+					4D71C1111DA4B11E009ADA50 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "SolarTmr" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4D71C1091DA4B11E009ADA50;
+			productRefGroup = 4D71C1131DA4B11E009ADA50 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4D71C1111DA4B11E009ADA50 /* SolarTmr */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D71C10E1DA4B11E009ADA50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D71C1251DA4B165009ADA50 /* Menu.c in Sources */,
+				4D0035311DA5225400E7731F /* eeprom.c in Sources */,
+				4D71C1241DA4B165009ADA50 /* lcd.c in Sources */,
+				4D71C1261DA4B165009ADA50 /* rtc.c in Sources */,
+				4D71C1281DA4B165009ADA50 /* tmr1.c in Sources */,
+				4D71C1231DA4B165009ADA50 /* adc.c in Sources */,
+				4D71C1161DA4B11E009ADA50 /* main.c in Sources */,
+				4D71C1271DA4B165009ADA50 /* SolarTimer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4D71C1171DA4B11E009ADA50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4D71C1181DA4B11E009ADA50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4D71C11A1DA4B11E009ADA50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4D71C11B1DA4B11E009ADA50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "SolarTmr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D71C1171DA4B11E009ADA50 /* Debug */,
+				4D71C1181DA4B11E009ADA50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "SolarTmr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D71C11A1DA4B11E009ADA50 /* Debug */,
+				4D71C11B1DA4B11E009ADA50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4D71C10A1DA4B11E009ADA50 /* Project object */;
+}

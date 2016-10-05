@@ -1,4 +1,7 @@
 //Global Variables
+
+char lcdrow1[] = "00:00:00 000 TUE";
+char lcdrow2[] = "00/00/00 00.0A  ";
 int voltage,current;
 
 unsigned short second;
@@ -12,10 +15,10 @@ unsigned short year;
 
 unsigned short set_count = 0;
 short set;
-unsigned short pgmStatus = 0;
-sbit shouldLoadDisp at pgmStatus.B0;
-
 unsigned int dispUpdateCount =0;
+unsigned short pgmStatus = 0;
+#if !DEBUG
+sbit shouldLoadDisp at pgmStatus.B0;
 
 // LCD
 sbit LCD_RS at RB4_bit;
@@ -31,6 +34,9 @@ sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
+#else
+
+#endif
 void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
@@ -49,3 +55,4 @@ void loadTimeAndDate();
  void initTmr1();
  
 void menuPortPinInt();
+void checkKey();

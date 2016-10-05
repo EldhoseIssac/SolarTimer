@@ -1,4 +1,14 @@
 //ADC
+
+#if DEBUG
+
+short  ADCON1;
+short  TRISA;
+
+int ADC_Read(int chanel){
+    return 1;
+}
+#endif
 extern int voltage,current;
 void adcInit()
 {

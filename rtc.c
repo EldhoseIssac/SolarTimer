@@ -1,3 +1,29 @@
+#if DEBUG
+
+
+
+void I2C1_Init(long freq){
+    
+}
+void I2C1_Start(){
+    
+}
+void I2C1_Wr(short arg) {
+    
+}
+void I2C1_Repeated_Start(){
+    
+}
+unsigned short I2C1_Rd(short adr){
+    return 1;
+    
+}
+void I2C1_Stop(){
+    
+}
+short secondB7;
+#endif
+
 extern unsigned short second;
 extern unsigned short minute;
 extern unsigned short hour;
@@ -48,7 +74,12 @@ void loadTimeAndDate(){
   I2C1_Repeated_Start();
   I2C1_Wr(0xD1);
   second =I2C1_Rd(1);
-  if (second.B7){
+#ifdef DEBUG
+    if (secondB7){
+#else
+    if (second.B7){
+#endif
+  
            reIntRtc();
            second = 0;
     }
