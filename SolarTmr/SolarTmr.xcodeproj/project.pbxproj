@@ -31,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		4D0035301DA5225400E7731F /* eeprom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eeprom.c; path = ../../eeprom.c; sourceTree = "<group>"; };
+		4D3ABD661DA631E400F84B3C /* Enums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../../Enums.h; sourceTree = "<group>"; };
 		4D71C1121DA4B11E009ADA50 /* SolarTmr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SolarTmr; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D71C1151DA4B11E009ADA50 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		4D71C11C1DA4B165009ADA50 /* Deff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Deff.h; path = ../../Deff.h; sourceTree = "<group>"; };
@@ -75,6 +76,7 @@
 			children = (
 				4D71C1151DA4B11E009ADA50 /* main.c */,
 				4D71C11C1DA4B165009ADA50 /* Deff.h */,
+				4D3ABD661DA631E400F84B3C /* Enums.h */,
 				4D71C11D1DA4B165009ADA50 /* adc.c */,
 				4D71C11E1DA4B165009ADA50 /* lcd.c */,
 				4D71C11F1DA4B165009ADA50 /* Menu.c */,

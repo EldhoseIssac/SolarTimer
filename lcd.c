@@ -20,6 +20,10 @@ extern int voltage,current;
 #include <stdio.h>
 short _LCD_CLEAR;
 short _LCD_CURSOR_OFF;
+short _LCD_UNDERLINE_ON;
+short _LCD_SECOND_ROW;
+short _LCD_MOVE_CURSOR_RIGHT;
+short _LCD_CURSOR_OFF;
 void Lcd_Init(){
     
 }
@@ -109,16 +113,19 @@ void displayTimeDate(){
 void loadTimeEdit(){
     lcdrow2[0] = BCD2UpperCh(hour);
     lcdrow2[1] = BCD2LowerCh(hour);
+    lcdrow2[2] = ':';
     lcdrow2[3] = BCD2UpperCh(minute);
     lcdrow2[4] = BCD2LowerCh(minute);
-    lcdrow2[6] = BCD2UpperCh(second);
-    lcdrow2[7] = BCD2LowerCh(second);
+//    lcdrow2[6] = BCD2UpperCh(second);
+//    lcdrow2[7] = BCD2LowerCh(second);
 }
 void loadDateEdit(){
     lcdrow2[0] = BCD2UpperCh(day);
     lcdrow2[1] = BCD2LowerCh(day);
+    lcdrow2[2] = '/';
     lcdrow2[3] = BCD2UpperCh(month);
     lcdrow2[4] = BCD2LowerCh(month);
+    lcdrow2[5] = '/';
     lcdrow2[6] = BCD2UpperCh(year);
     lcdrow2[7] = BCD2LowerCh(year);
     switch(dday){
@@ -131,8 +138,15 @@ void loadDateEdit(){
         case 7: lcdrow2[13]='S';lcdrow2[14]='a'; lcdrow2[15]='t';break;
     }
 }
+void setCursorPosition(unsigned short position){
+    Lcd_Cmd(_LCD_SECOND_ROW);
+    unsigned short i;
+    for (i=0; i<position; i++) {
+         Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
+    }
+}
 
-void loadEnHeighLow(int heigh,int low){
+void loadEnHeighLow(unsigned int heigh,unsigned int low){
     unsigned int disVolt = Binary2BCD(heigh);
     unsigned int discrr= Binary2BCD(low);
 

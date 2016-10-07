@@ -1,3 +1,4 @@
+#include "Enums.h"
 #if DEBUG
 #include <string.h>
 short MENU;
@@ -5,6 +6,8 @@ short SELECT;
 short PLUS;
 short MINUS;
 extern short _LCD_CLEAR;
+extern short _LCD_UNDERLINE_ON;
+extern short _LCD_CURSOR_OFF;
 void Lcd_Cmd(short command);
 #else
 #define MENU PORTD.F7
@@ -16,48 +19,12 @@ void Lcd_Cmd(short command);
 extern char lcdrow1[];
 extern char lcdrow2[];
 
-enum menus {
-    None,
-    Date,
-    Time,
-    Voltage,
-    Current,
-    LDRVal,
-    OnOFFTimerCnt,
-    OnOFFTime
-};
-enum subMenu{
-    NoEdit,
-    DateDay,
-    DateMonth,
-    DateYear,
-    DateWeekDay,
-    
-    TimeHour,
-    TimeMinute,
-    
-    VoltageEnable,
-    VoltageHigh,
-    VoltageLow,
-    
-    CurrentEnable,
-    CurrentHeigh,
-    CurrentLow,
-    
-    LDRValEnable,
-    LDRValHeigh,
-    LDRValLow,
-    
-    OnOFFTimerCntEdit,
-    OnOFFTimeEdit
-    
+extern unsigned short crntMenu;
+extern unsigned short subMenu;
 
-};
-short crntMenu = None;
-short subMenu = NoEdit;
 void loadDateEdit();
 void loadTimeEdit();
-
+void setCursorPosition(unsigned short position);
 
 int voltHeigh();
 int voltLow();
@@ -66,14 +33,14 @@ int currLow();
 int LDRHeigh();
 int LDRLow();
 int onOffTimeAt(short inx);
-void saveVoltHeigh(int val);
-void saveVoltLow(int val);
-void saveCurrHeigh(int val);
-void saveCurrLow(int val);
-void saveLDRHeigh(int val);
-void saveLDRLow(int val);
-void saveOnOffTimeAt(short inx,int val);
-
+void saveVoltHeigh(unsigned int val);
+void saveVoltLow(unsigned int val);
+void saveCurrHeigh(unsigned int val);
+void saveCurrLow(unsigned int val);
+void saveLDRHeigh(unsigned int val);
+void saveLDRLow(unsigned int val);
+void saveOnOffTimeAt(unsigned short inx,unsigned int val);
+void loadEnHeighLow(unsigned int heigh,unsigned int low);
 
 void menuPortPinInt(){
     
@@ -87,12 +54,13 @@ void menuPortPinInt(){
 }
 
 void checkKey(){
-    int val1;
-    int val2;
-    if (MENU) {
+//    int val1;
+//    int val2;
+    if (MENU == 0) {
         Lcd_Cmd(_LCD_CLEAR);
         switch (crntMenu) {
             case None:
+                Lcd_Cmd(_LCD_UNDERLINE_ON);
                 crntMenu = Date;
                 subMenu = DateDay;
                 strcpy(lcdrow1, "Date");
@@ -106,20 +74,34 @@ void checkKey(){
                 break;
             case Voltage:
                 crntMenu = Voltage;
-                subMenu = VoltageHigh;
+                subMenu = VoltageEnable;
                 strcpy(lcdrow1, "Volt Heigh Low");
-                val1 = voltHeigh();
-                val2 = voltLow();
-                if (val1>0) {
-                    lcdrow1[0] = 'O';
-                    lcdrow1[1] = 'N';
-                    
-                }else{
-                    strcpy(lcdrow2, "OFF   0.0  0.0");
-                }
+                loadEnHeighLow(voltHeigh(),voltLow());
                 break;
-                
-                
+            case Current:
+                crntMenu = Current;
+                subMenu = CurrentEnable;
+                strcpy(lcdrow1, "Amp Heigh Low");
+                loadEnHeighLow(currHeigh(),currLow());
+                break;
+            case LDRVal:
+                crntMenu = Current;
+                subMenu = CurrentEnable;
+                strcpy(lcdrow1, "LDR Heigh Low");
+                loadEnHeighLow(currHeigh(),currLow());
+                break;
+            default:
+                crntMenu = Date;
+                subMenu = DateDay;
+                Lcd_Cmd(_LCD_CURSOR_OFF);
+                break;
         }
+        setCursorPosition(subMenu);
+    }else if (SELECT == 0){
+        
+    }else if (PLUS == 0){
+        
+    }else if (MINUS == 0){
+        
     }
 }
