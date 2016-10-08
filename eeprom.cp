@@ -1,25 +1,25 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
 #line 7 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
 int voltHeigh(){
- return 10;
+ return 0;
 }
 int voltLow(){
- return 10;
+ return 0;
 }
 int currHeigh(){
- return 10;
+ return 0;
 }
 int currLow(){
- return 10;
+ return 0;
 }
 int LDRHeigh(){
- return 10;
+ return 0;
 }
 int LDRLow(){
- return 10;
+ return 0;
 }
 int onOffTimeAt(short inx){
- return 10;
+ return 0;
 }
 void saveVoltHeigh(int val){
 

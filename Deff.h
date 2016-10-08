@@ -1,9 +1,9 @@
 //Global Variables
 
 #include "Enums.h"
-char lcdrow1[] = "00:00:00 000 TUE";
-char lcdrow2[] = "00/00/00 00.0A  ";
-int voltage,current;
+
+unsigned lastReadVoltage;
+unsigned lastReadCurrent;
 
 unsigned short second;
 unsigned short minute;
@@ -15,7 +15,8 @@ unsigned short year;
 
 unsigned short crntMenu = None;
 unsigned short subMenu = NoEdit;
-
+char lcdrow1[] = "00:00:00 000 TUE";
+char lcdrow2[] = "00/00/00 00.0A  ";
 
 unsigned short set_count = 0;
 short set;

@@ -44,9 +44,9 @@ void SOLARmain() {
 void main() {
 #endif
 
-    osccon = 0x70;
-    ansel  = 7;
-    anselh  = 0;
+    //osccon = 0x70;
+    //ansel  = 7;
+    //anselh  = 0;
     trisb = 0;
     trisd = 0;
     ADC_Init();

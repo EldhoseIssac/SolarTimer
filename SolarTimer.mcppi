@@ -1,18 +1,18 @@
 [DEVICE]
-Name=P16F887
-Clock=8000000
+Name=P16F877A
+Clock=20000000
 [MEMORY_MODEL]
 Value=-1
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=eeprom.c
+Value=Menu.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
 Value=0
 [HEAP_SIZE]
-Value=2000
+Value=0
 [EEPROM_DEFINITION]
 Value=
 [FILES]
@@ -30,13 +30,12 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=6
-File0=SolarTimer.c
-File1=rtc.c
-File2=Menu.c
-File3=Deff.h
-File4=lcd.c
-File5=eeprom.c
+Count=5
+File0=Menu.c
+File1=Enums.h
+File2=SolarTimer.c
+File3=lcd.c
+File4=Deff.h
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -44,18 +43,17 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=5
+Count=3
 Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\
 Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\
 Path2=E:\PROGAMS\hussian\SolarTimer\
-Path3=E:\PROGAMS\hussian\SolarTimer\
-Path4=E:\PROGAMS\hussian\SolarTimer\
 [HEADER_PATH]
 Count=1
 Path0=E:\PROGAMS\hussian\SolarTimer\
 [HEADERS]
-Count=1
+Count=2
 File0=Deff.h
+File1=Enums.h
 [PLDS]
 Count=0
 [Useses]
@@ -69,4 +67,5 @@ File5=Lcd_Constants
 File6=C_String
 [EXPANDED_NODES]
 Node0=Sources
-Count=1
+Node1=Header Files
+Count=2

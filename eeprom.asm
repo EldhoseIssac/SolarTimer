@@ -2,11 +2,9 @@
 _voltHeigh:
 
 ;eeprom.c,7 :: 		int voltHeigh(){
-;eeprom.c,8 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,8 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,9 :: 		}
 L_end_voltHeigh:
 	RETURN
@@ -15,11 +13,9 @@ L_end_voltHeigh:
 _voltLow:
 
 ;eeprom.c,10 :: 		int voltLow(){
-;eeprom.c,11 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,11 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,12 :: 		}
 L_end_voltLow:
 	RETURN
@@ -28,11 +24,9 @@ L_end_voltLow:
 _currHeigh:
 
 ;eeprom.c,13 :: 		int currHeigh(){
-;eeprom.c,14 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,14 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,15 :: 		}
 L_end_currHeigh:
 	RETURN
@@ -41,11 +35,9 @@ L_end_currHeigh:
 _currLow:
 
 ;eeprom.c,16 :: 		int currLow(){
-;eeprom.c,17 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,17 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,18 :: 		}
 L_end_currLow:
 	RETURN
@@ -54,11 +46,9 @@ L_end_currLow:
 _LDRHeigh:
 
 ;eeprom.c,19 :: 		int LDRHeigh(){
-;eeprom.c,20 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,20 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,21 :: 		}
 L_end_LDRHeigh:
 	RETURN
@@ -67,11 +57,9 @@ L_end_LDRHeigh:
 _LDRLow:
 
 ;eeprom.c,22 :: 		int LDRLow(){
-;eeprom.c,23 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,23 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,24 :: 		}
 L_end_LDRLow:
 	RETURN
@@ -80,11 +68,9 @@ L_end_LDRLow:
 _onOffTimeAt:
 
 ;eeprom.c,25 :: 		int onOffTimeAt(short inx){
-;eeprom.c,26 :: 		return 10;
-	MOVLW      10
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+;eeprom.c,26 :: 		return 0;
+	CLRF       R0+0
+	CLRF       R0+1
 ;eeprom.c,27 :: 		}
 L_end_onOffTimeAt:
 	RETURN

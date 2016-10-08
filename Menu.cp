@@ -1,7 +1,6 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 16 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-extern char lcdrow1[];
-extern char lcdrow2[];
+#line 1 "e:/progams/hussian/solartimer/enums.h"
+
 
 enum menus {
  None,
@@ -13,38 +12,45 @@ enum menus {
  OnOFFTimerCnt,
  OnOFFTime
 };
+
 enum subMenu{
  NoEdit,
- DateDay,
- DateMonth,
- DateYear,
- DateWeekDay,
 
- TimeHour,
- TimeMinute,
+ DateDay = 0,
+ DateMonth = 3,
+ DateYear = 6,
+ DateWeekDay = 13,
 
- VoltageEnable,
- VoltageHigh,
- VoltageLow,
+ TimeHour = 0,
+ TimeMinute = 3,
 
- CurrentEnable,
- CurrentHeigh,
- CurrentLow,
+ VoltageEnable = 0,
+ VoltageHigh = 8,
+ VoltageLow = 13,
 
- LDRValEnable,
- LDRValHeigh,
- LDRValLow,
+ CurrentEnable = 0,
+ CurrentHeigh = 8,
+ CurrentLow = 13,
+
+ LDRValEnable = 0,
+ LDRValHeigh = 8,
+ LDRValLow = 13,
 
  OnOFFTimerCntEdit,
  OnOFFTimeEdit
 
 
 };
-short crntMenu = None;
-short subMenu = NoEdit;
+#line 22 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+extern char lcdrow1[];
+extern char lcdrow2[];
+
+extern unsigned short crntMenu;
+extern unsigned short subMenu;
+
 void loadDateEdit();
 void loadTimeEdit();
-
+void setCursorPosition(unsigned short position);
 
 int voltHeigh();
 int voltLow();
@@ -53,14 +59,14 @@ int currLow();
 int LDRHeigh();
 int LDRLow();
 int onOffTimeAt(short inx);
-void saveVoltHeigh(int val);
-void saveVoltLow(int val);
-void saveCurrHeigh(int val);
-void saveCurrLow(int val);
-void saveLDRHeigh(int val);
-void saveLDRLow(int val);
-void saveOnOffTimeAt(short inx,int val);
-
+void saveVoltHeigh(unsigned int val);
+void saveVoltLow(unsigned int val);
+void saveCurrHeigh(unsigned int val);
+void saveCurrLow(unsigned int val);
+void saveLDRHeigh(unsigned int val);
+void saveLDRLow(unsigned int val);
+void saveOnOffTimeAt(unsigned short inx,unsigned int val);
+void loadEnHeighLow(unsigned int heigh,unsigned int low);
 
 void menuPortPinInt(){
 
@@ -74,39 +80,122 @@ void menuPortPinInt(){
 }
 
 void checkKey(){
- int val1;
- int val2;
- if ( PORTD.F7 ) {
+
+do{
+ if ( PORTD.F7  ==  1 ) {
+
  Lcd_Cmd(_LCD_CLEAR);
  switch (crntMenu) {
  case None:
+ Lcd_Cmd(_LCD_UNDERLINE_ON);
  crntMenu = Date;
  subMenu = DateDay;
- strcpy(lcdrow1, "Date");
  loadDateEdit();
  break;
  case Date:
  crntMenu = Time;
  subMenu = TimeHour;
- strcpy(lcdrow1, "Time");
  loadTimeEdit();
  break;
- case Voltage:
+ case Time:
  crntMenu = Voltage;
- subMenu = VoltageHigh;
- strcpy(lcdrow1, "Volt Heigh Low");
- val1 = voltHeigh();
- val2 = voltLow();
- if (val1>0) {
- lcdrow1[0] = 'O';
- lcdrow1[1] = 'N';
+ subMenu = VoltageEnable;
+ Lcd_Out(1,1, "Volt Heigh Low");
+ loadEnHeighLow(voltHeigh(),voltLow());
+ break;
+ case Voltage:
+ crntMenu = Current;
+ subMenu = CurrentEnable;
+ Lcd_Out(1,1, "Amp Heigh Low");
+ loadEnHeighLow(currHeigh(),currLow());
+ break;
+ case Current:
+ crntMenu = LDRVal;
+ subMenu = LDRValEnable;
+ Lcd_Out(1,1, "LDR Heigh Low");
+ loadEnHeighLow(currHeigh(),currLow());
+ break;
+ default:
+ crntMenu = None;
+ subMenu = NoEdit;
+ strcpy(lcdrow1,"00:00:00 000 TUE");
+ strcpy(lcdrow2,"00/00/00 00.0A  ");
 
- }else{
- strcpy(lcdrow2, "OFF   0.0  0.0");
+ break;
+ }
+ setCursorPosition(subMenu);
+ }else if ( PORTD.F6  ==  1 ){
+ delay_ms(30);
+ switch (crntMenu) {
+ case Date:
+ switch(subMenu){
+ case DateDay:
+ subMenu = DateMonth;
+ break;
+ case DateMonth:
+ subMenu = DateYear;
+ break;
+ case DateYear:
+ subMenu = DateWeekDay;
+ break;
+ default:
+ subMenu = DateDay;
  }
  break;
+ case Time:
+ switch(subMenu){
+ case TimeHour:
+ subMenu = TimeMinute;
+ break;
+ default:
+ subMenu = TimeHour;
+ }
 
+ break;
+ case Voltage:
+ switch(subMenu){
+ case VoltageEnable:
+ subMenu = VoltageHigh;
+ break;
+ case VoltageHigh:
+ subMenu = VoltageLow; break;
+ default:
+ subMenu = VoltageEnable;
+ }
+ break;
+ case Current:
+ switch(subMenu){
+ case CurrentEnable:
+ subMenu = CurrentHeigh; break;
+ case CurrentHeigh:
+ subMenu = CurrentLow; break;
+ default:
+ subMenu = CurrentHeigh;
+ }
+ break;
+ case LDRVal:
+ switch(subMenu){
+ case LDRValEnable:
+ subMenu = LDRValHeigh; break;
+ case LDRValHeigh:
+ subMenu = LDRValLow; break;
+ default:
+ subMenu = LDRValHeigh;
+ }
+ break;
+ default:
+ break;
+ }
+ setCursorPosition(subMenu);
+ }else if ( PORTD.F5  ==  1 ){
+ delay_ms(30);
+
+ }else if ( PORTD.F5  ==  1 ){
+ delay_ms(30);
 
  }
- }
+ delay_ms(100);
+ }while(crntMenu != None);
+
+
 }

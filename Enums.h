@@ -17,7 +17,7 @@ enum subMenu{
     DateDay = 0,
     DateMonth = 3,
     DateYear = 6,
-    DateWeekDay = 13,
+    DateWeekDay = 7,
     
     TimeHour = 0,
     TimeMinute = 3,
@@ -39,4 +39,3 @@ enum subMenu{
     
     
 };
-

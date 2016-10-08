@@ -12,7 +12,7 @@ extern unsigned short dday;
 extern unsigned short month;
 extern unsigned short year;
 
-extern int voltage,current;
+extern unsigned lastReadVoltage,lastReadCurrent;
 //https://electrosome.com/digital-clock-pic-microcontroller-ds1307/
 
 #if DEBUG
@@ -111,15 +111,17 @@ void displayTimeDate(){
     }
 }
 void loadTimeEdit(){
+    Lcd_Out(1,1,"Set Time");
     lcdrow2[0] = BCD2UpperCh(hour);
     lcdrow2[1] = BCD2LowerCh(hour);
     lcdrow2[2] = ':';
     lcdrow2[3] = BCD2UpperCh(minute);
     lcdrow2[4] = BCD2LowerCh(minute);
-//    lcdrow2[6] = BCD2UpperCh(second);
-//    lcdrow2[7] = BCD2LowerCh(second);
+    lcdrow2[5] = '\0';
+    Lcd_Out(2,1,lcdrow2);
 }
 void loadDateEdit(){
+     Lcd_Out(1,1,"Set Date");
     lcdrow2[0] = BCD2UpperCh(day);
     lcdrow2[1] = BCD2LowerCh(day);
     lcdrow2[2] = '/';
@@ -129,19 +131,21 @@ void loadDateEdit(){
     lcdrow2[6] = BCD2UpperCh(year);
     lcdrow2[7] = BCD2LowerCh(year);
     switch(dday){
-        case 1: lcdrow2[13]='S';lcdrow2[14]='u'; lcdrow2[15]='n';break;
-        case 2: lcdrow2[13]='M';lcdrow2[14]='o'; lcdrow2[15]='n';break;
-        case 3: lcdrow2[13]='T';lcdrow2[14]='u'; lcdrow2[15]='e';break;
-        case 4: lcdrow2[13]='W';lcdrow2[14]='e'; lcdrow2[15]='d';break;
-        case 5: lcdrow2[13]='T';lcdrow2[14]='h'; lcdrow2[15]='u';break;
-        case 6: lcdrow2[13]='F';lcdrow2[14]='r'; lcdrow2[15]='i';break;
-        case 7: lcdrow2[13]='S';lcdrow2[14]='a'; lcdrow2[15]='t';break;
+        case 1: lcdrow2[9]='S';lcdrow2[10]='u'; lcdrow2[11]='n';break;
+        case 2: lcdrow2[9]='M';lcdrow2[10]='o'; lcdrow2[11]='n';break;
+        case 3: lcdrow2[9]='T';lcdrow2[10]='u'; lcdrow2[11]='e';break;
+        case 4: lcdrow2[9]='W';lcdrow2[10]='e'; lcdrow2[11]='d';break;
+        case 5: lcdrow2[9]='T';lcdrow2[10]='h'; lcdrow2[11]='u';break;
+        case 6: lcdrow2[9]='F';lcdrow2[10]='r'; lcdrow2[11]='i';break;
+        case 7: lcdrow2[9]='S';lcdrow2[10]='a'; lcdrow2[11]='t';break;
     }
+    lcdrow2[12] = '\0';
+    Lcd_Out(2,1,lcdrow2);
 }
 void setCursorPosition(unsigned short position){
+    unsigned short indx;
     Lcd_Cmd(_LCD_SECOND_ROW);
-    unsigned short i;
-    for (i=0; i<position; i++) {
+    for (indx=0; indx<position; indx++) {
          Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
     }
 }
@@ -161,16 +165,18 @@ void loadEnHeighLow(unsigned int heigh,unsigned int low){
         lcdrow2[10] = BCD2HignerCh(discrr);
         lcdrow2[11] = BCD2UpperCh(discrr);
         lcdrow2[12] = BCD2LowerCh(discrr);
+        lcdrow2[13] = '\0';
+        Lcd_Out(2,1, lcdrow2);
     }else{
-        strcpy(lcdrow2, "OFF   0.0  0.0");
+        Lcd_Out(2,1, "OFF   0.0  0.0");
     }
 
 }
 void displayVoltageCurrent(){
  unsigned int disVolt;
  unsigned int discrr;
- disVolt = Binary2BCD(voltage);
- discrr = Binary2BCD(current);
+ disVolt = Binary2BCD(lastReadVoltage);
+ discrr = Binary2BCD(lastReadCurrent);
   lcdrow1[9] = BCD2HignerCh(disVolt);
   lcdrow1[10] = BCD2UpperCh(disVolt);
   lcdrow1[11] = BCD2LowerCh(disVolt);
