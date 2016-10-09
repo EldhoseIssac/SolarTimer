@@ -258,6 +258,7 @@ ckp_bit
 cm1con0
 cm2con0
 cm2con1
+codetxt_to_ramtxt
 comfrem
 compare_double
 cren
@@ -326,6 +327,8 @@ eccpas2
 eccpas2_bit
 eccpase
 eccpase_bit
+editstr
+editvalue
 eeadr
 eeadrh
 eecon1
@@ -383,6 +386,7 @@ ics_auto
 ics_off
 indf
 initlcd
+initlcdraws
 initrtc
 inittmr1
 int2double
@@ -801,6 +805,7 @@ strcat
 strchr
 strcmp
 strcpy
+strcpylimit
 strcspn
 strd
 strd_bit

@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "D:/SolarTimer/Menu.c"
+#line 1 "d:/solartimer/enums.h"
 
 
 enum menus {
@@ -19,7 +19,7 @@ enum subMenu{
  DateDay = 0,
  DateMonth = 3,
  DateYear = 6,
- DateWeekDay = 13,
+ DateWeekDay = 7,
 
  TimeHour = 0,
  TimeMinute = 3,
@@ -41,12 +41,14 @@ enum subMenu{
 
 
 };
-#line 22 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 22 "D:/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
 extern unsigned short crntMenu;
 extern unsigned short subMenu;
+unsigned char editStr[10];
+unsigned int editValue;
 
 void loadDateEdit();
 void loadTimeEdit();
@@ -68,6 +70,25 @@ void saveLDRLow(unsigned int val);
 void saveOnOffTimeAt(unsigned short inx,unsigned int val);
 void loadEnHeighLow(unsigned int heigh,unsigned int low);
 
+char * codetxt_to_ramtxt(const char* ctxt)
+{
+static char txt[20];
+char i;
+ for(i =0; i<20; i++){
+ txt[i] = ctxt[i];
+ }
+ return txt;
+}
+
+void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count)
+{
+ unsigned short index = from;
+ unsigned short to = from + count;
+ for(index = from;index<to;index++){
+ dest[index - from] = source[index];
+ }
+ dest[index - from] = '\0';
+}
 void menuPortPinInt(){
 
 
@@ -83,6 +104,7 @@ void checkKey(){
 
 do{
  if ( PORTD.F7  ==  1 ) {
+ editStr[0] = '\0';
 
  Lcd_Cmd(_LCD_CLEAR);
  switch (crntMenu) {
@@ -91,36 +113,40 @@ do{
  crntMenu = Date;
  subMenu = DateDay;
  loadDateEdit();
+ strCpyLimit(lcdrow2,editStr,0,2);
  break;
  case Date:
  crntMenu = Time;
  subMenu = TimeHour;
  loadTimeEdit();
+ strCpyLimit(lcdrow2,editStr,0,2);
  break;
  case Time:
  crntMenu = Voltage;
  subMenu = VoltageEnable;
- Lcd_Out(1,1, "Volt Heigh Low");
+ Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
  loadEnHeighLow(voltHeigh(),voltLow());
+ strCpyLimit(lcdrow2,editStr,0,3);
  break;
  case Voltage:
  crntMenu = Current;
  subMenu = CurrentEnable;
- Lcd_Out(1,1, "Amp Heigh Low");
+ Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
  loadEnHeighLow(currHeigh(),currLow());
+ strCpyLimit(lcdrow2,editStr,0,3);
  break;
  case Current:
  crntMenu = LDRVal;
  subMenu = LDRValEnable;
- Lcd_Out(1,1, "LDR Heigh Low");
+ Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
  loadEnHeighLow(currHeigh(),currLow());
+ strCpyLimit(lcdrow2,editStr,0,3);
  break;
  default:
  crntMenu = None;
  subMenu = NoEdit;
- strcpy(lcdrow1,"00:00:00 000 TUE");
- strcpy(lcdrow2,"00/00/00 00.0A  ");
-
+ strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,16);
+ strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,16);
  break;
  }
  setCursorPosition(subMenu);

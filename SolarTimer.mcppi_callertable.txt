@@ -10,6 +10,10 @@ main
 			Delay_1us
 			Delay_5500us
 			Delay_50us
+		initLCDRaws
+			codetxt_to_ramtxt
+				____DoICP
+			strCpyLimit
 	InitRTC
 		I2C1_Init
 	initTmr1
@@ -26,6 +30,8 @@ main
 			Delay_5500us
 			Delay_50us
 		loadDateEdit
+			codetxt_to_ramtxt
+				____DoICP
 			Lcd_Out
 				Lcd_Cmd
 					Delay_1us
@@ -38,7 +44,10 @@ main
 						Delay_50us
 			BCD2UpperCh
 			BCD2LowerCh
+		strCpyLimit
 		loadTimeEdit
+			codetxt_to_ramtxt
+				____DoICP
 			Lcd_Out
 				Lcd_Cmd
 					Delay_1us
@@ -51,6 +60,8 @@ main
 						Delay_50us
 			BCD2UpperCh
 			BCD2LowerCh
+		codetxt_to_ramtxt
+			____DoICP
 		Lcd_Out
 			Lcd_Cmd
 				Delay_1us
@@ -80,9 +91,10 @@ main
 						Delay_1us
 						Delay_5500us
 						Delay_50us
+			codetxt_to_ramtxt
+				____DoICP
 		currLow
 		currHeigh
-		strcpy
 		setCursorPosition
 			Lcd_Cmd
 				Delay_1us

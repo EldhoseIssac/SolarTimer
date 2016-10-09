@@ -15,8 +15,8 @@ unsigned short year;
 
 unsigned short crntMenu = None;
 unsigned short subMenu = NoEdit;
-char lcdrow1[] = "00:00:00 000 TUE";
-char lcdrow2[] = "00/00/00 00.0A  ";
+char lcdrow1[17];
+char lcdrow2[17];
 
 unsigned short set_count = 0;
 short set;

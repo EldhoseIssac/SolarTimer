@@ -24,6 +24,8 @@ extern char lcdrow2[];
 
 extern unsigned short crntMenu;
 extern unsigned short subMenu;
+unsigned char  editStr[10];
+unsigned int editValue;
 
 void loadDateEdit();
 void loadTimeEdit();
@@ -45,7 +47,17 @@ void saveLDRLow(unsigned int val);
 void saveOnOffTimeAt(unsigned short inx,unsigned int val);
 void loadEnHeighLow(unsigned int heigh,unsigned int low);
 
-void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count){
+char * codetxt_to_ramtxt(const char* ctxt)
+{
+static char txt[20];
+char i;
+  for(i =0; i<20; i++){
+     txt[i] = ctxt[i];
+  }
+  return txt;
+}
+
+void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count)
 {
   unsigned short index = from;
   unsigned short to = from + count;
@@ -66,7 +78,7 @@ void menuPortPinInt(){
 }
 
 void checkKey(){
- unsigned char editStr[10];
+
 do{
          if (MENU == ON) {
          editStr[0] = '\0';
@@ -78,54 +90,45 @@ do{
                   crntMenu = Date;
                   subMenu = DateDay;
                   loadDateEdit();
-                  editStr[0] = lcdrow2[0];
-                  editStr[1] = lcdrow2[1];
-                  editStr[2] = '\0';
+                  strCpyLimit(lcdrow2,editStr,0,2);
+                  editValue = day;
                   break;
               case Date:
                   crntMenu = Time;
                   subMenu = TimeHour;
                   loadTimeEdit();
-                  editStr[0] = lcdrow2[0];
-                  editStr[1] = lcdrow2[1];
-                  editStr[2] = '\0';
+                  strCpyLimit(lcdrow2,editStr,0,2);
+                  editValue = hour;
                   break;
               case Time:
                   crntMenu = Voltage;
                   subMenu = VoltageEnable;
-                  Lcd_Out(1,1, "Volt Heigh Low");
-                  loadEnHeighLow(voltHeigh(),voltLow());
-                  editStr[0] = lcdrow2[0];
-                  editStr[1] = lcdrow2[1];
-                  editStr[2] = lcdrow2[2];
-                  editStr[3] = '\0';
+                  Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
+                  editValue = voltHeigh();
+                  loadEnHeighLow(editValue,voltLow());
+                  strCpyLimit(lcdrow2,editStr,0,3);
                   break;
               case Voltage:
                   crntMenu = Current;
                   subMenu = CurrentEnable;
-                  Lcd_Out(1,1, "Amp Heigh Low");
-                  loadEnHeighLow(currHeigh(),currLow());
-                  editStr[0] = lcdrow2[0];
-                  editStr[1] = lcdrow2[1];
-                  editStr[2] = lcdrow2[2];
-                  editStr[3] = '\0';
+                  Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
+                  editValue = currHeigh();
+                  loadEnHeighLow(editValue,currLow());
+                  strCpyLimit(lcdrow2,editStr,0,3);
                   break;
               case Current:
                   crntMenu = LDRVal;
                   subMenu = LDRValEnable;
-                  Lcd_Out(1,1, "LDR Heigh Low");
-                  loadEnHeighLow(currHeigh(),currLow());
-                  editStr[0] = lcdrow2[0];
-                  editStr[1] = lcdrow2[1];
-                  editStr[2] = lcdrow2[2];
-                  editStr[3] = '\0';
+                  editValue = LDRHeigh();
+                  Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
+                  loadEnHeighLow(editValue,LDRLow());
+                  strCpyLimit(lcdrow2,editStr,0,3);
                   break;
               default:
                   crntMenu = None;
                   subMenu = NoEdit;
-                   strcpy(lcdrow1,"00:00:00 000 TUE");
-                   strcpy(lcdrow2,"00/00/00 00.0A  ");
-                  //Lcd_Cmd(_LCD_CURSOR_OFF);
+                  strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,16);
+                  strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,16);
                   break;
           }
           setCursorPosition(subMenu);
@@ -136,24 +139,30 @@ do{
                    switch(subMenu){
                             case DateDay:
                                  subMenu = DateMonth;
+                                 editValue = month;
                                  break;
                             case DateMonth:
                                  subMenu = DateYear;
+                                 editValue = year;
                                  break;
                             case DateYear:
                                  subMenu = DateWeekDay;
+                                 editValue = dday;
                                  break;
                             default:
                                  subMenu = DateDay;
+                                 editValue = day;
                    }
                   break;
               case Time:
                    switch(subMenu){
                             case TimeHour:
                                  subMenu = TimeMinute;
+                                 editValue = minute;
                                  break;
                             default:
                                  subMenu = TimeHour;
+                                 editValue = hour;
                    }
 
                   break;
@@ -193,6 +202,7 @@ do{
           }
          setCursorPosition(subMenu);
         }else if (PLUS == ON){
+        
               delay_ms(30);
 
         }else if (MINUS == ON){

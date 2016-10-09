@@ -13,6 +13,8 @@ extern unsigned short month;
 extern unsigned short year;
 
 extern unsigned lastReadVoltage,lastReadCurrent;
+char * codetxt_to_ramtxt(const char* ctxt);
+void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count);
 //https://electrosome.com/digital-clock-pic-microcontroller-ds1307/
 
 #if DEBUG
@@ -36,10 +38,18 @@ void Lcd_out(int row,int col,char * sting){
 
 
 #endif
+
+void initLCDRaws()
+{
+ strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,16);
+ strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,16);
+
+}
 void initLCD(){
   Lcd_Init();                        // Initialize LCD
   Lcd_Cmd(_LCD_CLEAR);               // Clear display
   Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
+  initLCDRaws();
 }
 unsigned char BCD2HignerCh(unsigned int bcd)
 {
@@ -111,7 +121,7 @@ void displayTimeDate(){
     }
 }
 void loadTimeEdit(){
-    Lcd_Out(1,1,"Set Time");
+    Lcd_Out(1,1,codetxt_to_ramtxt("Set Time"));
     lcdrow2[0] = BCD2UpperCh(hour);
     lcdrow2[1] = BCD2LowerCh(hour);
     lcdrow2[2] = ':';
@@ -121,7 +131,7 @@ void loadTimeEdit(){
     Lcd_Out(2,1,lcdrow2);
 }
 void loadDateEdit(){
-     Lcd_Out(1,1,"Set Date");
+     Lcd_Out(1,1,codetxt_to_ramtxt("Set Date"));
     lcdrow2[0] = BCD2UpperCh(day);
     lcdrow2[1] = BCD2LowerCh(day);
     lcdrow2[2] = '/';
@@ -168,7 +178,7 @@ void loadEnHeighLow(unsigned int heigh,unsigned int low){
         lcdrow2[13] = '\0';
         Lcd_Out(2,1, lcdrow2);
     }else{
-        Lcd_Out(2,1, "OFF   0.0  0.0");
+        Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
     }
 
 }
