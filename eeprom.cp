@@ -1,5 +1,5 @@
-#line 1 "D:/SolarTimer/eeprom.c"
-#line 7 "D:/SolarTimer/eeprom.c"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
+#line 7 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
 int voltHeigh(){
  return 0;
 }

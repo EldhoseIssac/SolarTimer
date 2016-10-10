@@ -1,5 +1,5 @@
-#line 1 "D:/SolarTimer/Menu.c"
-#line 1 "d:/solartimer/enums.h"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 1 "e:/progams/hussian/solartimer/enums.h"
 
 
 enum menus {
@@ -13,13 +13,14 @@ enum menus {
  OnOFFTime
 };
 
+
 enum subMenu{
  NoEdit,
 
  DateDay = 0,
  DateMonth = 3,
  DateYear = 6,
- DateWeekDay = 7,
+ DateWeekDay = 9,
 
  TimeHour = 0,
  TimeMinute = 3,
@@ -41,13 +42,20 @@ enum subMenu{
 
 
 };
-#line 22 "D:/SolarTimer/Menu.c"
+#line 22 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
 extern unsigned short crntMenu;
 extern unsigned short subMenu;
-unsigned char editStr[10];
+extern unsigned short second;
+extern unsigned short minute;
+extern unsigned short hour;
+extern unsigned short day;
+extern unsigned short dday;
+extern unsigned short month;
+extern unsigned short year;
+
 unsigned int editValue;
 
 void loadDateEdit();
@@ -69,26 +77,19 @@ void saveLDRHeigh(unsigned int val);
 void saveLDRLow(unsigned int val);
 void saveOnOffTimeAt(unsigned short inx,unsigned int val);
 void loadEnHeighLow(unsigned int heigh,unsigned int low);
-
+void initLCDRaws();
+void write_ds1307(unsigned short address,unsigned short w_data);
 char * codetxt_to_ramtxt(const char* ctxt)
 {
 static char txt[20];
 char i;
- for(i =0; i<20; i++){
+ for(i =0; ctxt[i] != '\0'; i++){
  txt[i] = ctxt[i];
  }
+ txt[i] = '\0';
  return txt;
 }
 
-void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count)
-{
- unsigned short index = from;
- unsigned short to = from + count;
- for(index = from;index<to;index++){
- dest[index - from] = source[index];
- }
- dest[index - from] = '\0';
-}
 void menuPortPinInt(){
 
 
@@ -99,129 +100,296 @@ void menuPortPinInt(){
 
 
 }
-
-void checkKey(){
-
-do{
- if ( PORTD.F7  ==  1 ) {
- editStr[0] = '\0';
-
- Lcd_Cmd(_LCD_CLEAR);
- switch (crntMenu) {
- case None:
- Lcd_Cmd(_LCD_UNDERLINE_ON);
- crntMenu = Date;
- subMenu = DateDay;
- loadDateEdit();
- strCpyLimit(lcdrow2,editStr,0,2);
- break;
- case Date:
- crntMenu = Time;
- subMenu = TimeHour;
- loadTimeEdit();
- strCpyLimit(lcdrow2,editStr,0,2);
- break;
- case Time:
- crntMenu = Voltage;
- subMenu = VoltageEnable;
- Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
- loadEnHeighLow(voltHeigh(),voltLow());
- strCpyLimit(lcdrow2,editStr,0,3);
- break;
- case Voltage:
- crntMenu = Current;
- subMenu = CurrentEnable;
- Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
- loadEnHeighLow(currHeigh(),currLow());
- strCpyLimit(lcdrow2,editStr,0,3);
- break;
- case Current:
- crntMenu = LDRVal;
- subMenu = LDRValEnable;
- Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
- loadEnHeighLow(currHeigh(),currLow());
- strCpyLimit(lcdrow2,editStr,0,3);
- break;
- default:
- crntMenu = None;
- subMenu = NoEdit;
- strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,16);
- strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,16);
- break;
- }
- setCursorPosition(subMenu);
- }else if ( PORTD.F6  ==  1 ){
- delay_ms(30);
- switch (crntMenu) {
+ unsigned waitCount ;
+ unsigned char BCD2UpperCh(unsigned char bcd);
+ unsigned char BCD2LowerCh(unsigned char bcd);
+ void loadDay(unsigned char *arr,unsigned short theIndx);
+ void saveValue(){
+ switch(crntMenu){
  case Date:
  switch(subMenu){
  case DateDay:
- subMenu = DateMonth;
+ write_ds1307(0x04,editValue);
  break;
  case DateMonth:
- subMenu = DateYear;
+ write_ds1307(0x05,editValue);
  break;
  case DateYear:
- subMenu = DateWeekDay;
+ write_ds1307(0x06,editValue);
  break;
- default:
- subMenu = DateDay;
+ case DateWeekDay:
+ write_ds1307(0x03,editValue);
+ break;
  }
  break;
  case Time:
  switch(subMenu){
  case TimeHour:
- subMenu = TimeMinute;
+ write_ds1307(0x02,editValue);
  break;
- default:
- subMenu = TimeHour;
+ case TimeMinute:
+ write_ds1307(0x01,editValue);
+ break;
+ }
+ break;
+ }
+ }
+unsigned short cashedPortD = 0;
+sbit cMENU at cashedPortD.B7;
+sbit cSELECT at cashedPortD.B6;
+sbit cPLUS at cashedPortD.B5;
+sbit cMINUS at cashedPortD.B4;
+
+void checkKey(){
+
+
+
+do{
+ cMENU =  PORTD.F7 ;
+ cSELECT =  PORTD.F6 ;
+ cPLUS =  PORTD.F5 ;
+ cMINUS =  PORTD.F4 ;
+ if(cashedPortD > 0)
+ {
+ waitCount = 0;
+ delay_ms(100);
+ }
+ if(cMENU ==  1 ){
+ Lcd_Cmd(_LCD_CLEAR);
+ if(crntMenu == None){
+ Lcd_Cmd(_LCD_BLINK_CURSOR_ON);
+ }else{
+ saveValue();
+ }
+ crntMenu ++;
+ if(crntMenu>OnOFFTime)
+ {
+ waitCount = 100;
+ }
+ }
+ if(cSELECT ==  1 )
+ {
+ saveValue();
+ }
+ switch(crntMenu)
+ {
+ case None:
+ break;
+ case Date:
+ if (cMENU ==  1 )
+ {
+ subMenu = DateDay;
+ loadDateEdit();
+ editValue = day;
+ }
+ else
+ {
+ if(cPLUS ==  1 )
+ {
+ editValue++;
+ if((editValue & 0x0F )>9) editValue += 6;
+ }
+ if (cMINUS ==  1 )
+ {
+ editValue--;
+ if((editValue & 0x0F )>9) editValue -= 6;
+ }
+ switch(subMenu)
+ {
+
+ case DateDay:
+ if(cSELECT ==  1 )
+ {
+ subMenu = DateMonth;
+ editValue = month;
+ }
+ if(cPLUS ==  1 ){
+ if(editValue>0x31) editValue = 1;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue == 0) editValue = 0x31;
+ }
+ break;
+ case DateMonth:
+ if(cSELECT ==  1 )
+ {
+ subMenu = DateYear;
+ editValue = year;
+ }
+ if(cPLUS ==  1 )
+ {
+ if(editValue>0x12) editValue = 1;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue == 0) editValue = 0x01;
  }
 
  break;
- case Voltage:
- switch(subMenu){
- case VoltageEnable:
- subMenu = VoltageHigh;
+ case DateYear:
+ if(cSELECT ==  1 )
+ {
+ subMenu = DateWeekDay;
+ editValue = dday;
+ }
+ if(cPLUS ==  1 )
+ {
+ if(editValue>0x99) editValue = 1;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue == 0) editValue = 0x99;
+ }
+
  break;
- case VoltageHigh:
- subMenu = VoltageLow; break;
- default:
+ case DateWeekDay:
+ if(cSELECT ==  1 )
+ {
+ subMenu = DateDay;
+ editValue = day;
+ }
+ if(cPLUS ==  1 )
+ {
+ if(editValue>0x07) editValue = 1;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue == 0) editValue = 0x07;
+ }
+ break;
+
+ }
+ if(cPLUS ==  1  || cMINUS ==  1 )
+ {
+ if (subMenu == DateWeekDay)
+ {
+ loadDay(lcdrow2,editValue);
+ lcdrow2[3] = '\0';
+ Lcd_Out(2,subMenu+1,lcdrow2);
+ }
+ else
+ {
+ Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
+ Lcd_Chr_CP(BCD2LowerCh(editValue));
+ }
+ }
+
+ }
+ break;
+ case Time:
+ if (cMENU ==  1 )
+ {
+ subMenu = TimeHour;
+ loadTimeEdit();
+ editValue = hour;
+ }
+ else
+ {
+ if(cPLUS ==  1 )
+ {
+ editValue++;
+ if((editValue & 0x0F )>9) editValue += 6;
+ }
+ if (cMINUS ==  1 )
+ {
+ editValue--;
+ if((editValue & 0x0F )>9) editValue -= 6;
+ }
+ switch(subMenu)
+ {
+ case TimeHour:
+ if(cSELECT ==  1 )
+ {
+ subMenu = TimeMinute;
+ editValue = minute;
+ }
+ if(cPLUS ==  1 )
+ {
+ if(editValue>0x23) editValue = 0;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue > 0x23) editValue = 0x23;
+ }
+ break;
+ case TimeMinute:
+ if(cSELECT ==  1 )
+ {
+ subMenu = TimeHour;
+ editValue = hour;
+ }
+ if(cPLUS ==  1 )
+ {
+ if(editValue>0x59) editValue = 0;
+ }
+ if(cMINUS ==  1 )
+ {
+ if(editValue > 0x59) editValue = 0x59;
+ }
+ break;
+ }
+ if(cPLUS ==  1  || cMINUS ==  1 )
+ {
+ Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
+ Lcd_Chr_CP(BCD2LowerCh(editValue));
+ }
+ }
+ break;
+ case Voltage:
+ if(cMENU ==  1 )
+ {
  subMenu = VoltageEnable;
+ Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
+ editValue = voltHeigh();
+ loadEnHeighLow(editValue,voltLow());
+ }
+ else
+ {
  }
  break;
  case Current:
- switch(subMenu){
- case CurrentEnable:
- subMenu = CurrentHeigh; break;
- case CurrentHeigh:
- subMenu = CurrentLow; break;
- default:
- subMenu = CurrentHeigh;
+ if(cMENU ==  1 )
+ {
+ subMenu = CurrentEnable;
+ Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
+ editValue = currHeigh();
+ loadEnHeighLow(editValue,currLow());
+ }
+ else
+ {
  }
  break;
  case LDRVal:
- switch(subMenu){
- case LDRValEnable:
- subMenu = LDRValHeigh; break;
- case LDRValHeigh:
- subMenu = LDRValLow; break;
- default:
- subMenu = LDRValHeigh;
+ if(cMENU ==  1 )
+ {
+ subMenu = LDRValEnable;
+ editValue = LDRHeigh();
+ Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
+ loadEnHeighLow(editValue,LDRLow());
+ }
+ else
+ {
  }
  break;
  default:
+ waitCount = 100;
  break;
  }
+ if(cashedPortD > 0){
  setCursorPosition(subMenu);
- }else if ( PORTD.F5  ==  1 ){
- delay_ms(30);
-
- }else if ( PORTD.F5  ==  1 ){
- delay_ms(30);
-
  }
- delay_ms(100);
- }while(crntMenu != None);
 
+ delay_ms(100);
+ if(waitCount>20){
+ crntMenu = None;
+ subMenu = NoEdit;
+ initLCDRaws();
+ Lcd_Cmd(_LCD_CURSOR_OFF);
+ }
+
+
+ }while(crntMenu != None);
+ saveValue();
 
 }

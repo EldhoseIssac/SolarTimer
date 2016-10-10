@@ -11,13 +11,14 @@ enum menus {
     OnOFFTime
 };
 
+
 enum subMenu{
     NoEdit,
     
     DateDay = 0,
     DateMonth = 3,
     DateYear = 6,
-    DateWeekDay = 7,
+    DateWeekDay = 9,
     
     TimeHour = 0,
     TimeMinute = 3,

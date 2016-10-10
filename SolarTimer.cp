@@ -1,6 +1,6 @@
-#line 1 "D:/SolarTimer/SolarTimer.c"
-#line 1 "d:/solartimer/deff.h"
-#line 1 "d:/solartimer/enums.h"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+#line 1 "e:/progams/hussian/solartimer/deff.h"
+#line 1 "e:/progams/hussian/solartimer/enums.h"
 
 
 enum menus {
@@ -14,13 +14,14 @@ enum menus {
  OnOFFTime
 };
 
+
 enum subMenu{
  NoEdit,
 
  DateDay = 0,
  DateMonth = 3,
  DateYear = 6,
- DateWeekDay = 7,
+ DateWeekDay = 9,
 
  TimeHour = 0,
  TimeMinute = 3,
@@ -42,7 +43,7 @@ enum subMenu{
 
 
 };
-#line 5 "d:/solartimer/deff.h"
+#line 5 "e:/progams/hussian/solartimer/deff.h"
 unsigned lastReadVoltage;
 unsigned lastReadCurrent;
 
@@ -80,7 +81,7 @@ sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
-#line 45 "d:/solartimer/deff.h"
+#line 45 "e:/progams/hussian/solartimer/deff.h"
 void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
@@ -100,7 +101,7 @@ void loadTimeAndDate();
 
 void menuPortPinInt();
 void checkKey();
-#line 22 "D:/SolarTimer/SolarTimer.c"
+#line 22 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
 void interrupt()
 {
 

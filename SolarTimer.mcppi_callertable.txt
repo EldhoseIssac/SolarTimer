@@ -13,7 +13,7 @@ main
 		initLCDRaws
 			codetxt_to_ramtxt
 				____DoICP
-			strCpyLimit
+			strcpy
 	InitRTC
 		I2C1_Init
 	initTmr1
@@ -29,6 +29,12 @@ main
 			Delay_1us
 			Delay_5500us
 			Delay_50us
+		saveValue
+			write_ds1307
+				I2C1_Start
+					I2C1_Is_Idle
+				I2C1_Wr
+				I2C1_Stop
 		loadDateEdit
 			codetxt_to_ramtxt
 				____DoICP
@@ -44,7 +50,30 @@ main
 						Delay_50us
 			BCD2UpperCh
 			BCD2LowerCh
-		strCpyLimit
+			loadDay
+		loadDay
+		Lcd_Out
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
+			Lcd_Chr_CP
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+		BCD2UpperCh
+		Lcd_Chr
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
+		BCD2LowerCh
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
 		loadTimeEdit
 			codetxt_to_ramtxt
 				____DoICP
@@ -62,18 +91,8 @@ main
 			BCD2LowerCh
 		codetxt_to_ramtxt
 			____DoICP
-		Lcd_Out
-			Lcd_Cmd
-				Delay_1us
-				Delay_5500us
-				Delay_50us
-			Lcd_Chr_CP
-				Lcd_Cmd
-					Delay_1us
-					Delay_5500us
-					Delay_50us
-		voltLow
 		voltHeigh
+		voltLow
 		loadEnHeighLow
 			Binary2BCD
 				Div_16x16_S
@@ -93,13 +112,19 @@ main
 						Delay_50us
 			codetxt_to_ramtxt
 				____DoICP
-		currLow
 		currHeigh
+		currLow
+		LDRHeigh
+		LDRLow
 		setCursorPosition
 			Lcd_Cmd
 				Delay_1us
 				Delay_5500us
 				Delay_50us
+		initLCDRaws
+			codetxt_to_ramtxt
+				____DoICP
+			strcpy
 	displayVoltageCurrent
 		Binary2BCD
 			Div_16x16_S
@@ -123,6 +148,7 @@ main
 	displayTimeDate
 		BCD2UpperCh
 		BCD2LowerCh
+		loadDay
 	loadRamToDisp
 		Lcd_Out
 			Lcd_Cmd

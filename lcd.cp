@@ -1,4 +1,4 @@
-#line 1 "D:/SolarTimer/lcd.c"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 
 extern char lcdrow1[];
 extern char lcdrow2[];
@@ -16,11 +16,13 @@ extern unsigned short year;
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
 void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count);
-#line 42 "D:/SolarTimer/lcd.c"
+#line 42 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 void initLCDRaws()
 {
- strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,16);
- strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,16);
+ strcpy(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"));
+ strcpy(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "));
+
+
 
 }
 void initLCD(){
@@ -73,6 +75,17 @@ int BCD2Binary(int a)
  r = t*10 + r;
  return r;
 }
+void loadDay(unsigned char *arr,unsigned short theIndx){
+ switch(theIndx){
+ case 1: arr[0]='S';arr[1]='u'; arr[2]='n';break;
+ case 2: arr[0]='M';arr[1]='o'; arr[2]='n';break;
+ case 3: arr[0]='T';arr[1]='u'; arr[2]='e';break;
+ case 4: arr[0]='W';arr[1]='e'; arr[2]='d';break;
+ case 5: arr[0]='T';arr[1]='h'; arr[2]='u';break;
+ case 6: arr[0]='F';arr[1]='r'; arr[2]='i';break;
+ case 7: arr[0]='S';arr[1]='a'; arr[2]='t';break;
+ }
+}
 void displayTimeDate(){
 
  lcdrow1[0] = BCD2UpperCh(hour);
@@ -88,16 +101,10 @@ void displayTimeDate(){
  lcdrow2[4] = BCD2LowerCh(month);
  lcdrow2[6] = BCD2UpperCh(year);
  lcdrow2[7] = BCD2LowerCh(year);
- switch(dday){
- case 1: lcdrow1[13]='S';lcdrow1[14]='u'; lcdrow1[15]='n';break;
- case 2: lcdrow1[13]='M';lcdrow1[14]='o'; lcdrow1[15]='n';break;
- case 3: lcdrow1[13]='T';lcdrow1[14]='u'; lcdrow1[15]='e';break;
- case 4: lcdrow1[13]='W';lcdrow1[14]='e'; lcdrow1[15]='d';break;
- case 5: lcdrow1[13]='T';lcdrow1[14]='h'; lcdrow1[15]='u';break;
- case 6: lcdrow1[13]='F';lcdrow1[14]='r'; lcdrow1[15]='i';break;
- case 7: lcdrow1[13]='S';lcdrow1[14]='a'; lcdrow1[15]='t';break;
- }
+ loadDay(&lcdrow1[13],dday);
+
 }
+
 void loadTimeEdit(){
  Lcd_Out(1,1,codetxt_to_ramtxt("Set Time"));
  lcdrow2[0] = BCD2UpperCh(hour);
@@ -118,15 +125,7 @@ void loadDateEdit(){
  lcdrow2[5] = '/';
  lcdrow2[6] = BCD2UpperCh(year);
  lcdrow2[7] = BCD2LowerCh(year);
- switch(dday){
- case 1: lcdrow2[9]='S';lcdrow2[10]='u'; lcdrow2[11]='n';break;
- case 2: lcdrow2[9]='M';lcdrow2[10]='o'; lcdrow2[11]='n';break;
- case 3: lcdrow2[9]='T';lcdrow2[10]='u'; lcdrow2[11]='e';break;
- case 4: lcdrow2[9]='W';lcdrow2[10]='e'; lcdrow2[11]='d';break;
- case 5: lcdrow2[9]='T';lcdrow2[10]='h'; lcdrow2[11]='u';break;
- case 6: lcdrow2[9]='F';lcdrow2[10]='r'; lcdrow2[11]='i';break;
- case 7: lcdrow2[9]='S';lcdrow2[10]='a'; lcdrow2[11]='t';break;
- }
+ loadDay(&lcdrow2[9],dday);
  lcdrow2[12] = '\0';
  Lcd_Out(2,1,lcdrow2);
 }
