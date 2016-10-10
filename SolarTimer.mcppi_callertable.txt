@@ -91,8 +91,8 @@ main
 			BCD2LowerCh
 		codetxt_to_ramtxt
 			____DoICP
-		voltHeigh
-		voltLow
+		ee_read
+			EEPROM_Read
 		loadEnHeighLow
 			Binary2BCD
 				Div_16x16_S
@@ -112,10 +112,6 @@ main
 						Delay_50us
 			codetxt_to_ramtxt
 				____DoICP
-		currHeigh
-		currLow
-		LDRHeigh
-		LDRLow
 		setCursorPosition
 			Lcd_Cmd
 				Delay_1us

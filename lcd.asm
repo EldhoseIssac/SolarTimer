@@ -259,17 +259,17 @@ _BCD2Binary:
 	MOVF       R3+1, 0
 	MOVWF      R0+1
 	MOVF       R2+0, 0
-L__BCD2Binary21:
+L__BCD2Binary23:
 	BTFSC      STATUS+0, 2
-	GOTO       L__BCD2Binary22
+	GOTO       L__BCD2Binary24
 	RRF        R0+1, 1
 	RRF        R0+0, 1
 	BCF        R0+1, 7
 	BTFSC      R0+1, 6
 	BSF        R0+1, 7
 	ADDLW      255
-	GOTO       L__BCD2Binary21
-L__BCD2Binary22:
+	GOTO       L__BCD2Binary23
+L__BCD2Binary24:
 ;lcd.c,96 :: 		t = 0x0F & t;
 	MOVLW      15
 	ANDWF      R0+0, 1
@@ -699,18 +699,8 @@ L_end_setCursorPosition:
 
 _loadEnHeighLow:
 
-;lcd.c,162 :: 		void loadEnHeighLow(unsigned int heigh,unsigned int low){
-;lcd.c,163 :: 		unsigned int disVolt = Binary2BCD(heigh);
-	MOVF       FARG_loadEnHeighLow_heigh+0, 0
-	MOVWF      FARG_Binary2BCD_a+0
-	MOVF       FARG_loadEnHeighLow_heigh+1, 0
-	MOVWF      FARG_Binary2BCD_a+1
-	CALL       _Binary2BCD+0
-	MOVF       R0+0, 0
-	MOVWF      loadEnHeighLow_disVolt_L0+0
-	MOVF       R0+1, 0
-	MOVWF      loadEnHeighLow_disVolt_L0+1
-;lcd.c,164 :: 		unsigned int discrr= Binary2BCD(low);
+;lcd.c,162 :: 		void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
+;lcd.c,165 :: 		unsigned int discrr= Binary2BCD(low);
 	MOVF       FARG_loadEnHeighLow_low+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       FARG_loadEnHeighLow_low+1, 0
@@ -720,69 +710,204 @@ _loadEnHeighLow:
 	MOVWF      loadEnHeighLow_discrr_L0+0
 	MOVF       R0+1, 0
 	MOVWF      loadEnHeighLow_discrr_L0+1
-;lcd.c,166 :: 		if (heigh>0) {
+;lcd.c,166 :: 		unsigned short indx = 0;
+	CLRF       loadEnHeighLow_indx_L0+0
+;lcd.c,167 :: 		if (heigh>0) {
 	MOVF       FARG_loadEnHeighLow_heigh+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__loadEnHeighLow29
+	GOTO       L__loadEnHeighLow31
 	MOVF       FARG_loadEnHeighLow_heigh+0, 0
 	SUBLW      0
-L__loadEnHeighLow29:
+L__loadEnHeighLow31:
 	BTFSC      STATUS+0, 0
 	GOTO       L_loadEnHeighLow12
-;lcd.c,167 :: 		lcdrow1[0] = 'O';
+;lcd.c,168 :: 		lcdrow2[indx++] = 'O';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
 	MOVLW      79
-	MOVWF      _lcdrow1+0
-;lcd.c,168 :: 		lcdrow1[1] = 'N';
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,169 :: 		lcdrow2[indx++] = 'N';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
 	MOVLW      78
-	MOVWF      _lcdrow1+1
-;lcd.c,169 :: 		heigh = heigh>>1;
-	RRF        FARG_loadEnHeighLow_heigh+1, 1
-	RRF        FARG_loadEnHeighLow_heigh+0, 1
-	BCF        FARG_loadEnHeighLow_heigh+1, 7
-;lcd.c,170 :: 		lcdrow2[6] = BCD2HignerCh(disVolt);
-	MOVF       loadEnHeighLow_disVolt_L0+0, 0
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,170 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,171 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,172 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,173 :: 		heigh = heigh>>1;
+	MOVF       FARG_loadEnHeighLow_heigh+0, 0
+	MOVWF      R0+0
+	MOVF       FARG_loadEnHeighLow_heigh+1, 0
+	MOVWF      R0+1
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	MOVF       R0+0, 0
+	MOVWF      FARG_loadEnHeighLow_heigh+0
+	MOVF       R0+1, 0
+	MOVWF      FARG_loadEnHeighLow_heigh+1
+;lcd.c,174 :: 		disVolt = Binary2BCD(heigh);
+	MOVF       R0+0, 0
+	MOVWF      FARG_Binary2BCD_a+0
+	MOVF       R0+1, 0
+	MOVWF      FARG_Binary2BCD_a+1
+	CALL       _Binary2BCD+0
+	MOVF       R0+0, 0
+	MOVWF      loadEnHeighLow_disVolt_L0+0
+	MOVF       R0+1, 0
+	MOVWF      loadEnHeighLow_disVolt_L0+1
+;lcd.c,175 :: 		lcdrow2[indx++] = BCD2HignerCh(disVolt);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
+	MOVF       R0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
-	MOVF       loadEnHeighLow_disVolt_L0+1, 0
+	MOVF       R0+1, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+1
 	CALL       _BCD2HignerCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+6
-;lcd.c,171 :: 		lcdrow2[7] = BCD2UpperCh(disVolt);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,176 :: 		lcdrow2[indx++] = BCD2UpperCh(disVolt);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
 	MOVF       loadEnHeighLow_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+7
-;lcd.c,172 :: 		lcdrow2[8] = BCD2LowerCh(disVolt);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,177 :: 		if(shouldUseDecimal)
+	MOVF       FARG_loadEnHeighLow_shouldUseDecimal+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_loadEnHeighLow13
+;lcd.c,179 :: 		lcdrow2[indx++] = '.';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      46
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,180 :: 		}
+L_loadEnHeighLow13:
+;lcd.c,181 :: 		lcdrow2[indx++] = BCD2LowerCh(disVolt);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
 	MOVF       loadEnHeighLow_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+8
-;lcd.c,174 :: 		lcdrow2[10] = BCD2HignerCh(discrr);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,182 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,183 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,184 :: 		lcdrow2[indx++] = ' ';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      32
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,185 :: 		lcdrow2[indx++] = BCD2HignerCh(discrr);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
 	MOVF       loadEnHeighLow_discrr_L0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
 	MOVF       loadEnHeighLow_discrr_L0+1, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+1
 	CALL       _BCD2HignerCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+10
-;lcd.c,175 :: 		lcdrow2[11] = BCD2UpperCh(discrr);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,186 :: 		lcdrow2[indx++] = BCD2UpperCh(discrr);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
 	MOVF       loadEnHeighLow_discrr_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+11
-;lcd.c,176 :: 		lcdrow2[12] = BCD2LowerCh(discrr);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,187 :: 		if(shouldUseDecimal)
+	MOVF       FARG_loadEnHeighLow_shouldUseDecimal+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_loadEnHeighLow14
+;lcd.c,189 :: 		lcdrow2[indx++] = '.';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      46
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,190 :: 		}
+L_loadEnHeighLow14:
+;lcd.c,191 :: 		lcdrow2[indx++] = BCD2LowerCh(discrr);
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FLOC__loadEnHeighLow+0
 	MOVF       loadEnHeighLow_discrr_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
+	MOVF       FLOC__loadEnHeighLow+0, 0
+	MOVWF      FSR
 	MOVF       R0+0, 0
-	MOVWF      _lcdrow2+12
-;lcd.c,177 :: 		lcdrow2[13] = '\0';
-	CLRF       _lcdrow2+13
-;lcd.c,178 :: 		Lcd_Out(2,1, lcdrow2);
+	MOVWF      INDF+0
+	INCF       loadEnHeighLow_indx_L0+0, 1
+;lcd.c,192 :: 		lcdrow2[indx] = '\0';
+	MOVF       loadEnHeighLow_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	CLRF       INDF+0
+;lcd.c,193 :: 		Lcd_Out(2,1, lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -790,10 +915,10 @@ L__loadEnHeighLow29:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,179 :: 		}else{
-	GOTO       L_loadEnHeighLow13
+;lcd.c,194 :: 		}else{
+	GOTO       L_loadEnHeighLow15
 L_loadEnHeighLow12:
-;lcd.c,180 :: 		Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
+;lcd.c,195 :: 		Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
 	MOVLW      ?lstr_5_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_5_lcd+0)
@@ -806,17 +931,17 @@ L_loadEnHeighLow12:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;lcd.c,181 :: 		}
-L_loadEnHeighLow13:
-;lcd.c,183 :: 		}
+;lcd.c,196 :: 		}
+L_loadEnHeighLow15:
+;lcd.c,198 :: 		}
 L_end_loadEnHeighLow:
 	RETURN
 ; end of _loadEnHeighLow
 
 _displayVoltageCurrent:
 
-;lcd.c,184 :: 		void displayVoltageCurrent(){
-;lcd.c,187 :: 		disVolt = Binary2BCD(lastReadVoltage);
+;lcd.c,199 :: 		void displayVoltageCurrent(){
+;lcd.c,202 :: 		disVolt = Binary2BCD(lastReadVoltage);
 	MOVF       _lastReadVoltage+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       _lastReadVoltage+1, 0
@@ -826,7 +951,7 @@ _displayVoltageCurrent:
 	MOVWF      displayVoltageCurrent_disVolt_L0+0
 	MOVF       R0+1, 0
 	MOVWF      displayVoltageCurrent_disVolt_L0+1
-;lcd.c,188 :: 		discrr = Binary2BCD(lastReadCurrent);
+;lcd.c,203 :: 		discrr = Binary2BCD(lastReadCurrent);
 	MOVF       _lastReadCurrent+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       _lastReadCurrent+1, 0
@@ -836,7 +961,7 @@ _displayVoltageCurrent:
 	MOVWF      displayVoltageCurrent_discrr_L0+0
 	MOVF       R0+1, 0
 	MOVWF      displayVoltageCurrent_discrr_L0+1
-;lcd.c,189 :: 		lcdrow1[9] = BCD2HignerCh(disVolt);
+;lcd.c,204 :: 		lcdrow1[9] = BCD2HignerCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
 	MOVF       displayVoltageCurrent_disVolt_L0+1, 0
@@ -844,19 +969,19 @@ _displayVoltageCurrent:
 	CALL       _BCD2HignerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+9
-;lcd.c,190 :: 		lcdrow1[10] = BCD2UpperCh(disVolt);
+;lcd.c,205 :: 		lcdrow1[10] = BCD2UpperCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+10
-;lcd.c,191 :: 		lcdrow1[11] = BCD2LowerCh(disVolt);
+;lcd.c,206 :: 		lcdrow1[11] = BCD2LowerCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+11
-;lcd.c,193 :: 		lcdrow2[9] = BCD2HignerCh(discrr);
+;lcd.c,208 :: 		lcdrow2[9] = BCD2HignerCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
 	MOVF       displayVoltageCurrent_discrr_L0+1, 0
@@ -864,27 +989,27 @@ _displayVoltageCurrent:
 	CALL       _BCD2HignerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+9
-;lcd.c,194 :: 		lcdrow2[10] = BCD2UpperCh(discrr);
+;lcd.c,209 :: 		lcdrow2[10] = BCD2UpperCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+10
-;lcd.c,195 :: 		lcdrow2[12] = BCD2LowerCh(discrr);
+;lcd.c,210 :: 		lcdrow2[12] = BCD2LowerCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+12
-;lcd.c,197 :: 		}
+;lcd.c,212 :: 		}
 L_end_displayVoltageCurrent:
 	RETURN
 ; end of _displayVoltageCurrent
 
 _loadRamToDisp:
 
-;lcd.c,198 :: 		void loadRamToDisp(){
-;lcd.c,199 :: 		Lcd_out(1, 1, lcdrow1);
+;lcd.c,213 :: 		void loadRamToDisp(){
+;lcd.c,214 :: 		Lcd_out(1, 1, lcdrow1);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -892,7 +1017,7 @@ _loadRamToDisp:
 	MOVLW      _lcdrow1+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,200 :: 		Lcd_out(2, 1, lcdrow2);
+;lcd.c,215 :: 		Lcd_out(2, 1, lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -900,7 +1025,7 @@ _loadRamToDisp:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,201 :: 		}
+;lcd.c,216 :: 		}
 L_end_loadRamToDisp:
 	RETURN
 ; end of _loadRamToDisp

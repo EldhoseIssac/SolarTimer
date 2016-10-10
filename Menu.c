@@ -33,26 +33,18 @@ extern unsigned short month;
 extern unsigned short year;
 //unsigned char  editStr[10];
 unsigned int editValue;
+sbit isEnabled at editValue.B0;
 
 void loadDateEdit();
 void loadTimeEdit();
 void setCursorPosition(unsigned short position);
 
-int voltHeigh();
-int voltLow();
-int currHeigh();
-int currLow();
-int LDRHeigh();
-int LDRLow();
-int onOffTimeAt(short inx);
-void saveVoltHeigh(unsigned int val);
-void saveVoltLow(unsigned int val);
-void saveCurrHeigh(unsigned int val);
-void saveCurrLow(unsigned int val);
-void saveLDRHeigh(unsigned int val);
-void saveLDRLow(unsigned int val);
-void saveOnOffTimeAt(unsigned short inx,unsigned int val);
-void loadEnHeighLow(unsigned int heigh,unsigned int low);
+
+void ee_write(unsigned short addr,unsigned int value);
+unsigned ee_read(unsigned short addr);
+
+
+void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal);
 void initLCDRaws();
 void write_ds1307(unsigned short address,unsigned short w_data);
 char * codetxt_to_ramtxt(const char* ctxt)
@@ -316,21 +308,83 @@ do{
            if(cMENU == ON)
            {
                 subMenu = VoltageEnable;
-                Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
-                editValue = voltHeigh();
-                loadEnHeighLow(editValue,voltLow());
+                Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh  Low"));
+                editValue = ee_read(EEPADDR_VoltageHigh);
+                loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
            }
            else
            {
+              switch(subMenu)
+                {
+                    case VoltageEnable:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = VoltageHigh;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                             isEnabled = !isEnabled;
+                             if (isEnabled)
+                             {
+                               loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+                             }
+                         }
+                    break;
+                    case VoltageHigh:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = VoltageLow;
+                            editValue =  ee_read(EEPADDR_VoltageLow);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue > 221)   editValue = 81;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue < 81) editValue = 221;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+                         }
+                    break;
+                    case VoltageLow:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = VoltageEnable;
+                            editValue =  ee_read(EEPADDR_VoltageHigh);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue > 221)   editValue = 81;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue < 81) editValue = 221;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(ee_read(EEPADDR_VoltageLow),editValue,0);
+                         }
+                    break;
+                    
+                }
            }
            break;
       case Current:
             if(cMENU == ON)
            {
                subMenu = CurrentEnable;
-               Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
-               editValue = currHeigh();
-               loadEnHeighLow(editValue,currLow());
+               Lcd_Out(1,1, codetxt_to_ramtxt("Amp  Heigh  Low"));
+               editValue = ee_read(EEPADDR_CurrentHeigh);
+               loadEnHeighLow(editValue, ee_read(EEPADDR_CurrentLow),1);
            }
            else
            {
@@ -340,9 +394,9 @@ do{
            if(cMENU == ON)
            {
                 subMenu = LDRValEnable;
-                editValue = LDRHeigh();
-                Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
-                loadEnHeighLow(editValue,LDRLow());
+                editValue = ee_read(EEPADDR_LDRValHeigh);
+                Lcd_Out(1,1, codetxt_to_ramtxt("LDR  Heigh  Low"));
+                loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
            }
            else
            {
@@ -357,7 +411,8 @@ do{
    }
 
      delay_ms(100);
-     if(waitCount>20){
+     waitCount++;
+     if(waitCount>100){
           crntMenu = None;
           subMenu = NoEdit;
           initLCDRaws();

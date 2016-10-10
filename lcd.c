@@ -159,22 +159,37 @@ void setCursorPosition(unsigned short position){
     }
 }
 
-void loadEnHeighLow(unsigned int heigh,unsigned int low){
-    unsigned int disVolt = Binary2BCD(heigh);
+void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
+{
+    unsigned int disVolt;// = Binary2BCD(heigh);
     unsigned int discrr= Binary2BCD(low);
-
+    unsigned short indx = 0;
     if (heigh>0) {
-        lcdrow1[0] = 'O';
-        lcdrow1[1] = 'N';
+        lcdrow2[indx++] = 'O';
+        lcdrow2[indx++] = 'N';
+        lcdrow2[indx++] = ' ';
+        lcdrow2[indx++] = ' ';
+        lcdrow2[indx++] = ' ';
         heigh = heigh>>1;
-        lcdrow2[6] = BCD2HignerCh(disVolt);
-        lcdrow2[7] = BCD2UpperCh(disVolt);
-        lcdrow2[8] = BCD2LowerCh(disVolt);
-        
-        lcdrow2[10] = BCD2HignerCh(discrr);
-        lcdrow2[11] = BCD2UpperCh(discrr);
-        lcdrow2[12] = BCD2LowerCh(discrr);
-        lcdrow2[13] = '\0';
+        disVolt = Binary2BCD(heigh);
+        lcdrow2[indx++] = BCD2HignerCh(disVolt);
+        lcdrow2[indx++] = BCD2UpperCh(disVolt);
+        if(shouldUseDecimal)
+        {
+          lcdrow2[indx++] = '.';
+        }
+        lcdrow2[indx++] = BCD2LowerCh(disVolt);
+        lcdrow2[indx++] = ' ';
+        lcdrow2[indx++] = ' ';
+        lcdrow2[indx++] = ' ';
+        lcdrow2[indx++] = BCD2HignerCh(discrr);
+        lcdrow2[indx++] = BCD2UpperCh(discrr);
+        if(shouldUseDecimal)
+        {
+          lcdrow2[indx++] = '.';
+        }
+        lcdrow2[indx++] = BCD2LowerCh(discrr);
+        lcdrow2[indx] = '\0';
         Lcd_Out(2,1, lcdrow2);
     }else{
         Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));

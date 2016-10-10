@@ -13,7 +13,6 @@ enum menus {
  OnOFFTime
 };
 
-
 enum subMenu{
  NoEdit,
 
@@ -40,6 +39,33 @@ enum subMenu{
  OnOFFTimerCntEdit,
  OnOFFTimeEdit
 
+};
+
+enum EEPADDR
+{
+ EEPADDR_VoltageHigh = 0x02,
+ EEPADDR_VoltageLow = 0x04,
+
+ EEPADDR_CurrentHeigh = 0x06,
+ EEPADDR_CurrentLow = 0x08,
+
+ EEPADDR_LDRValHeigh = 10,
+ EEPADDR_LDRValLow = 12,
+
+ EEPADDR_OnOFFTimerCntEdit = 14,
+ EEPADDR_OnOFFTimeEdit1 = 16,
+ EEPADDR_OnOFFTimeEdit2 = 18,
+ EEPADDR_OnOFFTimeEdit3 = 20,
+ EEPADDR_OnOFFTimeEdit4 = 22,
+ EEPADDR_OnOFFTimeEdit5 = 24,
+ EEPADDR_OnOFFTimeEdit6 = 26,
+ EEPADDR_OnOFFTimeEdit7 = 28,
+ EEPADDR_OnOFFTimeEdit8 = 30,
+ EEPADDR_OnOFFTimeEdit9 = 32,
+ EEPADDR_OnOFFTimeEdit10 = 34,
+ EEPADDR_OnOFFTimeEdit11 = 36,
+ EEPADDR_OnOFFTimeEdit12 = 38
+
 
 };
 #line 22 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
@@ -57,26 +83,18 @@ extern unsigned short month;
 extern unsigned short year;
 
 unsigned int editValue;
+sbit isEnabled at editValue.B0;
 
 void loadDateEdit();
 void loadTimeEdit();
 void setCursorPosition(unsigned short position);
 
-int voltHeigh();
-int voltLow();
-int currHeigh();
-int currLow();
-int LDRHeigh();
-int LDRLow();
-int onOffTimeAt(short inx);
-void saveVoltHeigh(unsigned int val);
-void saveVoltLow(unsigned int val);
-void saveCurrHeigh(unsigned int val);
-void saveCurrLow(unsigned int val);
-void saveLDRHeigh(unsigned int val);
-void saveLDRLow(unsigned int val);
-void saveOnOffTimeAt(unsigned short inx,unsigned int val);
-void loadEnHeighLow(unsigned int heigh,unsigned int low);
+
+void ee_write(unsigned short addr,unsigned int value);
+unsigned ee_read(unsigned short addr);
+
+
+void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal);
 void initLCDRaws();
 void write_ds1307(unsigned short address,unsigned short w_data);
 char * codetxt_to_ramtxt(const char* ctxt)
@@ -340,21 +358,83 @@ do{
  if(cMENU ==  1 )
  {
  subMenu = VoltageEnable;
- Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh Low"));
- editValue = voltHeigh();
- loadEnHeighLow(editValue,voltLow());
+ Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh  Low"));
+ editValue = ee_read(EEPADDR_VoltageHigh);
+ loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
  }
  else
  {
+ switch(subMenu)
+ {
+ case VoltageEnable:
+ if(cSELECT ==  1  )
+ {
+ subMenu = VoltageHigh;
+ }
+ if (cPLUS ==  1  || cMINUS ==  1 )
+ {
+ isEnabled = !isEnabled;
+ if (isEnabled)
+ {
+ loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+ }
+ }
+ break;
+ case VoltageHigh:
+ if(cSELECT ==  1  )
+ {
+ subMenu = VoltageLow;
+ editValue = ee_read(EEPADDR_VoltageLow);
+ }
+ if (cPLUS ==  1 )
+ {
+ editValue += 2;
+ if (editValue > 221) editValue = 81;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ editValue += 2;
+ if (editValue < 81) editValue = 221;
+ }
+ if (cPLUS ==  1  || cMINUS ==  1 )
+ {
+ loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+ }
+ break;
+ case VoltageLow:
+ if(cSELECT ==  1  )
+ {
+ subMenu = VoltageEnable;
+ editValue = ee_read(EEPADDR_VoltageHigh);
+ }
+ if (cPLUS ==  1 )
+ {
+ editValue += 2;
+ if (editValue > 221) editValue = 81;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ editValue += 2;
+ if (editValue < 81) editValue = 221;
+ }
+ if (cPLUS ==  1  || cMINUS ==  1 )
+ {
+ loadEnHeighLow(ee_read(EEPADDR_VoltageLow),editValue,0);
+ }
+ break;
+
+ }
  }
  break;
  case Current:
  if(cMENU ==  1 )
  {
  subMenu = CurrentEnable;
- Lcd_Out(1,1, codetxt_to_ramtxt("Amp Heigh Low"));
- editValue = currHeigh();
- loadEnHeighLow(editValue,currLow());
+ Lcd_Out(1,1, codetxt_to_ramtxt("Amp  Heigh  Low"));
+ editValue = ee_read(EEPADDR_CurrentHeigh);
+ loadEnHeighLow(editValue, ee_read(EEPADDR_CurrentLow),1);
  }
  else
  {
@@ -364,9 +444,9 @@ do{
  if(cMENU ==  1 )
  {
  subMenu = LDRValEnable;
- editValue = LDRHeigh();
- Lcd_Out(1,1, codetxt_to_ramtxt("LDR Heigh Low"));
- loadEnHeighLow(editValue,LDRLow());
+ editValue = ee_read(EEPADDR_LDRValHeigh);
+ Lcd_Out(1,1, codetxt_to_ramtxt("LDR  Heigh  Low"));
+ loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
  }
  else
  {
@@ -381,6 +461,7 @@ do{
  }
 
  delay_ms(100);
+ waitCount++;
  if(waitCount>20){
  crntMenu = None;
  subMenu = NoEdit;

@@ -178,8 +178,6 @@ crntmenu
 cselect
 csrc
 csrc_bit
-currheigh
-currlow
 cvr0
 cvr0_bit
 cvr1
@@ -240,6 +238,8 @@ double2longint
 double2longword
 double2word
 editvalue
+ee_read
+ee_write
 eeadr
 eeadrh
 eecon1
@@ -316,6 +316,7 @@ inttostr
 inttostrwithzeros
 irp
 irp_bit
+isenabled
 lastreadcurrent
 lastreadvoltage
 lcd_chr
@@ -338,8 +339,6 @@ lcd_rs
 lcd_rs_direction
 lcdrow1
 lcdrow2
-ldrheigh
-ldrlow
 loaddateedit
 loadday
 loadenheighlow
@@ -406,7 +405,6 @@ obf_bit
 obf_trise_bit
 oerr
 oerr_bit
-onofftimeat
 option_reg
 p
 p_bit
@@ -579,14 +577,7 @@ rx9d
 rx9d_bit
 s
 s_bit
-savecurrheigh
-savecurrlow
-saveldrheigh
-saveldrlow
-saveonofftimeat
 savevalue
-savevoltheigh
-savevoltlow
 sdiv3232l
 second
 sen
@@ -796,8 +787,6 @@ ua
 ua_bit
 vdelay_advanced_ms
 vdelay_ms
-voltheigh
-voltlow
 w
 waitcount
 wcol
