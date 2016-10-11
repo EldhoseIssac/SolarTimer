@@ -17,8 +17,8 @@ void Lcd_Cmd(short command);
 #endif
 
 
-#define ON  1
-#define OFF 0
+#define ON  0
+#define OFF 1
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -117,7 +117,12 @@ do{
     cSELECT = SELECT;
     cPLUS = PLUS;
     cMINUS = MINUS;
-   if(cashedPortD > 0)
+    #if ON == 1
+       if(cashedPortD > 0)
+    #else
+       if(cashedPortD < 0xF0)
+    #endif
+
    {
       waitCount = 0;
       delay_ms(100);
