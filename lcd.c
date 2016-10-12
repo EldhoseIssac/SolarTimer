@@ -13,12 +13,12 @@ extern unsigned short month;
 extern unsigned short year;
 
 extern unsigned int editValue;
-sbit isEnabled at editValue.B0;
-sbit didHaveDay at editValue.B1;
+
+
 
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
-void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count);
+
 //https://electrosome.com/digital-clock-pic-microcontroller-ds1307/
 
 #if DEBUG
@@ -29,27 +29,37 @@ short _LCD_CURSOR_OFF;
 short _LCD_UNDERLINE_ON;
 short _LCD_SECOND_ROW;
 short _LCD_MOVE_CURSOR_RIGHT;
-short _LCD_CURSOR_OFF;
+short _LCD_BLINK_CURSOR_ON;
 void Lcd_Init(){
     
 }
 void Lcd_Cmd(short command){
     
 }
-void Lcd_out(int row,int col,char * sting){
+void Lcd_Out(int row,int col,char  *sting){
     printf("at %d,%d : %s",row,col,sting);
 }
-
+short Lo(unsigned int val){
+    return (short) val;
+}
+void Lcd_Chr(int row,int col,char  chr)
+{
+    
+}
+void Lcd_Chr_CP(char  chr)
+{
+    
+}
+extern short isEnabled;
  #else
 #include <built_in.h>
+sbit isEnabled at editValue.B0;
 #endif
 
 void initLCDRaws()
 {
  strcpy(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"));
  strcpy(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "));
- //strCpyLimit(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"),0,17);
- //strCpyLimit(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "),0,17);
 
 }
 void initLCD(){
@@ -102,7 +112,7 @@ int BCD2Binary(int a)
   r = t*10 + r;
   return r;
 }
-void loadDay(unsigned char *arr,unsigned short theIndx){
+void loadDay(char *arr,unsigned short theIndx){
    switch(theIndx){
      case 0: arr[0]='-';arr[1]='-'; arr[2]='-';break;
      case 1: arr[0]='S';arr[1]='u'; arr[2]='n';break;
@@ -173,13 +183,13 @@ void loadEnDayHrMin()
   unsigned int dis;
   if(isEnabled)
   {
-      lcdrow2[indx++] = 'O';
+        lcdrow2[indx++] = 'O';
         lcdrow2[indx++] = 'N';
         lcdrow2[indx++] = ' ';
   }
   else
   {
-       lcdrow2[indx++] = 'O';
+        lcdrow2[indx++] = 'O';
         lcdrow2[indx++] = 'F';
         lcdrow2[indx++] = 'F';
   }
@@ -190,13 +200,14 @@ void loadEnDayHrMin()
   indx += 3;
   lcdrow2[indx++] = ' ';
   lcdrow2[indx++] = ' ';
-  val = editValue >> 3;
-  dday =  editValue/60;
+  val = (val >> 3);
+  dday =  val & 0x1F;
   dis =   Binary2BCD(dday);
   lcdrow2[indx++] = BCD2UpperCh(dis);
   lcdrow2[indx++] = BCD2LowerCh(dis);
   lcdrow2[indx++] = ':';
-  dday =  editValue%60;
+  val = (val >> 5);
+  dday =  val & 0x3F;
   dis =   Binary2BCD(dday);
   lcdrow2[indx++] = BCD2UpperCh(dis);
   lcdrow2[indx++] = BCD2LowerCh(dis);
@@ -255,6 +266,6 @@ void displayVoltageCurrent(){
 
 }
  void loadRamToDisp(){
-      Lcd_out(1, 1, lcdrow1);
-      Lcd_out(2, 1, lcdrow2);
+      Lcd_Out(1, 1, lcdrow1);
+      Lcd_Out(2, 1, lcdrow2);
  }

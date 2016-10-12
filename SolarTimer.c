@@ -12,9 +12,7 @@ void ADC_Init(){
     
 }
 
-void delay_ms(int ms){
-    
-}
+void delay_ms(unsigned int del);
 
 #endif
 

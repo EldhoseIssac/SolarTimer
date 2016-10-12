@@ -1,5 +1,18 @@
 #if DEBUG
 
+void EEprom_write(unsigned short addr,unsigned short value){
+    
+}
+
+unsigned short EEprom_read(unsigned short addr){
+    return addr;
+}
+unsigned short Hi(unsigned val){
+    return 10;
+}
+unsigned short lo(unsigned val){
+    return 10;
+}
 
 #else
 #include <built_in.h>

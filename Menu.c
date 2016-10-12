@@ -9,6 +9,15 @@ extern short _LCD_CLEAR;
 extern short _LCD_UNDERLINE_ON;
 extern short _LCD_CURSOR_OFF;
 void Lcd_Cmd(short command);
+void delay_ms(unsigned int del){
+    
+}
+
+void Lcd_Out(int row,int col,char  *sting);
+short Lo(unsigned int val);
+void Lcd_Chr(int row,int col,char  chr);
+void Lcd_Chr_CP(char  chr);
+
 #else
 #define MENU PORTD.F7
 #define SELECT PORTD.F6
@@ -31,12 +40,25 @@ extern unsigned short day;
 extern unsigned short dday;
 extern unsigned short month;
 extern unsigned short year;
+extern short _LCD_BLINK_CURSOR_ON;
 //unsigned char  editStr[10];
 unsigned int editValue;
+void loadEnDayHrMin();
+#if DEBUG
+short isEnabled;
+short lowDay;
+short MidleDay;
+short HeighDay;
+
+
+
+#else
 sbit isEnabled at editValue.B0;
 sbit lowDay at editValue.B1;
 sbit MidleDay at editValue.B2;
 sbit HeighDay at editValue.B3;
+#endif
+
 
 void loadDateEdit();
 void loadTimeEdit();
@@ -74,7 +96,7 @@ void menuPortPinInt(){
  unsigned waitCount ;
  unsigned char BCD2UpperCh(unsigned char bcd);
  unsigned char BCD2LowerCh(unsigned char bcd);
- void loadDay(unsigned char *arr,unsigned short theIndx);
+ void loadDay(char *arr,unsigned short theIndx);
  void saveValue(){
       switch(crntMenu){
                    case Date:
@@ -106,13 +128,26 @@ void menuPortPinInt(){
       }
  }
 unsigned short cashedPortD = 0;
+#if DEBUG
+short cMENU;
+short cSELECT;
+short cPLUS;
+short cMINUS;
+
+#else
 sbit cMENU at cashedPortD.B7;
 sbit cSELECT at cashedPortD.B6;
 sbit cPLUS at cashedPortD.B5;
 sbit cMINUS at cashedPortD.B4;
 void loadEnDayHrMin();
+
+#endif
+
+
+
 void checkKey(){
-  unsigned short timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
+    unsigned short timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
+    unsigned short timeEditTemp = 0;
   
 do{
     cMENU = MENU;
@@ -422,32 +457,56 @@ do{
                 Lcd_Out(1,1,lcdrow1);
                 loadEnDayHrMin();
              }
-             case OnOFFTimeEditEnable:
+             else
+             {
+                 switch (subMenu) {
+                     case OnOFFTimeEditEnable:
                          if(cSELECT == ON )
                          {
-                            subMenu = OnOFFTimeEditWeekDay;
+                             subMenu = OnOFFTimeEditWeekDay;
+                             timeEditTemp = (editValue >> 1) & 0x07;
+                             
                          }
                          if (cPLUS == ON || cMINUS == ON)
                          {
                              isEnabled = !isEnabled;
                              loadEnDayHrMin();
                          }
-                    break;
-              case OnOFFTimeEditWeekDay:
+                         break;
+                     case OnOFFTimeEditWeekDay:
                          if(cSELECT == ON )
                          {
-                            subMenu = OnOFFTimeEditHour;
+                             subMenu = OnOFFTimeEditHour;
+                         }
+                         // no need to check overflow
+                         if (cPLUS == ON)
+                         {
+                             timeEditTemp++;
+                         }
+                         if (cMINUS == ON)
+                         {
+                             timeEditTemp--;
+                         }
+                         if (cPLUS == ON || cMINUS == ON) {
+                             editValue = (editValue & 0xFFE1) & ((timeEditTemp<<1) & 0xE1);
+                             loadEnDayHrMin();
+                         }
+                         break;
+                     case OnOFFTimeEditHour:
+                         if(cSELECT == ON )
+                         {
+                             subMenu = OnOFFTimeEditMint;
                          }
                          if (cPLUS == ON)
                          {
                              lowDay = !lowDay;
                              if(!lowDay )
                              {
-                               MidleDay = !MidleDay;
-                               if (!MidleDay)
-                               {
-                                 HeighDay = !HeighDay;
-                               }
+                                 MidleDay = !MidleDay;
+                                 if (!MidleDay)
+                                 {
+                                     HeighDay = !HeighDay;
+                                 }
                              }
                              loadEnDayHrMin();
                          }
@@ -456,15 +515,54 @@ do{
                              lowDay = !lowDay;
                              if(lowDay )
                              {
-                               MidleDay = !MidleDay;
-                               if (MidleDay)
-                               {
-                                 HeighDay = !HeighDay;
-                               }
+                                 MidleDay = !MidleDay;
+                                 if (MidleDay)
+                                 {
+                                     HeighDay = !HeighDay;
+                                 }
                              }
                              loadEnDayHrMin();
                          }
-                    break;
+
+                         break;
+                     case OnOFFTimeEditMint:
+                         if(cSELECT == ON )
+                         {
+                             subMenu = OnOFFTimeEditEnable;
+                         }
+                         if (cPLUS == ON)
+                         {
+                             lowDay = !lowDay;
+                             if(!lowDay )
+                             {
+                                 MidleDay = !MidleDay;
+                                 if (!MidleDay)
+                                 {
+                                     HeighDay = !HeighDay;
+                                 }
+                             }
+                             loadEnDayHrMin();
+                         }
+                         if (cMINUS == ON)
+                         {
+                             lowDay = !lowDay;
+                             if(lowDay )
+                             {
+                                 MidleDay = !MidleDay;
+                                 if (MidleDay)
+                                 {
+                                     HeighDay = !HeighDay;
+                                 }
+                             }
+                             loadEnDayHrMin();
+                         }
+
+                         break;
+                 }
+             }
+                 
+              
+             
           }
           else
           {
