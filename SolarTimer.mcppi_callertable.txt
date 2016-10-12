@@ -112,6 +112,25 @@ main
 						Delay_50us
 			codetxt_to_ramtxt
 				____DoICP
+		strcpy
+		loadEnDayHrMin
+			loadDay
+			Div_16X16_U
+			Binary2BCD
+				Div_16x16_S
+					Div_16x16_S_L
+			BCD2UpperCh
+			BCD2LowerCh
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 		setCursorPosition
 			Lcd_Cmd
 				Delay_1us

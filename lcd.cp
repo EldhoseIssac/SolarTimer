@@ -13,10 +13,15 @@ extern unsigned short dday;
 extern unsigned short month;
 extern unsigned short year;
 
+extern unsigned int editValue;
+sbit isEnabled at editValue.B0;
+sbit didHaveDay at editValue.B1;
+
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
 void strCpyLimit(unsigned char *source,unsigned char *dest,short from,short count);
-#line 42 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
+#line 47 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 void initLCDRaws()
 {
  strcpy(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"));
@@ -77,6 +82,7 @@ int BCD2Binary(int a)
 }
 void loadDay(unsigned char *arr,unsigned short theIndx){
  switch(theIndx){
+ case 0: arr[0]='-';arr[1]='-'; arr[2]='-';break;
  case 1: arr[0]='S';arr[1]='u'; arr[2]='n';break;
  case 2: arr[0]='M';arr[1]='o'; arr[2]='n';break;
  case 3: arr[0]='T';arr[1]='u'; arr[2]='e';break;
@@ -137,6 +143,44 @@ void setCursorPosition(unsigned short position){
  }
 }
 
+void loadEnDayHrMin()
+{
+ unsigned short indx = 0;
+ unsigned val = editValue >> 1;
+ unsigned short dday =  ((char *)&val)[0]  & 0x07;
+ unsigned int dis;
+ if(isEnabled)
+ {
+ lcdrow2[indx++] = 'O';
+ lcdrow2[indx++] = 'N';
+ lcdrow2[indx++] = ' ';
+ }
+ else
+ {
+ lcdrow2[indx++] = 'O';
+ lcdrow2[indx++] = 'F';
+ lcdrow2[indx++] = 'F';
+ }
+ lcdrow2[indx++] = ' ';
+ lcdrow2[indx++] = ' ';
+ lcdrow2[indx++] = ' ';
+ loadDay(&lcdrow2[indx],dday);
+ indx += 3;
+ lcdrow2[indx++] = ' ';
+ lcdrow2[indx++] = ' ';
+ val = editValue >> 3;
+ dday = editValue/60;
+ dis = Binary2BCD(dday);
+ lcdrow2[indx++] = BCD2UpperCh(dis);
+ lcdrow2[indx++] = BCD2LowerCh(dis);
+ lcdrow2[indx++] = ':';
+ dday = editValue%60;
+ dis = Binary2BCD(dday);
+ lcdrow2[indx++] = BCD2UpperCh(dis);
+ lcdrow2[indx++] = BCD2LowerCh(dis);
+ lcdrow2[indx] = '\0';
+ Lcd_Out(2,1, lcdrow2);
+}
 void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
 {
  unsigned int disVolt;

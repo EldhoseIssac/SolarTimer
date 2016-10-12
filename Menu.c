@@ -17,8 +17,8 @@ void Lcd_Cmd(short command);
 #endif
 
 
-#define ON  0
-#define OFF 1
+#define ON  1
+#define OFF 0
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -34,6 +34,9 @@ extern unsigned short year;
 //unsigned char  editStr[10];
 unsigned int editValue;
 sbit isEnabled at editValue.B0;
+sbit lowDay at editValue.B1;
+sbit MidleDay at editValue.B2;
+sbit HeighDay at editValue.B3;
 
 void loadDateEdit();
 void loadTimeEdit();
@@ -107,10 +110,9 @@ sbit cMENU at cashedPortD.B7;
 sbit cSELECT at cashedPortD.B6;
 sbit cPLUS at cashedPortD.B5;
 sbit cMINUS at cashedPortD.B4;
-
+void loadEnDayHrMin();
 void checkKey(){
-
-
+  unsigned short timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
   
 do{
     cMENU = MENU;
@@ -135,9 +137,9 @@ do{
             saveValue();
         }
         crntMenu ++;
-        if(crntMenu>OnOFFTime)
+        if(crntMenu>(OnOFFTime+8))
         {
-           waitCount = 100;
+           waitCount = 500;
         }
    }
    if(cSELECT == ON)
@@ -408,7 +410,67 @@ do{
            }
            break;
      default:
-          waitCount = 100;
+          if(crntMenu<(OnOFFTime+8))
+          {
+             if (cMENU == ON)
+             {
+                subMenu = OnOFFTimeEditEnable;
+                timeEEAddr += 2;
+                editValue = ee_read(timeEEAddr);
+                strcpy(lcdrow1,codetxt_to_ramtxt("Time1 Day  Hr:Mn"));
+                lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
+                Lcd_Out(1,1,lcdrow1);
+                loadEnDayHrMin();
+             }
+             case OnOFFTimeEditEnable:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = OnOFFTimeEditWeekDay;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                             isEnabled = !isEnabled;
+                             loadEnDayHrMin();
+                         }
+                    break;
+              case OnOFFTimeEditWeekDay:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = OnOFFTimeEditHour;
+                         }
+                         if (cPLUS == ON)
+                         {
+                             lowDay = !lowDay;
+                             if(!lowDay )
+                             {
+                               MidleDay = !MidleDay;
+                               if (!MidleDay)
+                               {
+                                 HeighDay = !HeighDay;
+                               }
+                             }
+                             loadEnDayHrMin();
+                         }
+                         if (cMINUS == ON)
+                         {
+                             lowDay = !lowDay;
+                             if(lowDay )
+                             {
+                               MidleDay = !MidleDay;
+                               if (MidleDay)
+                               {
+                                 HeighDay = !HeighDay;
+                               }
+                             }
+                             loadEnDayHrMin();
+                         }
+                    break;
+          }
+          else
+          {
+            waitCount = 500;
+          }
+
           break;
    }
    if(cashedPortD > 0){
@@ -417,7 +479,7 @@ do{
 
      delay_ms(100);
      waitCount++;
-     if(waitCount>100){
+     if(waitCount>200){
           crntMenu = None;
           subMenu = NoEdit;
           initLCDRaws();

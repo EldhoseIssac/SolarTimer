@@ -7,7 +7,7 @@ enum menus {
     Voltage,
     Current,
     LDRVal,
-    OnOFFTimerCnt,
+    //OnOFFTimerCnt,
     OnOFFTime
 };
 
@@ -34,8 +34,11 @@ enum subMenu{
     LDRValHeigh = 8,
     LDRValLow = 13,
     
-    OnOFFTimerCntEdit,
-    OnOFFTimeEdit
+    //OnOFFTimerCntEdit,
+    OnOFFTimeEditEnable = 0,
+    OnOFFTimeEditWeekDay = 6,
+    OnOFFTimeEditHour = 9,
+    OnOFFTimeEditMint = 12
 
 };
 
