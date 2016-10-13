@@ -437,9 +437,11 @@ ircf2
 ircf2_bit
 irp
 irp_bit
+isedited
 isenabled
 lastreadcurrent
 lastreadvoltage
+lasttimecheckvalue
 lcd_chr
 lcd_chr_cp
 lcd_cmd
@@ -462,6 +464,7 @@ lcdrow1
 lcdrow2
 loaddateedit
 loadday
+loadendayhrmin
 loadenheighlow
 loadramtodisp
 loadtimeanddate
@@ -776,6 +779,7 @@ setiov3224
 shorttohex
 shorttostr
 shouldloaddisp
+shouldon
 smp
 smp_bit
 spbrg
@@ -872,6 +876,7 @@ t2ckps0_bit
 t2ckps1
 t2ckps1_bit
 t2con
+timeeeaddr
 tmr0
 tmr0ie
 tmr0ie_bit

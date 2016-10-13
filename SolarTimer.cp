@@ -10,7 +10,7 @@ enum menus {
  Voltage,
  Current,
  LDRVal,
- OnOFFTimerCnt,
+
  OnOFFTime
 };
 
@@ -26,7 +26,7 @@ enum subMenu{
  TimeMinute = 3,
 
  VoltageEnable = 0,
- VoltageHigh = 8,
+ VoltageHigh = 7,
  VoltageLow = 13,
 
  CurrentEnable = 0,
@@ -37,8 +37,12 @@ enum subMenu{
  LDRValHeigh = 8,
  LDRValLow = 13,
 
- OnOFFTimerCntEdit,
- OnOFFTimeEdit
+
+ OnOFFTimeEditEnable = 0,
+ OnOFFTimeEditOnOff = 4,
+ OnOFFTimeEditWeekDay = 6,
+ OnOFFTimeEditHour = 11,
+ OnOFFTimeEditMint = 14
 
 };
 
@@ -90,9 +94,12 @@ unsigned short set_count = 0;
 short set;
 unsigned int dispUpdateCount =0;
 unsigned short pgmStatus = 0;
+unsigned int editValue;
 
 sbit shouldLoadDisp at pgmStatus.B0;
-
+sbit isEdited at pgmStatus.B1;
+sbit isEnabled at editValue.B0;
+sbit shouldON at editValue.B1;
 
 sbit LCD_RS at RB4_bit;
 sbit LCD_EN at RB5_bit;
@@ -107,7 +114,7 @@ sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
-#line 45 "e:/progams/hussian/solartimer/deff.h"
+#line 48 "e:/progams/hussian/solartimer/deff.h"
 void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
@@ -127,7 +134,7 @@ void loadTimeAndDate();
 
 void menuPortPinInt();
 void checkKey();
-#line 22 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+#line 20 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
 void interrupt()
 {
 
@@ -147,15 +154,21 @@ void interrupt()
  }
  }
 }
+unsigned ee_read(unsigned short addr);
+unsigned int lastTimeCheckValue;
+
 
 
 
 void main() {
 
 
-
-
-
+ unsigned short index;
+ unsigned short tmp;
+ lastTimeCheckValue = 0;
+ osccon = 0x70;
+ ansel = 7;
+ anselh = 0;
  trisb = 0;
  trisd = 0;
  ADC_Init();
@@ -172,14 +185,40 @@ void main() {
 
  if(shouldLoadDisp)
  {
- if(crntMenu == None ){
  displayVoltageCurrent();
  loadTimeAndDate();
  displayTimeDate();
- }
-
  loadRamToDisp();
  shouldLoadDisp = 0;
+ for (index = EEPADDR_OnOFFTimeEdit1;index<EEPADDR_OnOFFTimeEdit9;index+=2)
+ {
+ editValue = ee_read(index);
+ if(!isEnabled)
+ {
+ continue;
+ }
+ if (lastTimeCheckValue != editValue)
+ {
+ tmp = editValue;
+ tmp = (tmp & 0x1C) >> 2;
+ if (tmp != 0 || tmp != dday)
+ {
+ continue;
+ }
+ tmp = (editValue & 0x03E0) >> 5;
+ if (tmp != hour)
+ {
+ continue;
+ }
+ tmp = (editValue & 0xFC00) >> 10;
+ if (tmp != minute)
+ {
+ continue;
+ }
+  PORTC.F0  = shouldON;
+
+ }
+ }
  }
  }
 }

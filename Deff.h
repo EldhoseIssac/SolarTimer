@@ -22,9 +22,12 @@ unsigned short set_count = 0;
 short set;
 unsigned int dispUpdateCount =0;
 unsigned short pgmStatus = 0;
+unsigned int editValue;
 #if !DEBUG
 sbit shouldLoadDisp at pgmStatus.B0;
-
+sbit isEdited at  pgmStatus.B1;
+sbit isEnabled at editValue.B0;
+sbit shouldON at editValue.B1;
 // LCD
 sbit LCD_RS at RB4_bit;
 sbit LCD_EN at RB5_bit;
