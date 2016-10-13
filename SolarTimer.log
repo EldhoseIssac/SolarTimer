@@ -1,4 +1,8 @@
-0	1	mikroCPIC1618.exe -MSF -DBG -pP16F887 -DL -O11111114 -fo8 -N"E:\PROGAMS\hussian\SolarTimer\SolarTimer.mcppi" -EH"E:\PROGAMS\hussian\SolarTimer\SolarTimer.ihex" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"E:\PROGAMS\hussian\SolarTimer\" -IP"E:\PROGAMS\hussian\SolarTimer\" "SolarTimer.c" "adc.c" "lcd.c" "Menu.c" "rtc.c" "tmr1.c" "eeprom.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_Button.mcl" "__Lib_ADC_88X.mcl" "__Lib_EEPROM.mcl" "__Lib_I2C_c34.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl"	 
+0	1	mikroCPIC1618.exe -MSF -DBG -pP16F887 -DL -O11111114 -fo8 -N"D:\SolarTimer\SolarTimer.mcppi" -EH"D:\SolarTimer\SolarTimer.ihex" -SP"C:\Program Files (x86)\mikroC PRO for PIC\Defs\" -SP"C:\Program Files (x86)\mikroC PRO for PIC\Uses\P16\" -SP"D:\SolarTimer\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"E:\PROGAMS\hussian\SolarTimer\" -IP"E:\PROGAMS\hussian\SolarTimer\" -IP"D:\SolarTimer\" "SolarTimer.c" "adc.c" "lcd.c" "Menu.c" "rtc.c" "tmr1.c" "eeprom.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_Button.mcl" "__Lib_ADC_88X.mcl" "__Lib_EEPROM.mcl" "__Lib_I2C_c34.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl"	 
+warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs'	 
+warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16'	 
+warning: 0	1501	Specified search path does not exist: 'E:\PROGAMS\hussian\SolarTimer'	 
+warning: 0	1502	Specified include path does not exist: 'E:\PROGAMS\hussian\SolarTimer'	 
 hint: 0	1139	Available RAM: 352 [bytes], Available ROM: 8192 [bytes]	 
 diagnostics: 0	122	Compilation Started	enums.h
 diagnostics: 106	123	Compiled Successfully	SolarTimer.c
@@ -19,10 +23,10 @@ diagnostics: 0	122	Compilation Started	tmr1.c
 diagnostics: 16	123	Compiled Successfully	tmr1.c
 diagnostics: 0	122	Compilation Started	eeprom.c
 diagnostics: 32	123	Compiled Successfully	eeprom.c
-diagnostics: 0	127	All files Compiled in 343 ms	 
+diagnostics: 0	127	All files Compiled in 516 ms	 
 hint: 0	1144	Used RAM (bytes): 111 (32%)  Free RAM (bytes): 241 (68%)	Used RAM (bytes): 111 (32%)  Free RAM (bytes): 241 (68%)
 hint: 0	1144	Used ROM (program words): 4632 (57%)  Free ROM (program words): 3560 (43%)	Used ROM (program words): 4632 (57%)  Free ROM (program words): 3560 (43%)
 diagnostics: 0	125	Project Linked Successfully	SolarTimer.mcppi
-diagnostics: 0	128	Linked in 47 ms	 
-diagnostics: 0	129	Project 'SolarTimer.mcppi' completed: 421 ms	 
-diagnostics: 0	103	Finished successfully: 13 Oct 2016, 14:18:37	SolarTimer.mcppi
+diagnostics: 0	128	Linked in 94 ms	 
+diagnostics: 0	129	Project 'SolarTimer.mcppi' completed: 641 ms	 
+diagnostics: 0	103	Finished successfully: 13 Oct 2016, 14:37:52	SolarTimer.mcppi

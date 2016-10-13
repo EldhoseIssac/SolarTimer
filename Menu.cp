@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "D:/SolarTimer/Menu.c"
+#line 1 "d:/solartimer/enums.h"
 
 
 enum menus {
@@ -72,7 +72,7 @@ enum EEPADDR
 
 
 };
-#line 33 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 33 "D:/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 

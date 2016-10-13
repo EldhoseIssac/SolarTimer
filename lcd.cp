@@ -1,4 +1,4 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "D:/SolarTimer/lcd.c"
 
 extern char lcdrow1[];
 extern char lcdrow2[];
@@ -19,8 +19,8 @@ extern unsigned int editValue;
 
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 56 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
+#line 56 "D:/SolarTimer/lcd.c"
 extern sbit isEnabled;
 extern sbit shouldON;
 
