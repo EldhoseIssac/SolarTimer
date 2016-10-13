@@ -35,6 +35,8 @@ main
 					I2C1_Is_Idle
 				I2C1_Wr
 				I2C1_Stop
+			ee_write
+				EEPROM_Write
 		loadDateEdit
 			codetxt_to_ramtxt
 				____DoICP
@@ -115,7 +117,6 @@ main
 		strcpy
 		loadEnDayHrMin
 			loadDay
-			Div_16X16_U
 			Binary2BCD
 				Div_16x16_S
 					Div_16x16_S_L
@@ -175,4 +176,6 @@ main
 					Delay_1us
 					Delay_5500us
 					Delay_50us
+	ee_read
+		EEPROM_Read
 interrupt

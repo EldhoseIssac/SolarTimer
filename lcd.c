@@ -53,7 +53,8 @@ void Lcd_Chr_CP(char  chr)
 extern short isEnabled;
  #else
 #include <built_in.h>
-sbit isEnabled at editValue.B0;
+extern sbit isEnabled;
+extern sbit shouldON;
 #endif
 
 void initLCDRaws()
@@ -178,7 +179,7 @@ void setCursorPosition(unsigned short position){
 void loadEnDayHrMin()
 {
   unsigned short indx = 0;
-  unsigned val = editValue >> 1;
+  unsigned val = editValue >> 2;
   unsigned short dday = Lo(val) & 0x07;
   unsigned int dis;
   if(isEnabled)
@@ -194,7 +195,15 @@ void loadEnDayHrMin()
         lcdrow2[indx++] = 'F';
   }
   lcdrow2[indx++] = ' ';
-  lcdrow2[indx++] = ' ';
+
+  if (shouldON)
+  {
+     lcdrow2[indx++] = '1';
+  }
+  else
+  {
+    lcdrow2[indx++] = '0';
+  }
   lcdrow2[indx++] = ' ';
   loadDay(&lcdrow2[indx],dday);
   indx += 3;

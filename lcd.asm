@@ -1,8 +1,8 @@
 
 _initLCDRaws:
 
-;lcd.c,47 :: 		void initLCDRaws()
-;lcd.c,49 :: 		strcpy(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"));
+;lcd.c,60 :: 		void initLCDRaws()
+;lcd.c,62 :: 		strcpy(lcdrow1,codetxt_to_ramtxt("00:00:00 000 TUE"));
 	MOVLW      ?lstr_1_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_1_lcd+0)
@@ -13,7 +13,7 @@ _initLCDRaws:
 	MOVLW      _lcdrow1+0
 	MOVWF      FARG_strcpy_to+0
 	CALL       _strcpy+0
-;lcd.c,50 :: 		strcpy(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "));
+;lcd.c,63 :: 		strcpy(lcdrow2,codetxt_to_ramtxt("00/00/00 00.0A  "));
 	MOVLW      ?lstr_2_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_2_lcd+0)
@@ -24,35 +24,35 @@ _initLCDRaws:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_strcpy_to+0
 	CALL       _strcpy+0
-;lcd.c,54 :: 		}
+;lcd.c,65 :: 		}
 L_end_initLCDRaws:
 	RETURN
 ; end of _initLCDRaws
 
 _initLCD:
 
-;lcd.c,55 :: 		void initLCD(){
-;lcd.c,56 :: 		Lcd_Init();                        // Initialize LCD
+;lcd.c,66 :: 		void initLCD(){
+;lcd.c,67 :: 		Lcd_Init();                        // Initialize LCD
 	CALL       _Lcd_Init+0
-;lcd.c,57 :: 		Lcd_Cmd(_LCD_CLEAR);               // Clear display
+;lcd.c,68 :: 		Lcd_Cmd(_LCD_CLEAR);               // Clear display
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;lcd.c,58 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
+;lcd.c,69 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
 	MOVLW      12
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;lcd.c,59 :: 		initLCDRaws();
+;lcd.c,70 :: 		initLCDRaws();
 	CALL       _initLCDRaws+0
-;lcd.c,60 :: 		}
+;lcd.c,71 :: 		}
 L_end_initLCD:
 	RETURN
 ; end of _initLCD
 
 _BCD2HignerCh:
 
-;lcd.c,61 :: 		unsigned char BCD2HignerCh(unsigned int bcd)
-;lcd.c,63 :: 		return (((bcd >> 8) & 0x0F)+ '0');
+;lcd.c,72 :: 		unsigned char BCD2HignerCh(unsigned int bcd)
+;lcd.c,74 :: 		return (((bcd >> 8) & 0x0F)+ '0');
 	MOVF       FARG_BCD2HignerCh_bcd+1, 0
 	MOVWF      R0+0
 	CLRF       R0+1
@@ -60,15 +60,15 @@ _BCD2HignerCh:
 	ANDWF      R0+0, 1
 	MOVLW      48
 	ADDWF      R0+0, 1
-;lcd.c,64 :: 		}
+;lcd.c,75 :: 		}
 L_end_BCD2HignerCh:
 	RETURN
 ; end of _BCD2HignerCh
 
 _BCD2UpperCh:
 
-;lcd.c,65 :: 		unsigned char BCD2UpperCh(unsigned char bcd)
-;lcd.c,67 :: 		return (((bcd >> 4) & 0x0F) + '0');
+;lcd.c,76 :: 		unsigned char BCD2UpperCh(unsigned char bcd)
+;lcd.c,78 :: 		return (((bcd >> 4) & 0x0F) + '0');
 	MOVF       FARG_BCD2UpperCh_bcd+0, 0
 	MOVWF      R0+0
 	RRF        R0+0, 1
@@ -83,29 +83,29 @@ _BCD2UpperCh:
 	ANDWF      R0+0, 1
 	MOVLW      48
 	ADDWF      R0+0, 1
-;lcd.c,68 :: 		}
+;lcd.c,79 :: 		}
 L_end_BCD2UpperCh:
 	RETURN
 ; end of _BCD2UpperCh
 
 _BCD2LowerCh:
 
-;lcd.c,70 :: 		unsigned char BCD2LowerCh(unsigned char bcd)
-;lcd.c,72 :: 		return ((bcd & 0x0F) + '0');
+;lcd.c,81 :: 		unsigned char BCD2LowerCh(unsigned char bcd)
+;lcd.c,83 :: 		return ((bcd & 0x0F) + '0');
 	MOVLW      15
 	ANDWF      FARG_BCD2LowerCh_bcd+0, 0
 	MOVWF      R0+0
 	MOVLW      48
 	ADDWF      R0+0, 1
-;lcd.c,73 :: 		}
+;lcd.c,84 :: 		}
 L_end_BCD2LowerCh:
 	RETURN
 ; end of _BCD2LowerCh
 
 _Binary2BCD:
 
-;lcd.c,75 :: 		unsigned int Binary2BCD(int a)
-;lcd.c,79 :: 		t1 = a%10;
+;lcd.c,86 :: 		unsigned int Binary2BCD(int a)
+;lcd.c,90 :: 		t1 = a%10;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -119,11 +119,11 @@ _Binary2BCD:
 	MOVWF      R0+0
 	MOVF       R8+1, 0
 	MOVWF      R0+1
-;lcd.c,80 :: 		t1 = t1 & 0x0F;
+;lcd.c,91 :: 		t1 = t1 & 0x0F;
 	MOVLW      15
 	ANDWF      R0+0, 0
 	MOVWF      FLOC__Binary2BCD+3
-;lcd.c,81 :: 		a = a/10;
+;lcd.c,92 :: 		a = a/10;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -141,7 +141,7 @@ _Binary2BCD:
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       FLOC__Binary2BCD+2, 0
 	MOVWF      FARG_Binary2BCD_a+1
-;lcd.c,82 :: 		t2 = a%10;
+;lcd.c,93 :: 		t2 = a%10;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -155,11 +155,11 @@ _Binary2BCD:
 	MOVWF      R0+0
 	MOVF       R8+1, 0
 	MOVWF      R0+1
-;lcd.c,83 :: 		t2 = t2 & 0x0F;
+;lcd.c,94 :: 		t2 = t2 & 0x0F;
 	MOVLW      15
 	ANDWF      R0+0, 0
 	MOVWF      R2+0
-;lcd.c,84 :: 		t2 = t2 << 4;
+;lcd.c,95 :: 		t2 = t2 << 4;
 	MOVF       R2+0, 0
 	MOVWF      R0+0
 	RLF        R0+0, 1
@@ -170,11 +170,11 @@ _Binary2BCD:
 	BCF        R0+0, 0
 	RLF        R0+0, 1
 	BCF        R0+0, 0
-;lcd.c,85 :: 		t2 = 0xF0 & t2;
+;lcd.c,96 :: 		t2 = 0xF0 & t2;
 	MOVLW      240
 	ANDWF      R0+0, 0
 	MOVWF      FLOC__Binary2BCD+0
-;lcd.c,86 :: 		a = a/10;
+;lcd.c,97 :: 		a = a/10;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -188,7 +188,7 @@ _Binary2BCD:
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       R0+1, 0
 	MOVWF      FARG_Binary2BCD_a+1
-;lcd.c,87 :: 		t3 = a%10;
+;lcd.c,98 :: 		t3 = a%10;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -198,7 +198,7 @@ _Binary2BCD:
 	MOVWF      R0+0
 	MOVF       R8+1, 0
 	MOVWF      R0+1
-;lcd.c,88 :: 		t3 = t3 & 0x0F;
+;lcd.c,99 :: 		t3 = t3 & 0x0F;
 	MOVLW      15
 	ANDWF      R0+0, 0
 	MOVWF      R4+0
@@ -206,11 +206,11 @@ _Binary2BCD:
 	MOVWF      R4+1
 	MOVLW      0
 	ANDWF      R4+1, 1
-;lcd.c,89 :: 		t3 = t3 << 8;
+;lcd.c,100 :: 		t3 = t3 << 8;
 	MOVF       R4+0, 0
 	MOVWF      R2+1
 	CLRF       R2+0
-;lcd.c,90 :: 		t3 +=  t1 | t2;
+;lcd.c,101 :: 		t3 +=  t1 | t2;
 	MOVF       FLOC__Binary2BCD+0, 0
 	IORWF      FLOC__Binary2BCD+3, 0
 	MOVWF      R0+0
@@ -222,16 +222,16 @@ _Binary2BCD:
 	BTFSC      STATUS+0, 0
 	ADDLW      1
 	ADDWF      R0+1, 1
-;lcd.c,91 :: 		return t3;
-;lcd.c,92 :: 		}
+;lcd.c,102 :: 		return t3;
+;lcd.c,103 :: 		}
 L_end_Binary2BCD:
 	RETURN
 ; end of _Binary2BCD
 
 _BCD2Binary:
 
-;lcd.c,94 :: 		int BCD2Binary(int a)
-;lcd.c,97 :: 		t = a & 0x0F;
+;lcd.c,105 :: 		int BCD2Binary(int a)
+;lcd.c,108 :: 		t = a & 0x0F;
 	MOVLW      15
 	ANDWF      FARG_BCD2Binary_a+0, 0
 	MOVWF      FLOC__BCD2Binary+0
@@ -239,7 +239,7 @@ _BCD2Binary:
 	MOVWF      FLOC__BCD2Binary+1
 	MOVLW      0
 	ANDWF      FLOC__BCD2Binary+1, 1
-;lcd.c,99 :: 		a = 0xF0 & a;
+;lcd.c,110 :: 		a = 0xF0 & a;
 	MOVLW      240
 	ANDWF      FARG_BCD2Binary_a+0, 0
 	MOVWF      R3+0
@@ -251,7 +251,7 @@ _BCD2Binary:
 	MOVWF      FARG_BCD2Binary_a+0
 	MOVF       R3+1, 0
 	MOVWF      FARG_BCD2Binary_a+1
-;lcd.c,100 :: 		t = a >> 4;
+;lcd.c,111 :: 		t = a >> 4;
 	MOVLW      4
 	MOVWF      R2+0
 	MOVF       R3+0, 0
@@ -259,23 +259,23 @@ _BCD2Binary:
 	MOVF       R3+1, 0
 	MOVWF      R0+1
 	MOVF       R2+0, 0
-L__BCD2Binary26:
+L__BCD2Binary28:
 	BTFSC      STATUS+0, 2
-	GOTO       L__BCD2Binary27
+	GOTO       L__BCD2Binary29
 	RRF        R0+1, 1
 	RRF        R0+0, 1
 	BCF        R0+1, 7
 	BTFSC      R0+1, 6
 	BSF        R0+1, 7
 	ADDLW      255
-	GOTO       L__BCD2Binary26
-L__BCD2Binary27:
-;lcd.c,101 :: 		t = 0x0F & t;
+	GOTO       L__BCD2Binary28
+L__BCD2Binary29:
+;lcd.c,112 :: 		t = 0x0F & t;
 	MOVLW      15
 	ANDWF      R0+0, 1
 	MOVLW      0
 	ANDWF      R0+1, 1
-;lcd.c,102 :: 		r = t*10 + r;
+;lcd.c,113 :: 		r = t*10 + r;
 	MOVLW      10
 	MOVWF      R4+0
 	MOVLW      0
@@ -287,18 +287,18 @@ L__BCD2Binary27:
 	BTFSC      STATUS+0, 0
 	ADDLW      1
 	ADDWF      R0+1, 1
-;lcd.c,103 :: 		return r;
-;lcd.c,104 :: 		}
+;lcd.c,114 :: 		return r;
+;lcd.c,115 :: 		}
 L_end_BCD2Binary:
 	RETURN
 ; end of _BCD2Binary
 
 _loadDay:
 
-;lcd.c,105 :: 		void loadDay(unsigned char *arr,unsigned short theIndx){
-;lcd.c,106 :: 		switch(theIndx){
+;lcd.c,116 :: 		void loadDay(char *arr,unsigned short theIndx){
+;lcd.c,117 :: 		switch(theIndx){
 	GOTO       L_loadDay0
-;lcd.c,107 :: 		case 0: arr[0]='-';arr[1]='-'; arr[2]='-';break;
+;lcd.c,118 :: 		case 0: arr[0]='-';arr[1]='-'; arr[2]='-';break;
 L_loadDay2:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -314,7 +314,7 @@ L_loadDay2:
 	MOVLW      45
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,108 :: 		case 1: arr[0]='S';arr[1]='u'; arr[2]='n';break;
+;lcd.c,119 :: 		case 1: arr[0]='S';arr[1]='u'; arr[2]='n';break;
 L_loadDay3:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -330,7 +330,7 @@ L_loadDay3:
 	MOVLW      110
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,109 :: 		case 2: arr[0]='M';arr[1]='o'; arr[2]='n';break;
+;lcd.c,120 :: 		case 2: arr[0]='M';arr[1]='o'; arr[2]='n';break;
 L_loadDay4:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -346,7 +346,7 @@ L_loadDay4:
 	MOVLW      110
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,110 :: 		case 3: arr[0]='T';arr[1]='u'; arr[2]='e';break;
+;lcd.c,121 :: 		case 3: arr[0]='T';arr[1]='u'; arr[2]='e';break;
 L_loadDay5:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -362,7 +362,7 @@ L_loadDay5:
 	MOVLW      101
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,111 :: 		case 4: arr[0]='W';arr[1]='e'; arr[2]='d';break;
+;lcd.c,122 :: 		case 4: arr[0]='W';arr[1]='e'; arr[2]='d';break;
 L_loadDay6:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -378,7 +378,7 @@ L_loadDay6:
 	MOVLW      100
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,112 :: 		case 5: arr[0]='T';arr[1]='h'; arr[2]='u';break;
+;lcd.c,123 :: 		case 5: arr[0]='T';arr[1]='h'; arr[2]='u';break;
 L_loadDay7:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -394,7 +394,7 @@ L_loadDay7:
 	MOVLW      117
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,113 :: 		case 6: arr[0]='F';arr[1]='r'; arr[2]='i';break;
+;lcd.c,124 :: 		case 6: arr[0]='F';arr[1]='r'; arr[2]='i';break;
 L_loadDay8:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -410,7 +410,7 @@ L_loadDay8:
 	MOVLW      105
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,114 :: 		case 7: arr[0]='S';arr[1]='a'; arr[2]='t';break;
+;lcd.c,125 :: 		case 7: arr[0]='S';arr[1]='a'; arr[2]='t';break;
 L_loadDay9:
 	MOVF       FARG_loadDay_arr+0, 0
 	MOVWF      FSR
@@ -426,7 +426,7 @@ L_loadDay9:
 	MOVLW      116
 	MOVWF      INDF+0
 	GOTO       L_loadDay1
-;lcd.c,115 :: 		}
+;lcd.c,126 :: 		}
 L_loadDay0:
 	MOVF       FARG_loadDay_theIndx+0, 0
 	XORLW      0
@@ -461,101 +461,101 @@ L_loadDay0:
 	BTFSC      STATUS+0, 2
 	GOTO       L_loadDay9
 L_loadDay1:
-;lcd.c,116 :: 		}
+;lcd.c,127 :: 		}
 L_end_loadDay:
 	RETURN
 ; end of _loadDay
 
 _displayTimeDate:
 
-;lcd.c,117 :: 		void displayTimeDate(){
-;lcd.c,119 :: 		lcdrow1[0] = BCD2UpperCh(hour);
+;lcd.c,128 :: 		void displayTimeDate(){
+;lcd.c,130 :: 		lcdrow1[0] = BCD2UpperCh(hour);
 	MOVF       _hour+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+0
-;lcd.c,120 :: 		lcdrow1[1] = BCD2LowerCh(hour);
+;lcd.c,131 :: 		lcdrow1[1] = BCD2LowerCh(hour);
 	MOVF       _hour+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+1
-;lcd.c,121 :: 		lcdrow1[3] = BCD2UpperCh(minute);
+;lcd.c,132 :: 		lcdrow1[3] = BCD2UpperCh(minute);
 	MOVF       _minute+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+3
-;lcd.c,122 :: 		lcdrow1[4] = BCD2LowerCh(minute);
+;lcd.c,133 :: 		lcdrow1[4] = BCD2LowerCh(minute);
 	MOVF       _minute+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+4
-;lcd.c,123 :: 		lcdrow1[6] = BCD2UpperCh(second);
+;lcd.c,134 :: 		lcdrow1[6] = BCD2UpperCh(second);
 	MOVF       _second+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+6
-;lcd.c,124 :: 		lcdrow1[7] = BCD2LowerCh(second);
+;lcd.c,135 :: 		lcdrow1[7] = BCD2LowerCh(second);
 	MOVF       _second+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+7
-;lcd.c,126 :: 		lcdrow2[0] = BCD2UpperCh(day);
+;lcd.c,137 :: 		lcdrow2[0] = BCD2UpperCh(day);
 	MOVF       _day+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+0
-;lcd.c,127 :: 		lcdrow2[1] = BCD2LowerCh(day);
+;lcd.c,138 :: 		lcdrow2[1] = BCD2LowerCh(day);
 	MOVF       _day+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+1
-;lcd.c,128 :: 		lcdrow2[3] = BCD2UpperCh(month);
+;lcd.c,139 :: 		lcdrow2[3] = BCD2UpperCh(month);
 	MOVF       _month+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+3
-;lcd.c,129 :: 		lcdrow2[4] = BCD2LowerCh(month);
+;lcd.c,140 :: 		lcdrow2[4] = BCD2LowerCh(month);
 	MOVF       _month+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+4
-;lcd.c,130 :: 		lcdrow2[6] = BCD2UpperCh(year);
+;lcd.c,141 :: 		lcdrow2[6] = BCD2UpperCh(year);
 	MOVF       _year+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+6
-;lcd.c,131 :: 		lcdrow2[7] = BCD2LowerCh(year);
+;lcd.c,142 :: 		lcdrow2[7] = BCD2LowerCh(year);
 	MOVF       _year+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+7
-;lcd.c,132 :: 		loadDay(&lcdrow1[13],dday);
+;lcd.c,143 :: 		loadDay(&lcdrow1[13],dday);
 	MOVLW      _lcdrow1+13
 	MOVWF      FARG_loadDay_arr+0
 	MOVF       _dday+0, 0
 	MOVWF      FARG_loadDay_theIndx+0
 	CALL       _loadDay+0
-;lcd.c,134 :: 		}
+;lcd.c,145 :: 		}
 L_end_displayTimeDate:
 	RETURN
 ; end of _displayTimeDate
 
 _loadTimeEdit:
 
-;lcd.c,136 :: 		void loadTimeEdit(){
-;lcd.c,137 :: 		Lcd_Out(1,1,codetxt_to_ramtxt("Set Time"));
+;lcd.c,147 :: 		void loadTimeEdit(){
+;lcd.c,148 :: 		Lcd_Out(1,1,codetxt_to_ramtxt("Set Time"));
 	MOVLW      ?lstr_3_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_3_lcd+0)
@@ -568,36 +568,36 @@ _loadTimeEdit:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;lcd.c,138 :: 		lcdrow2[0] = BCD2UpperCh(hour);
+;lcd.c,149 :: 		lcdrow2[0] = BCD2UpperCh(hour);
 	MOVF       _hour+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+0
-;lcd.c,139 :: 		lcdrow2[1] = BCD2LowerCh(hour);
+;lcd.c,150 :: 		lcdrow2[1] = BCD2LowerCh(hour);
 	MOVF       _hour+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+1
-;lcd.c,140 :: 		lcdrow2[2] = ':';
+;lcd.c,151 :: 		lcdrow2[2] = ':';
 	MOVLW      58
 	MOVWF      _lcdrow2+2
-;lcd.c,141 :: 		lcdrow2[3] = BCD2UpperCh(minute);
+;lcd.c,152 :: 		lcdrow2[3] = BCD2UpperCh(minute);
 	MOVF       _minute+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+3
-;lcd.c,142 :: 		lcdrow2[4] = BCD2LowerCh(minute);
+;lcd.c,153 :: 		lcdrow2[4] = BCD2LowerCh(minute);
 	MOVF       _minute+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+4
-;lcd.c,143 :: 		lcdrow2[5] = '\0';
+;lcd.c,154 :: 		lcdrow2[5] = '\0';
 	CLRF       _lcdrow2+5
-;lcd.c,144 :: 		Lcd_Out(2,1,lcdrow2);
+;lcd.c,155 :: 		Lcd_Out(2,1,lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -605,15 +605,15 @@ _loadTimeEdit:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,145 :: 		}
+;lcd.c,156 :: 		}
 L_end_loadTimeEdit:
 	RETURN
 ; end of _loadTimeEdit
 
 _loadDateEdit:
 
-;lcd.c,146 :: 		void loadDateEdit(){
-;lcd.c,147 :: 		Lcd_Out(1,1,codetxt_to_ramtxt("Set Date"));
+;lcd.c,157 :: 		void loadDateEdit(){
+;lcd.c,158 :: 		Lcd_Out(1,1,codetxt_to_ramtxt("Set Date"));
 	MOVLW      ?lstr_4_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_4_lcd+0)
@@ -626,57 +626,57 @@ _loadDateEdit:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;lcd.c,148 :: 		lcdrow2[0] = BCD2UpperCh(day);
+;lcd.c,159 :: 		lcdrow2[0] = BCD2UpperCh(day);
 	MOVF       _day+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+0
-;lcd.c,149 :: 		lcdrow2[1] = BCD2LowerCh(day);
+;lcd.c,160 :: 		lcdrow2[1] = BCD2LowerCh(day);
 	MOVF       _day+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+1
-;lcd.c,150 :: 		lcdrow2[2] = '/';
+;lcd.c,161 :: 		lcdrow2[2] = '/';
 	MOVLW      47
 	MOVWF      _lcdrow2+2
-;lcd.c,151 :: 		lcdrow2[3] = BCD2UpperCh(month);
+;lcd.c,162 :: 		lcdrow2[3] = BCD2UpperCh(month);
 	MOVF       _month+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+3
-;lcd.c,152 :: 		lcdrow2[4] = BCD2LowerCh(month);
+;lcd.c,163 :: 		lcdrow2[4] = BCD2LowerCh(month);
 	MOVF       _month+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+4
-;lcd.c,153 :: 		lcdrow2[5] = '/';
+;lcd.c,164 :: 		lcdrow2[5] = '/';
 	MOVLW      47
 	MOVWF      _lcdrow2+5
-;lcd.c,154 :: 		lcdrow2[6] = BCD2UpperCh(year);
+;lcd.c,165 :: 		lcdrow2[6] = BCD2UpperCh(year);
 	MOVF       _year+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+6
-;lcd.c,155 :: 		lcdrow2[7] = BCD2LowerCh(year);
+;lcd.c,166 :: 		lcdrow2[7] = BCD2LowerCh(year);
 	MOVF       _year+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+7
-;lcd.c,156 :: 		loadDay(&lcdrow2[9],dday);
+;lcd.c,167 :: 		loadDay(&lcdrow2[9],dday);
 	MOVLW      _lcdrow2+9
 	MOVWF      FARG_loadDay_arr+0
 	MOVF       _dday+0, 0
 	MOVWF      FARG_loadDay_theIndx+0
 	CALL       _loadDay+0
-;lcd.c,157 :: 		lcdrow2[12] = '\0';
+;lcd.c,168 :: 		lcdrow2[12] = '\0';
 	CLRF       _lcdrow2+12
-;lcd.c,158 :: 		Lcd_Out(2,1,lcdrow2);
+;lcd.c,169 :: 		Lcd_Out(2,1,lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -684,45 +684,45 @@ _loadDateEdit:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,159 :: 		}
+;lcd.c,170 :: 		}
 L_end_loadDateEdit:
 	RETURN
 ; end of _loadDateEdit
 
 _setCursorPosition:
 
-;lcd.c,160 :: 		void setCursorPosition(unsigned short position){
-;lcd.c,162 :: 		Lcd_Cmd(_LCD_SECOND_ROW);
+;lcd.c,171 :: 		void setCursorPosition(unsigned short position){
+;lcd.c,173 :: 		Lcd_Cmd(_LCD_SECOND_ROW);
 	MOVLW      192
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;lcd.c,163 :: 		for (indx=0; indx<position; indx++) {
+;lcd.c,174 :: 		for (indx=0; indx<position; indx++) {
 	CLRF       setCursorPosition_indx_L0+0
 L_setCursorPosition10:
 	MOVF       FARG_setCursorPosition_position+0, 0
 	SUBWF      setCursorPosition_indx_L0+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_setCursorPosition11
-;lcd.c,164 :: 		Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
+;lcd.c,175 :: 		Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
 	MOVLW      20
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;lcd.c,163 :: 		for (indx=0; indx<position; indx++) {
+;lcd.c,174 :: 		for (indx=0; indx<position; indx++) {
 	INCF       setCursorPosition_indx_L0+0, 1
-;lcd.c,165 :: 		}
+;lcd.c,176 :: 		}
 	GOTO       L_setCursorPosition10
 L_setCursorPosition11:
-;lcd.c,166 :: 		}
+;lcd.c,177 :: 		}
 L_end_setCursorPosition:
 	RETURN
 ; end of _setCursorPosition
 
 _loadEnDayHrMin:
 
-;lcd.c,168 :: 		void loadEnDayHrMin()
-;lcd.c,170 :: 		unsigned short indx = 0;
+;lcd.c,179 :: 		void loadEnDayHrMin()
+;lcd.c,181 :: 		unsigned short indx = 0;
 	CLRF       loadEnDayHrMin_indx_L0+0
-;lcd.c,171 :: 		unsigned val = editValue >> 1;
+;lcd.c,182 :: 		unsigned val = editValue >> 2;
 	MOVF       _editValue+0, 0
 	MOVWF      loadEnDayHrMin_val_L0+0
 	MOVF       _editValue+1, 0
@@ -730,135 +730,150 @@ _loadEnDayHrMin:
 	RRF        loadEnDayHrMin_val_L0+1, 1
 	RRF        loadEnDayHrMin_val_L0+0, 1
 	BCF        loadEnDayHrMin_val_L0+1, 7
-;lcd.c,172 :: 		unsigned short dday = Lo(val) & 0x07;
+	RRF        loadEnDayHrMin_val_L0+1, 1
+	RRF        loadEnDayHrMin_val_L0+0, 1
+	BCF        loadEnDayHrMin_val_L0+1, 7
+;lcd.c,183 :: 		unsigned short dday = Lo(val) & 0x07;
 	MOVLW      7
 	ANDWF      loadEnDayHrMin_val_L0+0, 0
 	MOVWF      loadEnDayHrMin_dday_L0+0
-;lcd.c,174 :: 		if(isEnabled)
-	BTFSS      _editValue+0, 0
+;lcd.c,185 :: 		if(isEnabled)
+	BTFSS      _isEnabled+0, BitPos(_isEnabled+0)
 	GOTO       L_loadEnDayHrMin13
-;lcd.c,176 :: 		lcdrow2[indx++] = 'O';
+;lcd.c,187 :: 		lcdrow2[indx++] = 'O';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      79
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,177 :: 		lcdrow2[indx++] = 'N';
+;lcd.c,188 :: 		lcdrow2[indx++] = 'N';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      78
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,178 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,189 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,179 :: 		}
+;lcd.c,190 :: 		}
 	GOTO       L_loadEnDayHrMin14
 L_loadEnDayHrMin13:
-;lcd.c,182 :: 		lcdrow2[indx++] = 'O';
+;lcd.c,193 :: 		lcdrow2[indx++] = 'O';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      79
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,183 :: 		lcdrow2[indx++] = 'F';
+;lcd.c,194 :: 		lcdrow2[indx++] = 'F';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      70
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,184 :: 		lcdrow2[indx++] = 'F';
+;lcd.c,195 :: 		lcdrow2[indx++] = 'F';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      70
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,185 :: 		}
+;lcd.c,196 :: 		}
 L_loadEnDayHrMin14:
-;lcd.c,186 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,197 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,187 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,199 :: 		if (shouldON)
+	BTFSS      _shouldON+0, BitPos(_shouldON+0)
+	GOTO       L_loadEnDayHrMin15
+;lcd.c,201 :: 		lcdrow2[indx++] = '1';
+	MOVF       loadEnDayHrMin_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      49
+	MOVWF      INDF+0
+	INCF       loadEnDayHrMin_indx_L0+0, 1
+;lcd.c,202 :: 		}
+	GOTO       L_loadEnDayHrMin16
+L_loadEnDayHrMin15:
+;lcd.c,205 :: 		lcdrow2[indx++] = '0';
+	MOVF       loadEnDayHrMin_indx_L0+0, 0
+	ADDLW      _lcdrow2+0
+	MOVWF      FSR
+	MOVLW      48
+	MOVWF      INDF+0
+	INCF       loadEnDayHrMin_indx_L0+0, 1
+;lcd.c,206 :: 		}
+L_loadEnDayHrMin16:
+;lcd.c,207 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,188 :: 		lcdrow2[indx++] = ' ';
-	MOVF       loadEnDayHrMin_indx_L0+0, 0
-	ADDLW      _lcdrow2+0
-	MOVWF      FSR
-	MOVLW      32
-	MOVWF      INDF+0
-	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,189 :: 		loadDay(&lcdrow2[indx],dday);
+;lcd.c,208 :: 		loadDay(&lcdrow2[indx],dday);
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FARG_loadDay_arr+0
 	MOVF       loadEnDayHrMin_dday_L0+0, 0
 	MOVWF      FARG_loadDay_theIndx+0
 	CALL       _loadDay+0
-;lcd.c,190 :: 		indx += 3;
+;lcd.c,209 :: 		indx += 3;
 	MOVLW      3
 	ADDWF      loadEnDayHrMin_indx_L0+0, 0
 	MOVWF      R0+0
 	MOVF       R0+0, 0
 	MOVWF      loadEnDayHrMin_indx_L0+0
-;lcd.c,191 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,210 :: 		lcdrow2[indx++] = ' ';
 	MOVF       R0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,192 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,211 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,193 :: 		val = editValue >> 3;
-	MOVF       _editValue+0, 0
-	MOVWF      loadEnDayHrMin_val_L0+0
-	MOVF       _editValue+1, 0
-	MOVWF      loadEnDayHrMin_val_L0+1
-	RRF        loadEnDayHrMin_val_L0+1, 1
-	RRF        loadEnDayHrMin_val_L0+0, 1
-	BCF        loadEnDayHrMin_val_L0+1, 7
-	RRF        loadEnDayHrMin_val_L0+1, 1
-	RRF        loadEnDayHrMin_val_L0+0, 1
-	BCF        loadEnDayHrMin_val_L0+1, 7
-	RRF        loadEnDayHrMin_val_L0+1, 1
-	RRF        loadEnDayHrMin_val_L0+0, 1
-	BCF        loadEnDayHrMin_val_L0+1, 7
-;lcd.c,194 :: 		dday =  editValue/60;
-	MOVLW      60
-	MOVWF      R4+0
-	MOVLW      0
-	MOVWF      R4+1
-	MOVF       _editValue+0, 0
+;lcd.c,212 :: 		val = (val >> 3);
+	MOVF       loadEnDayHrMin_val_L0+0, 0
 	MOVWF      R0+0
-	MOVF       _editValue+1, 0
+	MOVF       loadEnDayHrMin_val_L0+1, 0
 	MOVWF      R0+1
-	CALL       _Div_16X16_U+0
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	MOVF       R0+0, 0
+	MOVWF      loadEnDayHrMin_val_L0+0
+	MOVF       R0+1, 0
+	MOVWF      loadEnDayHrMin_val_L0+1
+;lcd.c,213 :: 		dday =  val & 0x1F;
+	MOVLW      31
+	ANDWF      R0+0, 1
 	MOVF       R0+0, 0
 	MOVWF      loadEnDayHrMin_dday_L0+0
-;lcd.c,195 :: 		dis =   Binary2BCD(dday);
+;lcd.c,214 :: 		dis =   Binary2BCD(dday);
 	MOVF       R0+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	CLRF       FARG_Binary2BCD_a+1
@@ -867,7 +882,7 @@ L_loadEnDayHrMin14:
 	MOVWF      loadEnDayHrMin_dis_L0+0
 	MOVF       R0+1, 0
 	MOVWF      loadEnDayHrMin_dis_L0+1
-;lcd.c,196 :: 		lcdrow2[indx++] = BCD2UpperCh(dis);
+;lcd.c,215 :: 		lcdrow2[indx++] = BCD2UpperCh(dis);
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnDayHrMin+0
@@ -879,7 +894,7 @@ L_loadEnDayHrMin14:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,197 :: 		lcdrow2[indx++] = BCD2LowerCh(dis);
+;lcd.c,216 :: 		lcdrow2[indx++] = BCD2LowerCh(dis);
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnDayHrMin+0
@@ -891,30 +906,40 @@ L_loadEnDayHrMin14:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,198 :: 		lcdrow2[indx++] = ':';
+;lcd.c,217 :: 		lcdrow2[indx++] = ':';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      58
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,199 :: 		dday =  editValue%60;
-	MOVLW      60
-	MOVWF      R4+0
-	MOVLW      0
-	MOVWF      R4+1
-	MOVF       _editValue+0, 0
+;lcd.c,218 :: 		val = (val >> 5);
+	MOVLW      5
+	MOVWF      R2+0
+	MOVF       loadEnDayHrMin_val_L0+0, 0
 	MOVWF      R0+0
-	MOVF       _editValue+1, 0
+	MOVF       loadEnDayHrMin_val_L0+1, 0
 	MOVWF      R0+1
-	CALL       _Div_16X16_U+0
-	MOVF       R8+0, 0
-	MOVWF      R0+0
-	MOVF       R8+1, 0
-	MOVWF      R0+1
+	MOVF       R2+0, 0
+L__loadEnDayHrMin36:
+	BTFSC      STATUS+0, 2
+	GOTO       L__loadEnDayHrMin37
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	ADDLW      255
+	GOTO       L__loadEnDayHrMin36
+L__loadEnDayHrMin37:
+	MOVF       R0+0, 0
+	MOVWF      loadEnDayHrMin_val_L0+0
+	MOVF       R0+1, 0
+	MOVWF      loadEnDayHrMin_val_L0+1
+;lcd.c,219 :: 		dday =  val & 0x3F;
+	MOVLW      63
+	ANDWF      R0+0, 1
 	MOVF       R0+0, 0
 	MOVWF      loadEnDayHrMin_dday_L0+0
-;lcd.c,200 :: 		dis =   Binary2BCD(dday);
+;lcd.c,220 :: 		dis =   Binary2BCD(dday);
 	MOVF       R0+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	CLRF       FARG_Binary2BCD_a+1
@@ -923,7 +948,7 @@ L_loadEnDayHrMin14:
 	MOVWF      loadEnDayHrMin_dis_L0+0
 	MOVF       R0+1, 0
 	MOVWF      loadEnDayHrMin_dis_L0+1
-;lcd.c,201 :: 		lcdrow2[indx++] = BCD2UpperCh(dis);
+;lcd.c,221 :: 		lcdrow2[indx++] = BCD2UpperCh(dis);
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnDayHrMin+0
@@ -935,7 +960,7 @@ L_loadEnDayHrMin14:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,202 :: 		lcdrow2[indx++] = BCD2LowerCh(dis);
+;lcd.c,222 :: 		lcdrow2[indx++] = BCD2LowerCh(dis);
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnDayHrMin+0
@@ -947,12 +972,12 @@ L_loadEnDayHrMin14:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnDayHrMin_indx_L0+0, 1
-;lcd.c,203 :: 		lcdrow2[indx] = '\0';
+;lcd.c,223 :: 		lcdrow2[indx] = '\0';
 	MOVF       loadEnDayHrMin_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	CLRF       INDF+0
-;lcd.c,204 :: 		Lcd_Out(2,1, lcdrow2);
+;lcd.c,224 :: 		Lcd_Out(2,1, lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -960,15 +985,15 @@ L_loadEnDayHrMin14:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,205 :: 		}
+;lcd.c,225 :: 		}
 L_end_loadEnDayHrMin:
 	RETURN
 ; end of _loadEnDayHrMin
 
 _loadEnHeighLow:
 
-;lcd.c,206 :: 		void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
-;lcd.c,209 :: 		unsigned int discrr= Binary2BCD(low);
+;lcd.c,226 :: 		void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
+;lcd.c,229 :: 		unsigned int discrr= Binary2BCD(low);
 	MOVF       FARG_loadEnHeighLow_low+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       FARG_loadEnHeighLow_low+1, 0
@@ -978,54 +1003,54 @@ _loadEnHeighLow:
 	MOVWF      loadEnHeighLow_discrr_L0+0
 	MOVF       R0+1, 0
 	MOVWF      loadEnHeighLow_discrr_L0+1
-;lcd.c,210 :: 		unsigned short indx = 0;
+;lcd.c,230 :: 		unsigned short indx = 0;
 	CLRF       loadEnHeighLow_indx_L0+0
-;lcd.c,211 :: 		if (heigh>0) {
+;lcd.c,231 :: 		if (heigh>0) {
 	MOVF       FARG_loadEnHeighLow_heigh+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__loadEnHeighLow35
+	GOTO       L__loadEnHeighLow39
 	MOVF       FARG_loadEnHeighLow_heigh+0, 0
 	SUBLW      0
-L__loadEnHeighLow35:
+L__loadEnHeighLow39:
 	BTFSC      STATUS+0, 0
-	GOTO       L_loadEnHeighLow15
-;lcd.c,212 :: 		lcdrow2[indx++] = 'O';
+	GOTO       L_loadEnHeighLow17
+;lcd.c,232 :: 		lcdrow2[indx++] = 'O';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      79
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,213 :: 		lcdrow2[indx++] = 'N';
+;lcd.c,233 :: 		lcdrow2[indx++] = 'N';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      78
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,214 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,234 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,215 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,235 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,216 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,236 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,217 :: 		heigh = heigh>>1;
+;lcd.c,237 :: 		heigh = heigh>>1;
 	MOVF       FARG_loadEnHeighLow_heigh+0, 0
 	MOVWF      R0+0
 	MOVF       FARG_loadEnHeighLow_heigh+1, 0
@@ -1037,7 +1062,7 @@ L__loadEnHeighLow35:
 	MOVWF      FARG_loadEnHeighLow_heigh+0
 	MOVF       R0+1, 0
 	MOVWF      FARG_loadEnHeighLow_heigh+1
-;lcd.c,218 :: 		disVolt = Binary2BCD(heigh);
+;lcd.c,238 :: 		disVolt = Binary2BCD(heigh);
 	MOVF       R0+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       R0+1, 0
@@ -1047,7 +1072,7 @@ L__loadEnHeighLow35:
 	MOVWF      loadEnHeighLow_disVolt_L0+0
 	MOVF       R0+1, 0
 	MOVWF      loadEnHeighLow_disVolt_L0+1
-;lcd.c,219 :: 		lcdrow2[indx++] = BCD2HignerCh(disVolt);
+;lcd.c,239 :: 		lcdrow2[indx++] = BCD2HignerCh(disVolt);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1061,7 +1086,7 @@ L__loadEnHeighLow35:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,220 :: 		lcdrow2[indx++] = BCD2UpperCh(disVolt);
+;lcd.c,240 :: 		lcdrow2[indx++] = BCD2UpperCh(disVolt);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1073,20 +1098,20 @@ L__loadEnHeighLow35:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,221 :: 		if(shouldUseDecimal)
+;lcd.c,241 :: 		if(shouldUseDecimal)
 	MOVF       FARG_loadEnHeighLow_shouldUseDecimal+0, 0
 	BTFSC      STATUS+0, 2
-	GOTO       L_loadEnHeighLow16
-;lcd.c,223 :: 		lcdrow2[indx++] = '.';
+	GOTO       L_loadEnHeighLow18
+;lcd.c,243 :: 		lcdrow2[indx++] = '.';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      46
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,224 :: 		}
-L_loadEnHeighLow16:
-;lcd.c,225 :: 		lcdrow2[indx++] = BCD2LowerCh(disVolt);
+;lcd.c,244 :: 		}
+L_loadEnHeighLow18:
+;lcd.c,245 :: 		lcdrow2[indx++] = BCD2LowerCh(disVolt);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1098,28 +1123,28 @@ L_loadEnHeighLow16:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,226 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,246 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,227 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,247 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,228 :: 		lcdrow2[indx++] = ' ';
+;lcd.c,248 :: 		lcdrow2[indx++] = ' ';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      32
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,229 :: 		lcdrow2[indx++] = BCD2HignerCh(discrr);
+;lcd.c,249 :: 		lcdrow2[indx++] = BCD2HignerCh(discrr);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1133,7 +1158,7 @@ L_loadEnHeighLow16:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,230 :: 		lcdrow2[indx++] = BCD2UpperCh(discrr);
+;lcd.c,250 :: 		lcdrow2[indx++] = BCD2UpperCh(discrr);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1145,20 +1170,20 @@ L_loadEnHeighLow16:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,231 :: 		if(shouldUseDecimal)
+;lcd.c,251 :: 		if(shouldUseDecimal)
 	MOVF       FARG_loadEnHeighLow_shouldUseDecimal+0, 0
 	BTFSC      STATUS+0, 2
-	GOTO       L_loadEnHeighLow17
-;lcd.c,233 :: 		lcdrow2[indx++] = '.';
+	GOTO       L_loadEnHeighLow19
+;lcd.c,253 :: 		lcdrow2[indx++] = '.';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	MOVLW      46
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,234 :: 		}
-L_loadEnHeighLow17:
-;lcd.c,235 :: 		lcdrow2[indx++] = BCD2LowerCh(discrr);
+;lcd.c,254 :: 		}
+L_loadEnHeighLow19:
+;lcd.c,255 :: 		lcdrow2[indx++] = BCD2LowerCh(discrr);
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FLOC__loadEnHeighLow+0
@@ -1170,12 +1195,12 @@ L_loadEnHeighLow17:
 	MOVF       R0+0, 0
 	MOVWF      INDF+0
 	INCF       loadEnHeighLow_indx_L0+0, 1
-;lcd.c,236 :: 		lcdrow2[indx] = '\0';
+;lcd.c,256 :: 		lcdrow2[indx] = '\0';
 	MOVF       loadEnHeighLow_indx_L0+0, 0
 	ADDLW      _lcdrow2+0
 	MOVWF      FSR
 	CLRF       INDF+0
-;lcd.c,237 :: 		Lcd_Out(2,1, lcdrow2);
+;lcd.c,257 :: 		Lcd_Out(2,1, lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -1183,10 +1208,10 @@ L_loadEnHeighLow17:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,238 :: 		}else{
-	GOTO       L_loadEnHeighLow18
-L_loadEnHeighLow15:
-;lcd.c,239 :: 		Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
+;lcd.c,258 :: 		}else{
+	GOTO       L_loadEnHeighLow20
+L_loadEnHeighLow17:
+;lcd.c,259 :: 		Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
 	MOVLW      ?lstr_5_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_5_lcd+0)
@@ -1199,17 +1224,17 @@ L_loadEnHeighLow15:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;lcd.c,240 :: 		}
-L_loadEnHeighLow18:
-;lcd.c,242 :: 		}
+;lcd.c,260 :: 		}
+L_loadEnHeighLow20:
+;lcd.c,262 :: 		}
 L_end_loadEnHeighLow:
 	RETURN
 ; end of _loadEnHeighLow
 
 _displayVoltageCurrent:
 
-;lcd.c,243 :: 		void displayVoltageCurrent(){
-;lcd.c,246 :: 		disVolt = Binary2BCD(lastReadVoltage);
+;lcd.c,263 :: 		void displayVoltageCurrent(){
+;lcd.c,266 :: 		disVolt = Binary2BCD(lastReadVoltage);
 	MOVF       _lastReadVoltage+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       _lastReadVoltage+1, 0
@@ -1219,7 +1244,7 @@ _displayVoltageCurrent:
 	MOVWF      displayVoltageCurrent_disVolt_L0+0
 	MOVF       R0+1, 0
 	MOVWF      displayVoltageCurrent_disVolt_L0+1
-;lcd.c,247 :: 		discrr = Binary2BCD(lastReadCurrent);
+;lcd.c,267 :: 		discrr = Binary2BCD(lastReadCurrent);
 	MOVF       _lastReadCurrent+0, 0
 	MOVWF      FARG_Binary2BCD_a+0
 	MOVF       _lastReadCurrent+1, 0
@@ -1229,7 +1254,7 @@ _displayVoltageCurrent:
 	MOVWF      displayVoltageCurrent_discrr_L0+0
 	MOVF       R0+1, 0
 	MOVWF      displayVoltageCurrent_discrr_L0+1
-;lcd.c,248 :: 		lcdrow1[9] = BCD2HignerCh(disVolt);
+;lcd.c,268 :: 		lcdrow1[9] = BCD2HignerCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
 	MOVF       displayVoltageCurrent_disVolt_L0+1, 0
@@ -1237,19 +1262,19 @@ _displayVoltageCurrent:
 	CALL       _BCD2HignerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+9
-;lcd.c,249 :: 		lcdrow1[10] = BCD2UpperCh(disVolt);
+;lcd.c,269 :: 		lcdrow1[10] = BCD2UpperCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+10
-;lcd.c,250 :: 		lcdrow1[11] = BCD2LowerCh(disVolt);
+;lcd.c,270 :: 		lcdrow1[11] = BCD2LowerCh(disVolt);
 	MOVF       displayVoltageCurrent_disVolt_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow1+11
-;lcd.c,252 :: 		lcdrow2[9] = BCD2HignerCh(discrr);
+;lcd.c,272 :: 		lcdrow2[9] = BCD2HignerCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2HignerCh_bcd+0
 	MOVF       displayVoltageCurrent_discrr_L0+1, 0
@@ -1257,27 +1282,27 @@ _displayVoltageCurrent:
 	CALL       _BCD2HignerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+9
-;lcd.c,253 :: 		lcdrow2[10] = BCD2UpperCh(discrr);
+;lcd.c,273 :: 		lcdrow2[10] = BCD2UpperCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+10
-;lcd.c,254 :: 		lcdrow2[12] = BCD2LowerCh(discrr);
+;lcd.c,274 :: 		lcdrow2[12] = BCD2LowerCh(discrr);
 	MOVF       displayVoltageCurrent_discrr_L0+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      _lcdrow2+12
-;lcd.c,256 :: 		}
+;lcd.c,276 :: 		}
 L_end_displayVoltageCurrent:
 	RETURN
 ; end of _displayVoltageCurrent
 
 _loadRamToDisp:
 
-;lcd.c,257 :: 		void loadRamToDisp(){
-;lcd.c,258 :: 		Lcd_out(1, 1, lcdrow1);
+;lcd.c,277 :: 		void loadRamToDisp(){
+;lcd.c,278 :: 		Lcd_Out(1, 1, lcdrow1);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -1285,7 +1310,7 @@ _loadRamToDisp:
 	MOVLW      _lcdrow1+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,259 :: 		Lcd_out(2, 1, lcdrow2);
+;lcd.c,279 :: 		Lcd_Out(2, 1, lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -1293,7 +1318,7 @@ _loadRamToDisp:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;lcd.c,260 :: 		}
+;lcd.c,280 :: 		}
 L_end_loadRamToDisp:
 	RETURN
 ; end of _loadRamToDisp

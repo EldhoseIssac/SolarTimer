@@ -23,11 +23,13 @@ void Lcd_Chr_CP(char  chr);
 #define SELECT PORTD.F6
 #define PLUS PORTD.F5
 #define MINUS PORTD.F4
+
+
 #endif
 
 
-#define ON  1
-#define OFF 0
+#define ON  0
+#define OFF 1
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -42,7 +44,7 @@ extern unsigned short month;
 extern unsigned short year;
 extern short _LCD_BLINK_CURSOR_ON;
 //unsigned char  editStr[10];
-unsigned int editValue;
+extern unsigned int editValue;
 void loadEnDayHrMin();
 #if DEBUG
 short isEnabled;
@@ -53,10 +55,9 @@ short HeighDay;
 
 
 #else
-sbit isEnabled at editValue.B0;
-sbit lowDay at editValue.B1;
-sbit MidleDay at editValue.B2;
-sbit HeighDay at editValue.B3;
+extern sbit isEnabled;
+extern sbit shouldON;
+extern sbit isEdited;
 #endif
 
 
@@ -90,15 +91,23 @@ void menuPortPinInt(){
     TRISD.F6 = 1;
     TRISD.F5 = 1;
     TRISD.F4 = 1;
+    TRISC.F0 = 0;
 #endif
     
 }
+unsigned short timeEEAddr;
  unsigned waitCount ;
  unsigned char BCD2UpperCh(unsigned char bcd);
  unsigned char BCD2LowerCh(unsigned char bcd);
  void loadDay(char *arr,unsigned short theIndx);
  void saveValue(){
+      if (!isEdited){
+         return;
+      }
+      isEdited = 0;
       switch(crntMenu){
+                   case None:
+                   break;
                    case Date:
                       switch(subMenu){
                             case DateDay:
@@ -125,6 +134,43 @@ void menuPortPinInt(){
                                  break;
                    }
                    break;
+                    case Voltage:
+                      switch(submenu){
+                            case VoltageLow:
+                                 ee_write(EEPADDR_VoltageLow,editValue);
+                                 break;
+                            case VoltageHigh:
+                                 ee_write(EEPADDR_VoltageHigh,editValue);
+                                 break;
+                      }
+                   break;
+                   case Current:
+                        switch(submenu){
+                              case CurrentHeigh:
+                                   ee_write(EEPADDR_CurrentHeigh,editValue);
+                                   break;
+                              case CurrentLow:
+                                   ee_write(EEPADDR_CurrentLow,editValue);
+                                   break;
+                        }
+                   break;
+                   case LDRVal:
+                        switch(submenu){
+                              case LDRValLow:
+                                   ee_write(EEPADDR_LDRvalLow,editValue);
+                                   break;
+                              case LDRValHeigh:
+                                   ee_write(EEPADDR_LDRvalHeigh,editValue);
+                                   break;
+                        }
+                   break;
+                   default:
+                      if(crntMenu<(OnOFFTime+8))
+                      {
+                          ee_write(timeEEAddr,editValue);
+                      }
+                      break;
+                   
       }
  }
 unsigned short cashedPortD = 0;
@@ -146,9 +192,9 @@ void loadEnDayHrMin();
 
 
 void checkKey(){
-    unsigned short timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
-    unsigned short timeEditTemp = 0;
-  
+
+    unsigned int timeEditTemp = 0;
+    timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
 do{
     cMENU = MENU;
     cSELECT = SELECT;
@@ -366,10 +412,7 @@ do{
                          if (cPLUS == ON || cMINUS == ON)
                          {
                              isEnabled = !isEnabled;
-                             if (isEnabled)
-                             {
-                               loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
-                             }
+                              loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
                          }
                     break;
                     case VoltageHigh:
@@ -381,13 +424,13 @@ do{
                          if (cPLUS == ON)
                          {
                              editValue += 2;
-                             if (editValue > 221)   editValue = 81;
+                             if (editValue > 441)   editValue = 81;
 
                          }
                          if (cMINUS == ON)
                          {
-                             editValue += 2;
-                             if (editValue < 81) editValue = 221;
+                             editValue -= 2;
+                             if (editValue < 81) editValue = 441;
                          }
                          if (cPLUS == ON || cMINUS == ON)
                          {
@@ -402,18 +445,18 @@ do{
                          }
                          if (cPLUS == ON)
                          {
-                             editValue += 2;
-                             if (editValue > 221)   editValue = 81;
+                             editValue += 1;
+                             if (editValue > 220)   editValue = 80;
 
                          }
                          if (cMINUS == ON)
                          {
-                             editValue += 2;
-                             if (editValue < 81) editValue = 221;
+                             editValue -= 1;
+                             if (editValue < 80) editValue = 220;
                          }
                          if (cPLUS == ON || cMINUS == ON)
                          {
-                              loadEnHeighLow(ee_read(EEPADDR_VoltageLow),editValue,0);
+                              loadEnHeighLow(ee_read(EEPADDR_VoltageHigh),editValue,0);
                          }
                     break;
                     
@@ -430,6 +473,66 @@ do{
            }
            else
            {
+                switch(subMenu)
+                {
+                    case CurrentEnable:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = CurrentHeigh;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                             isEnabled = !isEnabled;
+                             loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
+                             
+                                                      }
+                    break;
+                    case CurrentHeigh:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = CurrentLow;
+                            editValue =  ee_read(EEPADDR_CurrentLow);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue > 201)   editValue = 11;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue -= 2;
+                             if (editValue < 11) editValue = 201;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
+                         }
+                    break;
+                    case CurrentLow:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = CurrentEnable;
+                            editValue =  ee_read(EEPADDR_CurrentHeigh);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 1;
+                             if (editValue > 220)   editValue = 80;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue -= 1;
+                             if (editValue < 80) editValue = 220;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(ee_read(EEPADDR_CurrentHeigh),editValue,1);
+                         }
+                    break;
+
+                }
            }
           break;
      case LDRVal:
@@ -442,6 +545,65 @@ do{
            }
            else
            {
+               switch(subMenu)
+                {
+                    case LDRValEnable:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = LDRValHeigh;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                             isEnabled = !isEnabled;
+                              loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
+                         }
+                    break;
+                    case LDRValHeigh:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = LDRValLow;
+                            editValue =  ee_read(EEPADDR_LDRValLow);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 2;
+                             if (editValue > 441)   editValue = 81;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue -= 2;
+                             if (editValue < 81) editValue = 441;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
+                         }
+                    break;
+                    case LDRValLow:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = LDRValEnable;
+                            editValue =  ee_read(EEPADDR_LDRValHeigh);
+                         }
+                         if (cPLUS == ON)
+                         {
+                             editValue += 1;
+                             if (editValue > 220)   editValue = 80;
+
+                         }
+                         if (cMINUS == ON)
+                         {
+                             editValue -= 1;
+                             if (editValue < 80) editValue = 220;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                              loadEnHeighLow(ee_read(EEPADDR_LDRValHeigh),editValue,0);
+                         }
+                    break;
+
+                }
            }
            break;
      default:
@@ -451,10 +613,10 @@ do{
              {
                 subMenu = OnOFFTimeEditEnable;
                 timeEEAddr += 2;
-                editValue = ee_read(timeEEAddr);
                 strcpy(lcdrow1,codetxt_to_ramtxt("Time1 Day  Hr:Mn"));
                 lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
                 Lcd_Out(1,1,lcdrow1);
+                editValue = ee_read(timeEEAddr);
                 loadEnDayHrMin();
              }
              else
@@ -463,13 +625,26 @@ do{
                      case OnOFFTimeEditEnable:
                          if(cSELECT == ON )
                          {
-                             subMenu = OnOFFTimeEditWeekDay;
-                             timeEditTemp = (editValue >> 1) & 0x07;
-                             
+                             if (isEnabled)
+                             {
+                               subMenu = OnOFFTimeEditOnOff;
+                             }
+
                          }
                          if (cPLUS == ON || cMINUS == ON)
                          {
                              isEnabled = !isEnabled;
+                             loadEnDayHrMin();
+                         }
+                         break;
+                      case OnOFFTimeEditOnOff:
+                         if(cSELECT == ON )
+                         {
+                            subMenu = OnOFFTimeEditWeekDay;
+                         }
+                         if (cPLUS == ON || cMINUS == ON)
+                         {
+                             shouldON = !shouldON;
                              loadEnDayHrMin();
                          }
                          break;
@@ -479,16 +654,17 @@ do{
                              subMenu = OnOFFTimeEditHour;
                          }
                          // no need to check overflow
+                         timeEditTemp = editValue;
                          if (cPLUS == ON)
                          {
-                             timeEditTemp++;
+                             timeEditTemp += 4;
                          }
                          if (cMINUS == ON)
                          {
-                             timeEditTemp--;
+                             timeEditTemp -= 4;
                          }
                          if (cPLUS == ON || cMINUS == ON) {
-                             editValue = (editValue & 0xFFE1) & ((timeEditTemp<<1) & 0xE1);
+                             editValue = (editValue & 0xFFE3) | (timeEditTemp & 0x001C);
                              loadEnDayHrMin();
                          }
                          break;
@@ -497,30 +673,29 @@ do{
                          {
                              subMenu = OnOFFTimeEditMint;
                          }
+                         timeEditTemp = editValue & 0x03E0;
                          if (cPLUS == ON)
                          {
-                             lowDay = !lowDay;
-                             if(!lowDay )
+                             timeEditTemp += 32;
+                             if (timeEditTemp > 736)
                              {
-                                 MidleDay = !MidleDay;
-                                 if (!MidleDay)
-                                 {
-                                     HeighDay = !HeighDay;
-                                 }
+                               timeEditTemp = 0;
                              }
-                             loadEnDayHrMin();
                          }
                          if (cMINUS == ON)
                          {
-                             lowDay = !lowDay;
-                             if(lowDay )
+                             if(timeEditTemp == 0)
                              {
-                                 MidleDay = !MidleDay;
-                                 if (MidleDay)
-                                 {
-                                     HeighDay = !HeighDay;
-                                 }
+                                 timeEditTemp = 736;
                              }
+                             else
+                             {
+                               timeEditTemp -= 32;
+                             }
+
+                         }
+                         if (cPLUS == ON || cMINUS == ON) {
+                             editValue = (editValue & 0xFC1F) | timeEditTemp;
                              loadEnDayHrMin();
                          }
 
@@ -530,30 +705,29 @@ do{
                          {
                              subMenu = OnOFFTimeEditEnable;
                          }
+                         timeEditTemp = editValue & 0xFC00;
                          if (cPLUS == ON)
                          {
-                             lowDay = !lowDay;
-                             if(!lowDay )
+                             timeEditTemp += 1024;
+                             if (timeEditTemp > 60416)
                              {
-                                 MidleDay = !MidleDay;
-                                 if (!MidleDay)
-                                 {
-                                     HeighDay = !HeighDay;
-                                 }
+                               timeEditTemp = 0;
                              }
-                             loadEnDayHrMin();
                          }
                          if (cMINUS == ON)
                          {
-                             lowDay = !lowDay;
-                             if(lowDay )
+                             if(timeEditTemp == 0)
                              {
-                                 MidleDay = !MidleDay;
-                                 if (MidleDay)
-                                 {
-                                     HeighDay = !HeighDay;
-                                 }
+                                 timeEditTemp = 60416;
                              }
+                             else
+                             {
+                               timeEditTemp -= 1024;
+                             }
+
+                         }
+                         if (cPLUS == ON || cMINUS == ON) {
+                             editValue = (editValue & 0x03FF) | timeEditTemp;
                              loadEnDayHrMin();
                          }
 
@@ -573,6 +747,10 @@ do{
    }
    if(cashedPortD > 0){
      setCursorPosition(subMenu);
+   }
+   if (cPLUS == ON || cMINUS == ON) 
+   {
+     isEdited = 1;
    }
 
      delay_ms(100);
