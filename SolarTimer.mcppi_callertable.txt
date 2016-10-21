@@ -116,7 +116,6 @@ main
 				____DoICP
 		strcpy
 		loadEnDayHrMin
-			loadDay
 			Binary2BCD
 				Div_16x16_S
 					Div_16x16_S_L

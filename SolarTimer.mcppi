@@ -6,7 +6,7 @@ Value=-1
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=SolarTimer.c
+Value=Menu.c
 [USE_EEPROM]
 Value=1
 [USE_HEAP]
@@ -33,11 +33,11 @@ ActiveImageIndex=-1
 Count=7
 File0=Enums.h
 File1=SolarTimer.c
-File2=Menu.c
-File3=lcd.c
-File4=Deff.h
-File5=rtc.c
-File6=eeprom.c
+File2=lcd.c
+File3=Deff.h
+File4=rtc.c
+File5=eeprom.c
+File6=Menu.c
 [EEPROM]
 Count=1
 File0=SolarTimer.ihex
@@ -46,13 +46,13 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=6
+Count=3
 Path0=C:\Program Files (x86)\mikroC PRO for PIC\Defs\
 Path1=C:\Program Files (x86)\mikroC PRO for PIC\Uses\P16\
 Path2=D:\SolarTimer\
 [HEADER_PATH]
-Count=2
-Path1=D:\SolarTimer\
+Count=1
+Path0=D:\SolarTimer\
 [HEADERS]
 Count=2
 File0=Deff.h
