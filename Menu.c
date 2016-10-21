@@ -84,6 +84,8 @@ char i;
   return txt;
 }
 
+
+
 void menuPortPinInt(){
     
 #if !DEBUG
@@ -607,14 +609,14 @@ do{
            }
            break;
      default:
-          if(crntMenu<(OnOFFTime+8))
+          if(crntMenu<(OnOFFTime+7))
           {
              if (cMENU == ON)
              {
                 subMenu = OnOFFTimeEditEnable;
                 timeEEAddr += 2;
-                strcpy(lcdrow1,codetxt_to_ramtxt("Time1 Day  Hr:Mn"));
-                lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
+                strcpy(lcdrow1,codetxt_to_ramtxt("SuMoTuWeThFrSa"));
+                //lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
                 Lcd_Out(1,1,lcdrow1);
                 editValue = ee_read(timeEEAddr);
                 loadEnDayHrMin();
@@ -627,7 +629,7 @@ do{
                          {
                              if (isEnabled)
                              {
-                               subMenu = OnOFFTimeEditOnOff;
+                               subMenu = OnOFFTimeEditHour;
                              }
 
                          }

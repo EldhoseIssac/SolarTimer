@@ -35,11 +35,11 @@ enum subMenu{
     LDRValLow = 13,
     
     //OnOFFTimerCntEdit,
-    OnOFFTimeEditEnable = 0,
-    OnOFFTimeEditOnOff = 4,
+    OnOFFTimeEditEnable = 3,
+    OnOFFTimeEditOnOff = 7,
     OnOFFTimeEditWeekDay = 6,
-    OnOFFTimeEditHour = 11,
-    OnOFFTimeEditMint = 14
+    OnOFFTimeEditHour = 8,
+    OnOFFTimeEditMint = 11
 
 };
 

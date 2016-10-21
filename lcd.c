@@ -3,7 +3,7 @@ extern char lcdrow1[];
 extern char lcdrow2[];
 
 
-
+extern unsigned short crntMenu;
 extern unsigned short second;
 extern unsigned short minute;
 extern unsigned short hour;
@@ -182,6 +182,32 @@ void loadEnDayHrMin()
   unsigned val = editValue >> 2;
   unsigned short dday = Lo(val) & 0x07;
   unsigned int dis;
+  switch(crntMenu-5)
+  {
+        case 1:
+             lcdrow2[indx++]='1';
+             break;
+        case 2:
+             lcdrow2[indx++]='2';
+             break;
+        case 3:
+             lcdrow2[indx++]='3';
+             break;
+        case 4:
+             lcdrow2[indx++]='4';
+             break;
+        case 5:
+             lcdrow2[indx++]='5';
+             break;
+        case 6:
+             lcdrow2[indx++]='6';
+             break;
+        case 7:
+             lcdrow2[indx++]='7';
+             break;
+  }
+  lcdrow2[indx++]=')';
+  lcdrow2[indx++]=' ';
   if(isEnabled)
   {
         lcdrow2[indx++] = 'O';
@@ -196,19 +222,19 @@ void loadEnDayHrMin()
   }
   lcdrow2[indx++] = ' ';
 
-  if (shouldON)
-  {
-     lcdrow2[indx++] = '1';
-  }
-  else
-  {
-    lcdrow2[indx++] = '0';
-  }
-  lcdrow2[indx++] = ' ';
-  loadDay(&lcdrow2[indx],dday);
-  indx += 3;
-  lcdrow2[indx++] = ' ';
-  lcdrow2[indx++] = ' ';
+  //if (shouldON)
+  //{
+  //   lcdrow2[indx++] = '1';
+  //}
+ // else
+  //{
+  //  lcdrow2[indx++] = '0';
+  //}
+  //lcdrow2[indx++] = ' ';
+  //loadDay(&lcdrow2[indx],dday);
+  //indx += 3;
+  //lcdrow2[indx++] = ' ';
+  //lcdrow2[indx++] = ' ';
   val = (val >> 3);
   dday =  val & 0x1F;
   dis =   Binary2BCD(dday);

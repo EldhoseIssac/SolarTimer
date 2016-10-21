@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "D:/SolarTimer/Menu.c"
+#line 1 "d:/solartimer/enums.h"
 
 
 enum menus {
@@ -37,11 +37,11 @@ enum subMenu{
  LDRValLow = 13,
 
 
- OnOFFTimeEditEnable = 0,
- OnOFFTimeEditOnOff = 4,
+ OnOFFTimeEditEnable = 3,
+ OnOFFTimeEditOnOff = 7,
  OnOFFTimeEditWeekDay = 6,
- OnOFFTimeEditHour = 11,
- OnOFFTimeEditMint = 14
+ OnOFFTimeEditHour = 8,
+ OnOFFTimeEditMint = 11
 
 };
 
@@ -72,7 +72,7 @@ enum EEPADDR
 
 
 };
-#line 33 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 33 "D:/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -126,6 +126,8 @@ char i;
  txt[i] = '\0';
  return txt;
 }
+
+
 
 void menuPortPinInt(){
 
@@ -650,14 +652,14 @@ do{
  }
  break;
  default:
- if(crntMenu<(OnOFFTime+8))
+ if(crntMenu<(OnOFFTime+7))
  {
  if (cMENU ==  0 )
  {
  subMenu = OnOFFTimeEditEnable;
  timeEEAddr += 2;
- strcpy(lcdrow1,codetxt_to_ramtxt("Time1 Day  Hr:Mn"));
- lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
+ strcpy(lcdrow1,codetxt_to_ramtxt("SuMoTuWeThFrSa"));
+
  Lcd_Out(1,1,lcdrow1);
  editValue = ee_read(timeEEAddr);
  loadEnDayHrMin();
@@ -670,7 +672,7 @@ do{
  {
  if (isEnabled)
  {
- subMenu = OnOFFTimeEditOnOff;
+ subMenu = OnOFFTimeEditHour;
  }
 
  }
