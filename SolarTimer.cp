@@ -166,7 +166,7 @@ void main() {
  unsigned short index;
  unsigned short tmp;
  lastTimeCheckValue = 0;
- osccon = 0x70;
+
  ansel = 7;
  anselh = 0;
  trisb = 0;
@@ -178,6 +178,8 @@ void main() {
  menuPortPinInt();
 
  shouldLoadDisp = 1;
+ Lcd_Out(1,1,"Welcome");
+ while(1);
  while(1){
  readVoltage();
  readCurrent();
