@@ -115,6 +115,7 @@ main
 			codetxt_to_ramtxt
 				____DoICP
 		strcpy
+		EEPROM_Read
 		loadEnDayHrMin
 			Binary2BCD
 				Div_16x16_S
@@ -175,6 +176,4 @@ main
 					Delay_1us
 					Delay_5500us
 					Delay_50us
-	ee_read
-		EEPROM_Read
 interrupt

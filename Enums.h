@@ -8,8 +8,27 @@ enum menus {
     Current,
     LDRVal,
     //OnOFFTimerCnt,
-    OnOFFTime
+    OnOFFTimeDay1,
+    OnOFFTime1,
+    OnOFFTimeDay2,
+    OnOFFTime2,
+    OnOFFTimeDay3,
+    OnOFFTime3,
+    OnOFFTimeDay4,
+    OnOFFTime4,
+    OnOFFTimeDay5,
+    OnOFFTime5,
+    OnOFFTimeDay6,
+    OnOFFTime6,
+    OnOFFTimeDay7,
+    OnOFFTime7,
+    OnOFFTimeDay8,
+    OnOFFTime8,
+    OnOFFTimeDay9,
+    OnOFFTime9
+
 };
+
 
 enum subMenu{
     NoEdit,
@@ -35,11 +54,20 @@ enum subMenu{
     LDRValLow = 13,
     
     //OnOFFTimerCntEdit,
-    OnOFFTimeEditEnable = 3,
-    OnOFFTimeEditOnOff = 7,
-    OnOFFTimeEditWeekDay = 6,
-    OnOFFTimeEditHour = 8,
-    OnOFFTimeEditMint = 11
+    OnOFFTimeDaySun = 1,
+    OnOFFTimeDayMon = 3,
+    OnOFFTimeDayTue = 5,
+    OnOFFTimeDayWed = 7,
+    OnOFFTimeDayThu = 9,
+    OnOFFTimeDayFri = 11,
+    OnOFFTimeDaySat = 13,
+    
+    //N>10:10 F>10:10
+    OnOFFTimeOnHr = 3,
+    OnOFFTimeOnMin = 6,
+    OnOFFTimeOffHr = 11,
+    OnOFFTimeOffMin = 14
+
 
 };
 
@@ -55,18 +83,27 @@ enum EEPADDR
     EEPADDR_LDRValLow = 12,
     
     EEPADDR_OnOFFTimerCntEdit = 14,
-    EEPADDR_OnOFFTimeEdit1 = 16,
-    EEPADDR_OnOFFTimeEdit2 = 18,
-    EEPADDR_OnOFFTimeEdit3 = 20,
-    EEPADDR_OnOFFTimeEdit4 = 22,
-    EEPADDR_OnOFFTimeEdit5 = 24,
-    EEPADDR_OnOFFTimeEdit6 = 26,
-    EEPADDR_OnOFFTimeEdit7 = 28,
-    EEPADDR_OnOFFTimeEdit8 = 30,
-    EEPADDR_OnOFFTimeEdit9 = 32,
-    EEPADDR_OnOFFTimeEdit10 = 34,
-    EEPADDR_OnOFFTimeEdit11 = 36,
-    EEPADDR_OnOFFTimeEdit12 = 38
-
-
+    
+    EEPADDR_OnOFFTimeDay1 = 20,
+    EEPADDR_OnOFFTimeDay2 = 25,
+    EEPADDR_OnOFFTimeDay3 = 30,
+    EEPADDR_OnOFFTimeDay4 = 35,
+    EEPADDR_OnOFFTimeDay5 = 40,
+    EEPADDR_OnOFFTimeDay6 = 45,
+    EEPADDR_OnOFFTimeDay7 = 50,
+    EEPADDR_OnOFFTimeDay8 = 55,
+    EEPADDR_OnOFFTimeDay9 = 60,
+    EEPADDR_OnOFFTimeDay10 = 65,
+    EEPADDR_OnOFFTimeDay11 = 70,
+    EEPADDR_OnOFFTimeDay12 = 75,
+    EEPADDR_OnOFFTimeDay13 = 80,
+    EEPADDR_OnOFFTimeDay14 = 85
+};
+enum TIMERMEM
+{
+     TIMERMEMDays = 0,
+     TIMERMEMOnHour = 1,
+     TIMERMEMOnMin = 2,
+     TIMERMEMOffHour = 3,
+     TIMERMEMOffMin  = 4
 };

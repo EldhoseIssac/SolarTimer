@@ -1,6 +1,6 @@
-#line 1 "D:/SolarTimer/eeprom.c"
-#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
-#line 21 "D:/SolarTimer/eeprom.c"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
+#line 21 "E:/PROGAMS/hussian/SolarTimer/eeprom.c"
  void ee_write(unsigned short addr,unsigned int value)
  {
  EEprom_write(addr, ((char *)&value)[1] );

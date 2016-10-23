@@ -175,7 +175,9 @@ void setCursorPosition(unsigned short position){
          Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
     }
 }
-
+void loadEnabledDay()
+{
+}
 void loadEnDayHrMin()
 {
   unsigned short indx = 0;

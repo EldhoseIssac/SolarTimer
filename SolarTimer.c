@@ -42,15 +42,16 @@ unsigned int lastTimeCheckValue;
 #if DEBUG
 void SOLARmain() {
 #else
-void main() {
+void main() 
+{
 
 #endif
-      unsigned short index;
-      unsigned short tmp;
+//      unsigned short index;
+//      unsigned short tmp;
       lastTimeCheckValue = 0;
     //osccon = 0x70;
-    ansel  = 7;
-    anselh  = 0;
+    //ansel  = 7;
+    //anselh  = 0;
     trisb = 0;
     trisd = 0;
     ADC_Init();
@@ -60,9 +61,8 @@ void main() {
     menuPortPinInt();
 
     shouldLoadDisp = 1;
-    Lcd_Out(1,1,"Welcome");
-    while(1);
-    while(1){
+    while(1)
+    {
        readVoltage();
        readCurrent();
        checkKey();
@@ -74,35 +74,7 @@ void main() {
          displayTimeDate();
          loadRamToDisp();
          shouldLoadDisp = 0;
-         for (index = EEPADDR_OnOFFTimeEdit1;index<EEPADDR_OnOFFTimeEdit9;index+=2)
-         {
-           editValue = ee_read(index);
-           if(!isEnabled)
-           {
-             continue;
-           }
-           if (lastTimeCheckValue != editValue)
-           {
-              tmp = editValue;
-              tmp = (tmp & 0x1C) >> 2;
-              if (tmp != 0 || tmp != dday)
-              {
-                continue;
-              }
-              tmp = (editValue & 0x03E0) >> 5;
-              if (tmp != hour)
-              {
-                continue;
-              }
-              tmp = (editValue & 0xFC00) >> 10;
-              if (tmp != minute)
-              {
-                continue;
-              }
-              MOTOR = shouldON;
-
-           }
-         }
        }
-  }
+
+     }
 }

@@ -28,8 +28,8 @@ void Lcd_Chr_CP(char  chr);
 #endif
 
 
-#define ON  0
-#define OFF 1
+#define ON  1
+#define OFF 0
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -167,7 +167,7 @@ unsigned short timeEEAddr;
                         }
                    break;
                    default:
-                      if(crntMenu<(OnOFFTime+8))
+                      if(crntMenu<OnOFFTimeDay9)
                       {
                           ee_write(timeEEAddr,editValue);
                       }
@@ -195,8 +195,7 @@ void loadEnDayHrMin();
 
 void checkKey(){
 
-    unsigned int timeEditTemp = 0;
-    timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
+    timeEEAddr = EEPADDR_OnOFFTimeDay1-5;
 do{
     cMENU = MENU;
     cSELECT = SELECT;
@@ -220,7 +219,7 @@ do{
             saveValue();
         }
         crntMenu ++;
-        if(crntMenu>(OnOFFTime+8))
+        if(crntMenu>OnOFFTime8)
         {
            waitCount = 500;
         }
@@ -609,21 +608,24 @@ do{
            }
            break;
      default:
-          if(crntMenu<(OnOFFTime+7))
+          if(crntMenu<OnOFFTimeDay9)
           {
              if (cMENU == ON)
              {
-                subMenu = OnOFFTimeEditEnable;
-                timeEEAddr += 2;
-                strcpy(lcdrow1,codetxt_to_ramtxt("SuMoTuWeThFrSa"));
-                //lcdrow1[4]= crntMenu - OnOFFTime + '0' + 1;
+                subMenu = OnOFFTimeDaySun;
+                timeEEAddr += 5;
+                strcpy(lcdrow1,codetxt_to_ramtxt("1)"));
+                lcdrow1[0]= ((crntMenu - OnOFFTimeDay1) >> 1) + '0' + 1;
+                Lcd_Out(1,1,lcdrow1);
+                editValue = EEPROM_Read(timeEEAddr);
+
                 Lcd_Out(1,1,lcdrow1);
                 editValue = ee_read(timeEEAddr);
                 loadEnDayHrMin();
              }
              else
              {
-                 switch (subMenu) {
+                /*switch (subMenu) {
                      case OnOFFTimeEditEnable:
                          if(cSELECT == ON )
                          {
@@ -734,7 +736,7 @@ do{
                          }
 
                          break;
-                 }
+                 }*/
              }
                  
               

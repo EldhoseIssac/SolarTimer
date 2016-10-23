@@ -324,8 +324,8 @@ L_saveValue31:
 	GOTO       L_saveValue5
 ;Menu.c,169 :: 		default:
 L_saveValue34:
-;Menu.c,170 :: 		if(crntMenu<(OnOFFTime+8))
-	MOVLW      14
+;Menu.c,170 :: 		if(crntMenu<OnOFFTimeDay9)
+	MOVLW      22
 	SUBWF      _crntMenu+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_saveValue35
@@ -377,60 +377,57 @@ L_end_saveValue:
 _checkKey:
 
 ;Menu.c,196 :: 		void checkKey(){
-;Menu.c,198 :: 		unsigned int timeEditTemp = 0;
-	CLRF       checkKey_timeEditTemp_L0+0
-	CLRF       checkKey_timeEditTemp_L0+1
-;Menu.c,199 :: 		timeEEAddr = EEPADDR_OnOFFTimeEdit1-2;
-	MOVLW      14
+;Menu.c,198 :: 		timeEEAddr = EEPADDR_OnOFFTimeDay1-5;
+	MOVLW      15
 	MOVWF      _timeEEAddr+0
-;Menu.c,200 :: 		do{
+;Menu.c,199 :: 		do{
 L_checkKey36:
-;Menu.c,201 :: 		cMENU = MENU;
+;Menu.c,200 :: 		cMENU = MENU;
 	BTFSC      PORTD+0, 7
-	GOTO       L__checkKey267
+	GOTO       L__checkKey222
 	BCF        _cashedPortD+0, 7
-	GOTO       L__checkKey268
-L__checkKey267:
+	GOTO       L__checkKey223
+L__checkKey222:
 	BSF        _cashedPortD+0, 7
-L__checkKey268:
-;Menu.c,202 :: 		cSELECT = SELECT;
+L__checkKey223:
+;Menu.c,201 :: 		cSELECT = SELECT;
 	BTFSC      PORTD+0, 6
-	GOTO       L__checkKey269
+	GOTO       L__checkKey224
 	BCF        _cashedPortD+0, 6
-	GOTO       L__checkKey270
-L__checkKey269:
+	GOTO       L__checkKey225
+L__checkKey224:
 	BSF        _cashedPortD+0, 6
-L__checkKey270:
-;Menu.c,203 :: 		cPLUS = PLUS;
+L__checkKey225:
+;Menu.c,202 :: 		cPLUS = PLUS;
 	BTFSC      PORTD+0, 5
-	GOTO       L__checkKey271
+	GOTO       L__checkKey226
 	BCF        _cashedPortD+0, 5
-	GOTO       L__checkKey272
-L__checkKey271:
+	GOTO       L__checkKey227
+L__checkKey226:
 	BSF        _cashedPortD+0, 5
-L__checkKey272:
-;Menu.c,204 :: 		cMINUS = MINUS;
+L__checkKey227:
+;Menu.c,203 :: 		cMINUS = MINUS;
 	BTFSC      PORTD+0, 4
-	GOTO       L__checkKey273
+	GOTO       L__checkKey228
 	BCF        _cashedPortD+0, 4
-	GOTO       L__checkKey274
-L__checkKey273:
+	GOTO       L__checkKey229
+L__checkKey228:
 	BSF        _cashedPortD+0, 4
-L__checkKey274:
-;Menu.c,208 :: 		if(cashedPortD < 0xF0)
-	MOVLW      240
-	SUBWF      _cashedPortD+0, 0
+L__checkKey229:
+;Menu.c,205 :: 		if(cashedPortD > 0)
+	MOVF       _cashedPortD+0, 0
+	SUBLW      0
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey39
-;Menu.c,212 :: 		waitCount = 0;
+;Menu.c,211 :: 		waitCount = 0;
 	CLRF       _waitCount+0
 	CLRF       _waitCount+1
-;Menu.c,213 :: 		delay_ms(100);
-	MOVLW      2
+;Menu.c,212 :: 		delay_ms(100);
+	MOVLW      3
 	MOVWF      R11+0
-	MOVLW      4
+	MOVLW      138
 	MOVWF      R12+0
-	MOVLW      186
+	MOVLW      85
 	MOVWF      R13+0
 L_checkKey40:
 	DECFSZ     R13+0, 1
@@ -440,84 +437,85 @@ L_checkKey40:
 	DECFSZ     R11+0, 1
 	GOTO       L_checkKey40
 	NOP
-;Menu.c,214 :: 		}
+	NOP
+;Menu.c,213 :: 		}
 L_checkKey39:
-;Menu.c,215 :: 		if(cMENU == ON){
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,214 :: 		if(cMENU == ON){
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey41
-;Menu.c,216 :: 		Lcd_Cmd(_LCD_CLEAR);
+;Menu.c,215 :: 		Lcd_Cmd(_LCD_CLEAR);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;Menu.c,217 :: 		if(crntMenu == None){
+;Menu.c,216 :: 		if(crntMenu == None){
 	MOVF       _crntMenu+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey42
-;Menu.c,218 :: 		Lcd_Cmd(_LCD_BLINK_CURSOR_ON);
+;Menu.c,217 :: 		Lcd_Cmd(_LCD_BLINK_CURSOR_ON);
 	MOVLW      15
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;Menu.c,219 :: 		}else{
+;Menu.c,218 :: 		}else{
 	GOTO       L_checkKey43
 L_checkKey42:
-;Menu.c,220 :: 		saveValue();
+;Menu.c,219 :: 		saveValue();
 	CALL       _saveValue+0
-;Menu.c,221 :: 		}
+;Menu.c,220 :: 		}
 L_checkKey43:
-;Menu.c,222 :: 		crntMenu ++;
+;Menu.c,221 :: 		crntMenu ++;
 	INCF       _crntMenu+0, 1
-;Menu.c,223 :: 		if(crntMenu>(OnOFFTime+8))
+;Menu.c,222 :: 		if(crntMenu>OnOFFTime8)
 	MOVF       _crntMenu+0, 0
-	SUBLW      14
+	SUBLW      21
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey44
-;Menu.c,225 :: 		waitCount = 500;
+;Menu.c,224 :: 		waitCount = 500;
 	MOVLW      244
 	MOVWF      _waitCount+0
 	MOVLW      1
 	MOVWF      _waitCount+1
-;Menu.c,226 :: 		}
+;Menu.c,225 :: 		}
 L_checkKey44:
-;Menu.c,227 :: 		}
+;Menu.c,226 :: 		}
 L_checkKey41:
-;Menu.c,228 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,227 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey45
-;Menu.c,230 :: 		saveValue();
+;Menu.c,229 :: 		saveValue();
 	CALL       _saveValue+0
-;Menu.c,231 :: 		}
+;Menu.c,230 :: 		}
 L_checkKey45:
-;Menu.c,232 :: 		switch(crntMenu)
+;Menu.c,231 :: 		switch(crntMenu)
 	GOTO       L_checkKey46
-;Menu.c,234 :: 		case None:
+;Menu.c,233 :: 		case None:
 L_checkKey48:
-;Menu.c,235 :: 		break;
+;Menu.c,234 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,236 :: 		case Date:
+;Menu.c,235 :: 		case Date:
 L_checkKey49:
-;Menu.c,237 :: 		if (cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,236 :: 		if (cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey50
-;Menu.c,239 :: 		subMenu = DateDay;
+;Menu.c,238 :: 		subMenu = DateDay;
 	CLRF       _subMenu+0
-;Menu.c,240 :: 		loadDateEdit();
+;Menu.c,239 :: 		loadDateEdit();
 	CALL       _loadDateEdit+0
-;Menu.c,241 :: 		editValue = day;
+;Menu.c,240 :: 		editValue = day;
 	MOVF       _day+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,242 :: 		}
+;Menu.c,241 :: 		}
 	GOTO       L_checkKey51
 L_checkKey50:
-;Menu.c,245 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,244 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey52
-;Menu.c,247 :: 		editValue++;
+;Menu.c,246 :: 		editValue++;
 	INCF       _editValue+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _editValue+1, 1
-;Menu.c,248 :: 		if((editValue & 0x0F )>9) editValue += 6;
+;Menu.c,247 :: 		if((editValue & 0x0F )>9) editValue += 6;
 	MOVLW      15
 	ANDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -528,10 +526,10 @@ L_checkKey50:
 	MOVF       R1+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey275
+	GOTO       L__checkKey230
 	MOVF       R1+0, 0
 	SUBLW      9
-L__checkKey275:
+L__checkKey230:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey53
 	MOVLW      6
@@ -539,17 +537,17 @@ L__checkKey275:
 	BTFSC      STATUS+0, 0
 	INCF       _editValue+1, 1
 L_checkKey53:
-;Menu.c,249 :: 		}
+;Menu.c,248 :: 		}
 L_checkKey52:
-;Menu.c,250 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,249 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey54
-;Menu.c,252 :: 		editValue--;
+;Menu.c,251 :: 		editValue--;
 	MOVLW      1
 	SUBWF      _editValue+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
-;Menu.c,253 :: 		if((editValue & 0x0F )>9) editValue -= 6;
+;Menu.c,252 :: 		if((editValue & 0x0F )>9) editValue -= 6;
 	MOVLW      15
 	ANDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -560,10 +558,10 @@ L_checkKey52:
 	MOVF       R1+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey276
+	GOTO       L__checkKey231
 	MOVF       R1+0, 0
 	SUBLW      9
-L__checkKey276:
+L__checkKey231:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey55
 	MOVLW      6
@@ -571,35 +569,35 @@ L__checkKey276:
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
 L_checkKey55:
-;Menu.c,254 :: 		}
+;Menu.c,253 :: 		}
 L_checkKey54:
-;Menu.c,255 :: 		switch(subMenu)
+;Menu.c,254 :: 		switch(subMenu)
 	GOTO       L_checkKey56
-;Menu.c,258 :: 		case DateDay:
+;Menu.c,257 :: 		case DateDay:
 L_checkKey58:
-;Menu.c,259 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,258 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey59
-;Menu.c,261 :: 		subMenu = DateMonth;
+;Menu.c,260 :: 		subMenu = DateMonth;
 	MOVLW      3
 	MOVWF      _subMenu+0
-;Menu.c,262 :: 		editValue = month;
+;Menu.c,261 :: 		editValue = month;
 	MOVF       _month+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,263 :: 		}
+;Menu.c,262 :: 		}
 L_checkKey59:
-;Menu.c,264 :: 		if(cPLUS == ON){
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,263 :: 		if(cPLUS == ON){
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey60
-;Menu.c,265 :: 		if(editValue>0x31)  editValue = 1;
+;Menu.c,264 :: 		if(editValue>0x31)  editValue = 1;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey277
+	GOTO       L__checkKey232
 	MOVF       _editValue+0, 0
 	SUBLW      49
-L__checkKey277:
+L__checkKey232:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey61
 	MOVLW      1
@@ -607,19 +605,19 @@ L__checkKey277:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey61:
-;Menu.c,266 :: 		}
+;Menu.c,265 :: 		}
 L_checkKey60:
-;Menu.c,267 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,266 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey62
-;Menu.c,269 :: 		if(editValue == 0) editValue = 0x31;
+;Menu.c,268 :: 		if(editValue == 0) editValue = 0x31;
 	MOVLW      0
 	XORWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey278
+	GOTO       L__checkKey233
 	MOVLW      0
 	XORWF      _editValue+0, 0
-L__checkKey278:
+L__checkKey233:
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey63
 	MOVLW      49
@@ -627,35 +625,35 @@ L__checkKey278:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey63:
-;Menu.c,270 :: 		}
+;Menu.c,269 :: 		}
 L_checkKey62:
-;Menu.c,271 :: 		break;
+;Menu.c,270 :: 		break;
 	GOTO       L_checkKey57
-;Menu.c,272 :: 		case DateMonth:
+;Menu.c,271 :: 		case DateMonth:
 L_checkKey64:
-;Menu.c,273 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,272 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey65
-;Menu.c,275 :: 		subMenu = DateYear;
+;Menu.c,274 :: 		subMenu = DateYear;
 	MOVLW      6
 	MOVWF      _subMenu+0
-;Menu.c,276 :: 		editValue = year;
+;Menu.c,275 :: 		editValue = year;
 	MOVF       _year+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,277 :: 		}
+;Menu.c,276 :: 		}
 L_checkKey65:
-;Menu.c,278 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,277 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey66
-;Menu.c,280 :: 		if(editValue>0x12)  editValue = 1;
+;Menu.c,279 :: 		if(editValue>0x12)  editValue = 1;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey279
+	GOTO       L__checkKey234
 	MOVF       _editValue+0, 0
 	SUBLW      18
-L__checkKey279:
+L__checkKey234:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey67
 	MOVLW      1
@@ -663,19 +661,19 @@ L__checkKey279:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey67:
-;Menu.c,281 :: 		}
+;Menu.c,280 :: 		}
 L_checkKey66:
-;Menu.c,282 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,281 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey68
-;Menu.c,284 :: 		if(editValue == 0) editValue = 0x01;
+;Menu.c,283 :: 		if(editValue == 0) editValue = 0x01;
 	MOVLW      0
 	XORWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey280
+	GOTO       L__checkKey235
 	MOVLW      0
 	XORWF      _editValue+0, 0
-L__checkKey280:
+L__checkKey235:
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey69
 	MOVLW      1
@@ -683,35 +681,35 @@ L__checkKey280:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey69:
-;Menu.c,285 :: 		}
+;Menu.c,284 :: 		}
 L_checkKey68:
-;Menu.c,287 :: 		break;
+;Menu.c,286 :: 		break;
 	GOTO       L_checkKey57
-;Menu.c,288 :: 		case DateYear:
+;Menu.c,287 :: 		case DateYear:
 L_checkKey70:
-;Menu.c,289 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,288 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey71
-;Menu.c,291 :: 		subMenu = DateWeekDay;
+;Menu.c,290 :: 		subMenu = DateWeekDay;
 	MOVLW      9
 	MOVWF      _subMenu+0
-;Menu.c,292 :: 		editValue = dday;
+;Menu.c,291 :: 		editValue = dday;
 	MOVF       _dday+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,293 :: 		}
+;Menu.c,292 :: 		}
 L_checkKey71:
-;Menu.c,294 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,293 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey72
-;Menu.c,296 :: 		if(editValue>0x99)  editValue = 1;
+;Menu.c,295 :: 		if(editValue>0x99)  editValue = 1;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey281
+	GOTO       L__checkKey236
 	MOVF       _editValue+0, 0
 	SUBLW      153
-L__checkKey281:
+L__checkKey236:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey73
 	MOVLW      1
@@ -719,53 +717,53 @@ L__checkKey281:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey73:
-;Menu.c,297 :: 		}
+;Menu.c,296 :: 		}
 L_checkKey72:
-;Menu.c,298 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,297 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey74
-;Menu.c,300 :: 		if(editValue == 0) editValue = 0x99;
+;Menu.c,299 :: 		if(editValue == 0) editValue = 0x99;
 	MOVLW      0
 	XORWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey282
+	GOTO       L__checkKey237
 	MOVLW      0
 	XORWF      _editValue+0, 0
-L__checkKey282:
+L__checkKey237:
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey75
 	MOVLW      153
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
 L_checkKey75:
-;Menu.c,301 :: 		}
+;Menu.c,300 :: 		}
 L_checkKey74:
-;Menu.c,303 :: 		break;
+;Menu.c,302 :: 		break;
 	GOTO       L_checkKey57
-;Menu.c,304 :: 		case DateWeekDay:
+;Menu.c,303 :: 		case DateWeekDay:
 L_checkKey76:
-;Menu.c,305 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,304 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey77
-;Menu.c,307 :: 		subMenu = DateDay;
+;Menu.c,306 :: 		subMenu = DateDay;
 	CLRF       _subMenu+0
-;Menu.c,308 :: 		editValue = day;
+;Menu.c,307 :: 		editValue = day;
 	MOVF       _day+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,309 :: 		}
+;Menu.c,308 :: 		}
 L_checkKey77:
-;Menu.c,310 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,309 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey78
-;Menu.c,312 :: 		if(editValue>0x07)  editValue = 1;
+;Menu.c,311 :: 		if(editValue>0x07)  editValue = 1;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey283
+	GOTO       L__checkKey238
 	MOVF       _editValue+0, 0
 	SUBLW      7
-L__checkKey283:
+L__checkKey238:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey79
 	MOVLW      1
@@ -773,19 +771,19 @@ L__checkKey283:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey79:
-;Menu.c,313 :: 		}
+;Menu.c,312 :: 		}
 L_checkKey78:
-;Menu.c,314 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,313 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey80
-;Menu.c,316 :: 		if(editValue == 0) editValue = 0x07;
+;Menu.c,315 :: 		if(editValue == 0) editValue = 0x07;
 	MOVLW      0
 	XORWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey284
+	GOTO       L__checkKey239
 	MOVLW      0
 	XORWF      _editValue+0, 0
-L__checkKey284:
+L__checkKey239:
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey81
 	MOVLW      7
@@ -793,11 +791,11 @@ L__checkKey284:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey81:
-;Menu.c,317 :: 		}
+;Menu.c,316 :: 		}
 L_checkKey80:
-;Menu.c,318 :: 		break;
+;Menu.c,317 :: 		break;
 	GOTO       L_checkKey57
-;Menu.c,320 :: 		}
+;Menu.c,319 :: 		}
 L_checkKey56:
 	MOVF       _subMenu+0, 0
 	XORLW      0
@@ -816,27 +814,27 @@ L_checkKey56:
 	BTFSC      STATUS+0, 2
 	GOTO       L_checkKey76
 L_checkKey57:
-;Menu.c,321 :: 		if(cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey262
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey262
+;Menu.c,320 :: 		if(cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey217
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey217
 	GOTO       L_checkKey84
-L__checkKey262:
-;Menu.c,323 :: 		if (subMenu == DateWeekDay)
+L__checkKey217:
+;Menu.c,322 :: 		if (subMenu == DateWeekDay)
 	MOVF       _subMenu+0, 0
 	XORLW      9
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey85
-;Menu.c,325 :: 		loadDay(lcdrow2,editValue);
+;Menu.c,324 :: 		loadDay(lcdrow2,editValue);
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_loadDay_arr+0
 	MOVF       _editValue+0, 0
 	MOVWF      FARG_loadDay_theIndx+0
 	CALL       _loadDay+0
-;Menu.c,326 :: 		lcdrow2[3] = '\0';
+;Menu.c,325 :: 		lcdrow2[3] = '\0';
 	CLRF       _lcdrow2+3
-;Menu.c,327 :: 		Lcd_Out(2,subMenu+1,lcdrow2);
+;Menu.c,326 :: 		Lcd_Out(2,subMenu+1,lcdrow2);
 	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
 	INCF       _subMenu+0, 0
@@ -844,10 +842,10 @@ L__checkKey262:
 	MOVLW      _lcdrow2+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;Menu.c,328 :: 		}
+;Menu.c,327 :: 		}
 	GOTO       L_checkKey86
 L_checkKey85:
-;Menu.c,331 :: 		Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
+;Menu.c,330 :: 		Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
 	MOVF       _editValue+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
@@ -858,45 +856,45 @@ L_checkKey85:
 	INCF       _subMenu+0, 0
 	MOVWF      FARG_Lcd_Chr_column+0
 	CALL       _Lcd_Chr+0
-;Menu.c,332 :: 		Lcd_Chr_CP(BCD2LowerCh(editValue));
+;Menu.c,331 :: 		Lcd_Chr_CP(BCD2LowerCh(editValue));
 	MOVF       _editValue+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      FARG_Lcd_Chr_CP_out_char+0
 	CALL       _Lcd_Chr_CP+0
-;Menu.c,333 :: 		}
+;Menu.c,332 :: 		}
 L_checkKey86:
-;Menu.c,334 :: 		}
+;Menu.c,333 :: 		}
 L_checkKey84:
-;Menu.c,336 :: 		}
+;Menu.c,335 :: 		}
 L_checkKey51:
-;Menu.c,337 :: 		break;
+;Menu.c,336 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,338 :: 		case Time:
+;Menu.c,337 :: 		case Time:
 L_checkKey87:
-;Menu.c,339 :: 		if (cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,338 :: 		if (cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey88
-;Menu.c,341 :: 		subMenu = TimeHour;
+;Menu.c,340 :: 		subMenu = TimeHour;
 	CLRF       _subMenu+0
-;Menu.c,342 :: 		loadTimeEdit();
+;Menu.c,341 :: 		loadTimeEdit();
 	CALL       _loadTimeEdit+0
-;Menu.c,343 :: 		editValue = hour;
+;Menu.c,342 :: 		editValue = hour;
 	MOVF       _hour+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,344 :: 		}
+;Menu.c,343 :: 		}
 	GOTO       L_checkKey89
 L_checkKey88:
-;Menu.c,347 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,346 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey90
-;Menu.c,349 :: 		editValue++;
+;Menu.c,348 :: 		editValue++;
 	INCF       _editValue+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _editValue+1, 1
-;Menu.c,350 :: 		if((editValue & 0x0F )>9) editValue += 6;
+;Menu.c,349 :: 		if((editValue & 0x0F )>9) editValue += 6;
 	MOVLW      15
 	ANDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -907,10 +905,10 @@ L_checkKey88:
 	MOVF       R1+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey285
+	GOTO       L__checkKey240
 	MOVF       R1+0, 0
 	SUBLW      9
-L__checkKey285:
+L__checkKey240:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey91
 	MOVLW      6
@@ -918,17 +916,17 @@ L__checkKey285:
 	BTFSC      STATUS+0, 0
 	INCF       _editValue+1, 1
 L_checkKey91:
-;Menu.c,351 :: 		}
+;Menu.c,350 :: 		}
 L_checkKey90:
-;Menu.c,352 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,351 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey92
-;Menu.c,354 :: 		editValue--;
+;Menu.c,353 :: 		editValue--;
 	MOVLW      1
 	SUBWF      _editValue+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
-;Menu.c,355 :: 		if((editValue & 0x0F )>9) editValue -= 6;
+;Menu.c,354 :: 		if((editValue & 0x0F )>9) editValue -= 6;
 	MOVLW      15
 	ANDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -939,10 +937,10 @@ L_checkKey90:
 	MOVF       R1+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey286
+	GOTO       L__checkKey241
 	MOVF       R1+0, 0
 	SUBLW      9
-L__checkKey286:
+L__checkKey241:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey93
 	MOVLW      6
@@ -950,53 +948,53 @@ L__checkKey286:
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
 L_checkKey93:
-;Menu.c,356 :: 		}
+;Menu.c,355 :: 		}
 L_checkKey92:
-;Menu.c,357 :: 		switch(subMenu)
+;Menu.c,356 :: 		switch(subMenu)
 	GOTO       L_checkKey94
-;Menu.c,359 :: 		case TimeHour:
+;Menu.c,358 :: 		case TimeHour:
 L_checkKey96:
-;Menu.c,360 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,359 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey97
-;Menu.c,362 :: 		subMenu = TimeMinute;
+;Menu.c,361 :: 		subMenu = TimeMinute;
 	MOVLW      3
 	MOVWF      _subMenu+0
-;Menu.c,363 :: 		editValue = minute;
+;Menu.c,362 :: 		editValue = minute;
 	MOVF       _minute+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,364 :: 		}
+;Menu.c,363 :: 		}
 L_checkKey97:
-;Menu.c,365 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,364 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey98
-;Menu.c,367 :: 		if(editValue>0x23)  editValue = 0;
+;Menu.c,366 :: 		if(editValue>0x23)  editValue = 0;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey287
+	GOTO       L__checkKey242
 	MOVF       _editValue+0, 0
 	SUBLW      35
-L__checkKey287:
+L__checkKey242:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey99
 	CLRF       _editValue+0
 	CLRF       _editValue+1
 L_checkKey99:
-;Menu.c,368 :: 		}
+;Menu.c,367 :: 		}
 L_checkKey98:
-;Menu.c,369 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,368 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey100
-;Menu.c,371 :: 		if(editValue > 0x23) editValue = 0x23;
+;Menu.c,370 :: 		if(editValue > 0x23) editValue = 0x23;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey288
+	GOTO       L__checkKey243
 	MOVF       _editValue+0, 0
 	SUBLW      35
-L__checkKey288:
+L__checkKey243:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey101
 	MOVLW      35
@@ -1004,52 +1002,52 @@ L__checkKey288:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey101:
-;Menu.c,372 :: 		}
+;Menu.c,371 :: 		}
 L_checkKey100:
-;Menu.c,373 :: 		break;
+;Menu.c,372 :: 		break;
 	GOTO       L_checkKey95
-;Menu.c,374 :: 		case TimeMinute:
+;Menu.c,373 :: 		case TimeMinute:
 L_checkKey102:
-;Menu.c,375 :: 		if(cSELECT == ON)
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,374 :: 		if(cSELECT == ON)
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey103
-;Menu.c,377 :: 		subMenu = TimeHour;
+;Menu.c,376 :: 		subMenu = TimeHour;
 	CLRF       _subMenu+0
-;Menu.c,378 :: 		editValue = hour;
+;Menu.c,377 :: 		editValue = hour;
 	MOVF       _hour+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;Menu.c,379 :: 		}
+;Menu.c,378 :: 		}
 L_checkKey103:
-;Menu.c,380 :: 		if(cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,379 :: 		if(cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey104
-;Menu.c,382 :: 		if(editValue>0x59)  editValue = 0;
+;Menu.c,381 :: 		if(editValue>0x59)  editValue = 0;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey289
+	GOTO       L__checkKey244
 	MOVF       _editValue+0, 0
 	SUBLW      89
-L__checkKey289:
+L__checkKey244:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey105
 	CLRF       _editValue+0
 	CLRF       _editValue+1
 L_checkKey105:
-;Menu.c,383 :: 		}
+;Menu.c,382 :: 		}
 L_checkKey104:
-;Menu.c,384 :: 		if(cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,383 :: 		if(cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey106
-;Menu.c,386 :: 		if(editValue > 0x59) editValue = 0x59;
+;Menu.c,385 :: 		if(editValue > 0x59) editValue = 0x59;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey290
+	GOTO       L__checkKey245
 	MOVF       _editValue+0, 0
 	SUBLW      89
-L__checkKey290:
+L__checkKey245:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey107
 	MOVLW      89
@@ -1057,11 +1055,11 @@ L__checkKey290:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey107:
-;Menu.c,387 :: 		}
+;Menu.c,386 :: 		}
 L_checkKey106:
-;Menu.c,388 :: 		break;
+;Menu.c,387 :: 		break;
 	GOTO       L_checkKey95
-;Menu.c,389 :: 		}
+;Menu.c,388 :: 		}
 L_checkKey94:
 	MOVF       _subMenu+0, 0
 	XORLW      0
@@ -1072,14 +1070,14 @@ L_checkKey94:
 	BTFSC      STATUS+0, 2
 	GOTO       L_checkKey102
 L_checkKey95:
-;Menu.c,390 :: 		if(cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey261
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey261
+;Menu.c,389 :: 		if(cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey216
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey216
 	GOTO       L_checkKey110
-L__checkKey261:
-;Menu.c,392 :: 		Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
+L__checkKey216:
+;Menu.c,391 :: 		Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
 	MOVF       _editValue+0, 0
 	MOVWF      FARG_BCD2UpperCh_bcd+0
 	CALL       _BCD2UpperCh+0
@@ -1090,27 +1088,27 @@ L__checkKey261:
 	INCF       _subMenu+0, 0
 	MOVWF      FARG_Lcd_Chr_column+0
 	CALL       _Lcd_Chr+0
-;Menu.c,393 :: 		Lcd_Chr_CP(BCD2LowerCh(editValue));
+;Menu.c,392 :: 		Lcd_Chr_CP(BCD2LowerCh(editValue));
 	MOVF       _editValue+0, 0
 	MOVWF      FARG_BCD2LowerCh_bcd+0
 	CALL       _BCD2LowerCh+0
 	MOVF       R0+0, 0
 	MOVWF      FARG_Lcd_Chr_CP_out_char+0
 	CALL       _Lcd_Chr_CP+0
-;Menu.c,394 :: 		}
+;Menu.c,393 :: 		}
 L_checkKey110:
-;Menu.c,395 :: 		}
+;Menu.c,394 :: 		}
 L_checkKey89:
-;Menu.c,396 :: 		break;
+;Menu.c,395 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,397 :: 		case   Voltage:
+;Menu.c,396 :: 		case   Voltage:
 L_checkKey111:
-;Menu.c,398 :: 		if(cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,397 :: 		if(cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey112
-;Menu.c,400 :: 		subMenu = VoltageEnable;
+;Menu.c,399 :: 		subMenu = VoltageEnable;
 	CLRF       _subMenu+0
-;Menu.c,401 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh  Low"));
+;Menu.c,400 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh  Low"));
 	MOVLW      ?lstr_1_Menu+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_1_Menu+0)
@@ -1123,7 +1121,7 @@ L_checkKey111:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;Menu.c,402 :: 		editValue = ee_read(EEPADDR_VoltageHigh);
+;Menu.c,401 :: 		editValue = ee_read(EEPADDR_VoltageHigh);
 	MOVLW      2
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1131,7 +1129,7 @@ L_checkKey111:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,403 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+;Menu.c,402 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
 	MOVLW      4
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1145,32 +1143,32 @@ L_checkKey111:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,404 :: 		}
+;Menu.c,403 :: 		}
 	GOTO       L_checkKey113
 L_checkKey112:
-;Menu.c,407 :: 		switch(subMenu)
+;Menu.c,406 :: 		switch(subMenu)
 	GOTO       L_checkKey114
-;Menu.c,409 :: 		case VoltageEnable:
+;Menu.c,408 :: 		case VoltageEnable:
 L_checkKey116:
-;Menu.c,410 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,409 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey117
-;Menu.c,412 :: 		subMenu = VoltageHigh;
+;Menu.c,411 :: 		subMenu = VoltageHigh;
 	MOVLW      7
 	MOVWF      _subMenu+0
-;Menu.c,413 :: 		}
+;Menu.c,412 :: 		}
 L_checkKey117:
-;Menu.c,414 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey260
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey260
+;Menu.c,413 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey215
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey215
 	GOTO       L_checkKey120
-L__checkKey260:
-;Menu.c,416 :: 		isEnabled = !isEnabled;
+L__checkKey215:
+;Menu.c,415 :: 		isEnabled = !isEnabled;
 	MOVLW
 	XORWF      _isEnabled+0, 1
-;Menu.c,417 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+;Menu.c,416 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
 	MOVLW      4
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1184,19 +1182,19 @@ L__checkKey260:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,418 :: 		}
+;Menu.c,417 :: 		}
 L_checkKey120:
-;Menu.c,419 :: 		break;
+;Menu.c,418 :: 		break;
 	GOTO       L_checkKey115
-;Menu.c,420 :: 		case VoltageHigh:
+;Menu.c,419 :: 		case VoltageHigh:
 L_checkKey121:
-;Menu.c,421 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,420 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey122
-;Menu.c,423 :: 		subMenu = VoltageLow;
+;Menu.c,422 :: 		subMenu = VoltageLow;
 	MOVLW      13
 	MOVWF      _subMenu+0
-;Menu.c,424 :: 		editValue =  ee_read(EEPADDR_VoltageLow);
+;Menu.c,423 :: 		editValue =  ee_read(EEPADDR_VoltageLow);
 	MOVLW      4
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1204,12 +1202,12 @@ L_checkKey121:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,425 :: 		}
+;Menu.c,424 :: 		}
 L_checkKey122:
-;Menu.c,426 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,425 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey123
-;Menu.c,428 :: 		editValue += 2;
+;Menu.c,427 :: 		editValue += 2;
 	MOVLW      2
 	ADDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1221,14 +1219,14 @@ L_checkKey122:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,429 :: 		if (editValue > 441)   editValue = 81;
+;Menu.c,428 :: 		if (editValue > 441)   editValue = 81;
 	MOVF       R1+1, 0
 	SUBLW      1
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey291
+	GOTO       L__checkKey246
 	MOVF       R1+0, 0
 	SUBLW      185
-L__checkKey291:
+L__checkKey246:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey124
 	MOVLW      81
@@ -1236,12 +1234,12 @@ L__checkKey291:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey124:
-;Menu.c,431 :: 		}
+;Menu.c,430 :: 		}
 L_checkKey123:
-;Menu.c,432 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,431 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey125
-;Menu.c,434 :: 		editValue -= 2;
+;Menu.c,433 :: 		editValue -= 2;
 	MOVLW      2
 	SUBWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1254,14 +1252,14 @@ L_checkKey123:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,435 :: 		if (editValue < 81) editValue = 441;
+;Menu.c,434 :: 		if (editValue < 81) editValue = 441;
 	MOVLW      0
 	SUBWF      R1+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey292
+	GOTO       L__checkKey247
 	MOVLW      81
 	SUBWF      R1+0, 0
-L__checkKey292:
+L__checkKey247:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey126
 	MOVLW      185
@@ -1269,16 +1267,16 @@ L__checkKey292:
 	MOVLW      1
 	MOVWF      _editValue+1
 L_checkKey126:
-;Menu.c,436 :: 		}
+;Menu.c,435 :: 		}
 L_checkKey125:
-;Menu.c,437 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey259
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey259
+;Menu.c,436 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey214
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey214
 	GOTO       L_checkKey129
-L__checkKey259:
-;Menu.c,439 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
+L__checkKey214:
+;Menu.c,438 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
 	MOVLW      4
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1292,18 +1290,18 @@ L__checkKey259:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,440 :: 		}
+;Menu.c,439 :: 		}
 L_checkKey129:
-;Menu.c,441 :: 		break;
+;Menu.c,440 :: 		break;
 	GOTO       L_checkKey115
-;Menu.c,442 :: 		case VoltageLow:
+;Menu.c,441 :: 		case VoltageLow:
 L_checkKey130:
-;Menu.c,443 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,442 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey131
-;Menu.c,445 :: 		subMenu = VoltageEnable;
+;Menu.c,444 :: 		subMenu = VoltageEnable;
 	CLRF       _subMenu+0
-;Menu.c,446 :: 		editValue =  ee_read(EEPADDR_VoltageHigh);
+;Menu.c,445 :: 		editValue =  ee_read(EEPADDR_VoltageHigh);
 	MOVLW      2
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1311,23 +1309,23 @@ L_checkKey130:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,447 :: 		}
+;Menu.c,446 :: 		}
 L_checkKey131:
-;Menu.c,448 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,447 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey132
-;Menu.c,450 :: 		editValue += 1;
+;Menu.c,449 :: 		editValue += 1;
 	INCF       _editValue+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _editValue+1, 1
-;Menu.c,451 :: 		if (editValue > 220)   editValue = 80;
+;Menu.c,450 :: 		if (editValue > 220)   editValue = 80;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey293
+	GOTO       L__checkKey248
 	MOVF       _editValue+0, 0
 	SUBLW      220
-L__checkKey293:
+L__checkKey248:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey133
 	MOVLW      80
@@ -1335,40 +1333,40 @@ L__checkKey293:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey133:
-;Menu.c,453 :: 		}
+;Menu.c,452 :: 		}
 L_checkKey132:
-;Menu.c,454 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,453 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey134
-;Menu.c,456 :: 		editValue -= 1;
+;Menu.c,455 :: 		editValue -= 1;
 	MOVLW      1
 	SUBWF      _editValue+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
-;Menu.c,457 :: 		if (editValue < 80) editValue = 220;
+;Menu.c,456 :: 		if (editValue < 80) editValue = 220;
 	MOVLW      0
 	SUBWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey294
+	GOTO       L__checkKey249
 	MOVLW      80
 	SUBWF      _editValue+0, 0
-L__checkKey294:
+L__checkKey249:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey135
 	MOVLW      220
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
 L_checkKey135:
-;Menu.c,458 :: 		}
+;Menu.c,457 :: 		}
 L_checkKey134:
-;Menu.c,459 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey258
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey258
+;Menu.c,458 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey213
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey213
 	GOTO       L_checkKey138
-L__checkKey258:
-;Menu.c,461 :: 		loadEnHeighLow(ee_read(EEPADDR_VoltageHigh),editValue,0);
+L__checkKey213:
+;Menu.c,460 :: 		loadEnHeighLow(ee_read(EEPADDR_VoltageHigh),editValue,0);
 	MOVLW      2
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1382,11 +1380,11 @@ L__checkKey258:
 	MOVWF      FARG_loadEnHeighLow_low+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,462 :: 		}
+;Menu.c,461 :: 		}
 L_checkKey138:
-;Menu.c,463 :: 		break;
+;Menu.c,462 :: 		break;
 	GOTO       L_checkKey115
-;Menu.c,465 :: 		}
+;Menu.c,464 :: 		}
 L_checkKey114:
 	MOVF       _subMenu+0, 0
 	XORLW      0
@@ -1401,18 +1399,18 @@ L_checkKey114:
 	BTFSC      STATUS+0, 2
 	GOTO       L_checkKey130
 L_checkKey115:
-;Menu.c,466 :: 		}
+;Menu.c,465 :: 		}
 L_checkKey113:
-;Menu.c,467 :: 		break;
+;Menu.c,466 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,468 :: 		case Current:
+;Menu.c,467 :: 		case Current:
 L_checkKey139:
-;Menu.c,469 :: 		if(cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,468 :: 		if(cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey140
-;Menu.c,471 :: 		subMenu = CurrentEnable;
+;Menu.c,470 :: 		subMenu = CurrentEnable;
 	CLRF       _subMenu+0
-;Menu.c,472 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("Amp  Heigh  Low"));
+;Menu.c,471 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("Amp  Heigh  Low"));
 	MOVLW      ?lstr_2_Menu+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_2_Menu+0)
@@ -1425,7 +1423,7 @@ L_checkKey139:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;Menu.c,473 :: 		editValue = ee_read(EEPADDR_CurrentHeigh);
+;Menu.c,472 :: 		editValue = ee_read(EEPADDR_CurrentHeigh);
 	MOVLW      6
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1433,7 +1431,7 @@ L_checkKey139:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,474 :: 		loadEnHeighLow(editValue, ee_read(EEPADDR_CurrentLow),1);
+;Menu.c,473 :: 		loadEnHeighLow(editValue, ee_read(EEPADDR_CurrentLow),1);
 	MOVLW      8
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1448,32 +1446,32 @@ L_checkKey139:
 	MOVLW      1
 	MOVWF      FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,475 :: 		}
+;Menu.c,474 :: 		}
 	GOTO       L_checkKey141
 L_checkKey140:
-;Menu.c,478 :: 		switch(subMenu)
+;Menu.c,477 :: 		switch(subMenu)
 	GOTO       L_checkKey142
-;Menu.c,480 :: 		case CurrentEnable:
+;Menu.c,479 :: 		case CurrentEnable:
 L_checkKey144:
-;Menu.c,481 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,480 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey145
-;Menu.c,483 :: 		subMenu = CurrentHeigh;
+;Menu.c,482 :: 		subMenu = CurrentHeigh;
 	MOVLW      8
 	MOVWF      _subMenu+0
-;Menu.c,484 :: 		}
+;Menu.c,483 :: 		}
 L_checkKey145:
-;Menu.c,485 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey257
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey257
+;Menu.c,484 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey212
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey212
 	GOTO       L_checkKey148
-L__checkKey257:
-;Menu.c,487 :: 		isEnabled = !isEnabled;
+L__checkKey212:
+;Menu.c,486 :: 		isEnabled = !isEnabled;
 	MOVLW
 	XORWF      _isEnabled+0, 1
-;Menu.c,488 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
+;Menu.c,487 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
 	MOVLW      8
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1488,19 +1486,19 @@ L__checkKey257:
 	MOVLW      1
 	MOVWF      FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,490 :: 		}
+;Menu.c,489 :: 		}
 L_checkKey148:
-;Menu.c,491 :: 		break;
+;Menu.c,490 :: 		break;
 	GOTO       L_checkKey143
-;Menu.c,492 :: 		case CurrentHeigh:
+;Menu.c,491 :: 		case CurrentHeigh:
 L_checkKey149:
-;Menu.c,493 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,492 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey150
-;Menu.c,495 :: 		subMenu = CurrentLow;
+;Menu.c,494 :: 		subMenu = CurrentLow;
 	MOVLW      13
 	MOVWF      _subMenu+0
-;Menu.c,496 :: 		editValue =  ee_read(EEPADDR_CurrentLow);
+;Menu.c,495 :: 		editValue =  ee_read(EEPADDR_CurrentLow);
 	MOVLW      8
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1508,12 +1506,12 @@ L_checkKey149:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,497 :: 		}
+;Menu.c,496 :: 		}
 L_checkKey150:
-;Menu.c,498 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,497 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey151
-;Menu.c,500 :: 		editValue += 2;
+;Menu.c,499 :: 		editValue += 2;
 	MOVLW      2
 	ADDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1525,14 +1523,14 @@ L_checkKey150:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,501 :: 		if (editValue > 201)   editValue = 11;
+;Menu.c,500 :: 		if (editValue > 201)   editValue = 11;
 	MOVF       R1+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey295
+	GOTO       L__checkKey250
 	MOVF       R1+0, 0
 	SUBLW      201
-L__checkKey295:
+L__checkKey250:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey152
 	MOVLW      11
@@ -1540,12 +1538,12 @@ L__checkKey295:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey152:
-;Menu.c,503 :: 		}
+;Menu.c,502 :: 		}
 L_checkKey151:
-;Menu.c,504 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,503 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey153
-;Menu.c,506 :: 		editValue -= 2;
+;Menu.c,505 :: 		editValue -= 2;
 	MOVLW      2
 	SUBWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1558,30 +1556,30 @@ L_checkKey151:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,507 :: 		if (editValue < 11) editValue = 201;
+;Menu.c,506 :: 		if (editValue < 11) editValue = 201;
 	MOVLW      0
 	SUBWF      R1+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey296
+	GOTO       L__checkKey251
 	MOVLW      11
 	SUBWF      R1+0, 0
-L__checkKey296:
+L__checkKey251:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey154
 	MOVLW      201
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
 L_checkKey154:
-;Menu.c,508 :: 		}
+;Menu.c,507 :: 		}
 L_checkKey153:
-;Menu.c,509 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey256
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey256
+;Menu.c,508 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey211
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey211
 	GOTO       L_checkKey157
-L__checkKey256:
-;Menu.c,511 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
+L__checkKey211:
+;Menu.c,510 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
 	MOVLW      8
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1596,18 +1594,18 @@ L__checkKey256:
 	MOVLW      1
 	MOVWF      FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,512 :: 		}
+;Menu.c,511 :: 		}
 L_checkKey157:
-;Menu.c,513 :: 		break;
+;Menu.c,512 :: 		break;
 	GOTO       L_checkKey143
-;Menu.c,514 :: 		case CurrentLow:
+;Menu.c,513 :: 		case CurrentLow:
 L_checkKey158:
-;Menu.c,515 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,514 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey159
-;Menu.c,517 :: 		subMenu = CurrentEnable;
+;Menu.c,516 :: 		subMenu = CurrentEnable;
 	CLRF       _subMenu+0
-;Menu.c,518 :: 		editValue =  ee_read(EEPADDR_CurrentHeigh);
+;Menu.c,517 :: 		editValue =  ee_read(EEPADDR_CurrentHeigh);
 	MOVLW      6
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1615,23 +1613,23 @@ L_checkKey158:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,519 :: 		}
+;Menu.c,518 :: 		}
 L_checkKey159:
-;Menu.c,520 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,519 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey160
-;Menu.c,522 :: 		editValue += 1;
+;Menu.c,521 :: 		editValue += 1;
 	INCF       _editValue+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _editValue+1, 1
-;Menu.c,523 :: 		if (editValue > 220)   editValue = 80;
+;Menu.c,522 :: 		if (editValue > 220)   editValue = 80;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey297
+	GOTO       L__checkKey252
 	MOVF       _editValue+0, 0
 	SUBLW      220
-L__checkKey297:
+L__checkKey252:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey161
 	MOVLW      80
@@ -1639,40 +1637,40 @@ L__checkKey297:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey161:
-;Menu.c,525 :: 		}
+;Menu.c,524 :: 		}
 L_checkKey160:
-;Menu.c,526 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,525 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey162
-;Menu.c,528 :: 		editValue -= 1;
+;Menu.c,527 :: 		editValue -= 1;
 	MOVLW      1
 	SUBWF      _editValue+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
-;Menu.c,529 :: 		if (editValue < 80) editValue = 220;
+;Menu.c,528 :: 		if (editValue < 80) editValue = 220;
 	MOVLW      0
 	SUBWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey298
+	GOTO       L__checkKey253
 	MOVLW      80
 	SUBWF      _editValue+0, 0
-L__checkKey298:
+L__checkKey253:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey163
 	MOVLW      220
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
 L_checkKey163:
-;Menu.c,530 :: 		}
+;Menu.c,529 :: 		}
 L_checkKey162:
-;Menu.c,531 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey255
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey255
+;Menu.c,530 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey210
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey210
 	GOTO       L_checkKey166
-L__checkKey255:
-;Menu.c,533 :: 		loadEnHeighLow(ee_read(EEPADDR_CurrentHeigh),editValue,1);
+L__checkKey210:
+;Menu.c,532 :: 		loadEnHeighLow(ee_read(EEPADDR_CurrentHeigh),editValue,1);
 	MOVLW      6
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1687,11 +1685,11 @@ L__checkKey255:
 	MOVLW      1
 	MOVWF      FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,534 :: 		}
+;Menu.c,533 :: 		}
 L_checkKey166:
-;Menu.c,535 :: 		break;
+;Menu.c,534 :: 		break;
 	GOTO       L_checkKey143
-;Menu.c,537 :: 		}
+;Menu.c,536 :: 		}
 L_checkKey142:
 	MOVF       _subMenu+0, 0
 	XORLW      0
@@ -1706,18 +1704,18 @@ L_checkKey142:
 	BTFSC      STATUS+0, 2
 	GOTO       L_checkKey158
 L_checkKey143:
-;Menu.c,538 :: 		}
+;Menu.c,537 :: 		}
 L_checkKey141:
-;Menu.c,539 :: 		break;
+;Menu.c,538 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,540 :: 		case LDRVal:
+;Menu.c,539 :: 		case LDRVal:
 L_checkKey167:
-;Menu.c,541 :: 		if(cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,540 :: 		if(cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey168
-;Menu.c,543 :: 		subMenu = LDRValEnable;
+;Menu.c,542 :: 		subMenu = LDRValEnable;
 	CLRF       _subMenu+0
-;Menu.c,544 :: 		editValue = ee_read(EEPADDR_LDRValHeigh);
+;Menu.c,543 :: 		editValue = ee_read(EEPADDR_LDRValHeigh);
 	MOVLW      10
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1725,7 +1723,7 @@ L_checkKey167:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,545 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("LDR  Heigh  Low"));
+;Menu.c,544 :: 		Lcd_Out(1,1, codetxt_to_ramtxt("LDR  Heigh  Low"));
 	MOVLW      ?lstr_3_Menu+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_3_Menu+0)
@@ -1738,7 +1736,7 @@ L_checkKey167:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
-;Menu.c,546 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
+;Menu.c,545 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
 	MOVLW      12
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1752,32 +1750,32 @@ L_checkKey167:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,547 :: 		}
+;Menu.c,546 :: 		}
 	GOTO       L_checkKey169
 L_checkKey168:
-;Menu.c,550 :: 		switch(subMenu)
+;Menu.c,549 :: 		switch(subMenu)
 	GOTO       L_checkKey170
-;Menu.c,552 :: 		case LDRValEnable:
+;Menu.c,551 :: 		case LDRValEnable:
 L_checkKey172:
-;Menu.c,553 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,552 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey173
-;Menu.c,555 :: 		subMenu = LDRValHeigh;
+;Menu.c,554 :: 		subMenu = LDRValHeigh;
 	MOVLW      8
 	MOVWF      _subMenu+0
-;Menu.c,556 :: 		}
+;Menu.c,555 :: 		}
 L_checkKey173:
-;Menu.c,557 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey254
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey254
+;Menu.c,556 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey209
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey209
 	GOTO       L_checkKey176
-L__checkKey254:
-;Menu.c,559 :: 		isEnabled = !isEnabled;
+L__checkKey209:
+;Menu.c,558 :: 		isEnabled = !isEnabled;
 	MOVLW
 	XORWF      _isEnabled+0, 1
-;Menu.c,560 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
+;Menu.c,559 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
 	MOVLW      12
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1791,19 +1789,19 @@ L__checkKey254:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,561 :: 		}
+;Menu.c,560 :: 		}
 L_checkKey176:
-;Menu.c,562 :: 		break;
+;Menu.c,561 :: 		break;
 	GOTO       L_checkKey171
-;Menu.c,563 :: 		case LDRValHeigh:
+;Menu.c,562 :: 		case LDRValHeigh:
 L_checkKey177:
-;Menu.c,564 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,563 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey178
-;Menu.c,566 :: 		subMenu = LDRValLow;
+;Menu.c,565 :: 		subMenu = LDRValLow;
 	MOVLW      13
 	MOVWF      _subMenu+0
-;Menu.c,567 :: 		editValue =  ee_read(EEPADDR_LDRValLow);
+;Menu.c,566 :: 		editValue =  ee_read(EEPADDR_LDRValLow);
 	MOVLW      12
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1811,12 +1809,12 @@ L_checkKey177:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,568 :: 		}
+;Menu.c,567 :: 		}
 L_checkKey178:
-;Menu.c,569 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,568 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey179
-;Menu.c,571 :: 		editValue += 2;
+;Menu.c,570 :: 		editValue += 2;
 	MOVLW      2
 	ADDWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1828,14 +1826,14 @@ L_checkKey178:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,572 :: 		if (editValue > 441)   editValue = 81;
+;Menu.c,571 :: 		if (editValue > 441)   editValue = 81;
 	MOVF       R1+1, 0
 	SUBLW      1
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey299
+	GOTO       L__checkKey254
 	MOVF       R1+0, 0
 	SUBLW      185
-L__checkKey299:
+L__checkKey254:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey180
 	MOVLW      81
@@ -1843,12 +1841,12 @@ L__checkKey299:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey180:
-;Menu.c,574 :: 		}
+;Menu.c,573 :: 		}
 L_checkKey179:
-;Menu.c,575 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,574 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey181
-;Menu.c,577 :: 		editValue -= 2;
+;Menu.c,576 :: 		editValue -= 2;
 	MOVLW      2
 	SUBWF      _editValue+0, 0
 	MOVWF      R1+0
@@ -1861,14 +1859,14 @@ L_checkKey179:
 	MOVWF      _editValue+0
 	MOVF       R1+1, 0
 	MOVWF      _editValue+1
-;Menu.c,578 :: 		if (editValue < 81) editValue = 441;
+;Menu.c,577 :: 		if (editValue < 81) editValue = 441;
 	MOVLW      0
 	SUBWF      R1+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey300
+	GOTO       L__checkKey255
 	MOVLW      81
 	SUBWF      R1+0, 0
-L__checkKey300:
+L__checkKey255:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey182
 	MOVLW      185
@@ -1876,16 +1874,16 @@ L__checkKey300:
 	MOVLW      1
 	MOVWF      _editValue+1
 L_checkKey182:
-;Menu.c,579 :: 		}
+;Menu.c,578 :: 		}
 L_checkKey181:
-;Menu.c,580 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey253
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey253
+;Menu.c,579 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey208
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey208
 	GOTO       L_checkKey185
-L__checkKey253:
-;Menu.c,582 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
+L__checkKey208:
+;Menu.c,581 :: 		loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
 	MOVLW      12
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1899,18 +1897,18 @@ L__checkKey253:
 	MOVWF      FARG_loadEnHeighLow_heigh+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,583 :: 		}
+;Menu.c,582 :: 		}
 L_checkKey185:
-;Menu.c,584 :: 		break;
+;Menu.c,583 :: 		break;
 	GOTO       L_checkKey171
-;Menu.c,585 :: 		case LDRValLow:
+;Menu.c,584 :: 		case LDRValLow:
 L_checkKey186:
-;Menu.c,586 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
+;Menu.c,585 :: 		if(cSELECT == ON )
+	BTFSS      _cashedPortD+0, 6
 	GOTO       L_checkKey187
-;Menu.c,588 :: 		subMenu = LDRValEnable;
+;Menu.c,587 :: 		subMenu = LDRValEnable;
 	CLRF       _subMenu+0
-;Menu.c,589 :: 		editValue =  ee_read(EEPADDR_LDRValHeigh);
+;Menu.c,588 :: 		editValue =  ee_read(EEPADDR_LDRValHeigh);
 	MOVLW      10
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1918,23 +1916,23 @@ L_checkKey186:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,590 :: 		}
+;Menu.c,589 :: 		}
 L_checkKey187:
-;Menu.c,591 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
+;Menu.c,590 :: 		if (cPLUS == ON)
+	BTFSS      _cashedPortD+0, 5
 	GOTO       L_checkKey188
-;Menu.c,593 :: 		editValue += 1;
+;Menu.c,592 :: 		editValue += 1;
 	INCF       _editValue+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _editValue+1, 1
-;Menu.c,594 :: 		if (editValue > 220)   editValue = 80;
+;Menu.c,593 :: 		if (editValue > 220)   editValue = 80;
 	MOVF       _editValue+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey301
+	GOTO       L__checkKey256
 	MOVF       _editValue+0, 0
 	SUBLW      220
-L__checkKey301:
+L__checkKey256:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey189
 	MOVLW      80
@@ -1942,40 +1940,40 @@ L__checkKey301:
 	MOVLW      0
 	MOVWF      _editValue+1
 L_checkKey189:
-;Menu.c,596 :: 		}
+;Menu.c,595 :: 		}
 L_checkKey188:
-;Menu.c,597 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
+;Menu.c,596 :: 		if (cMINUS == ON)
+	BTFSS      _cashedPortD+0, 4
 	GOTO       L_checkKey190
-;Menu.c,599 :: 		editValue -= 1;
+;Menu.c,598 :: 		editValue -= 1;
 	MOVLW      1
 	SUBWF      _editValue+0, 1
 	BTFSS      STATUS+0, 0
 	DECF       _editValue+1, 1
-;Menu.c,600 :: 		if (editValue < 80) editValue = 220;
+;Menu.c,599 :: 		if (editValue < 80) editValue = 220;
 	MOVLW      0
 	SUBWF      _editValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey302
+	GOTO       L__checkKey257
 	MOVLW      80
 	SUBWF      _editValue+0, 0
-L__checkKey302:
+L__checkKey257:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey191
 	MOVLW      220
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
 L_checkKey191:
-;Menu.c,601 :: 		}
+;Menu.c,600 :: 		}
 L_checkKey190:
-;Menu.c,602 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey252
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey252
+;Menu.c,601 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey207
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey207
 	GOTO       L_checkKey194
-L__checkKey252:
-;Menu.c,604 :: 		loadEnHeighLow(ee_read(EEPADDR_LDRValHeigh),editValue,0);
+L__checkKey207:
+;Menu.c,603 :: 		loadEnHeighLow(ee_read(EEPADDR_LDRValHeigh),editValue,0);
 	MOVLW      10
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -1989,11 +1987,11 @@ L__checkKey252:
 	MOVWF      FARG_loadEnHeighLow_low+1
 	CLRF       FARG_loadEnHeighLow_shouldUseDecimal+0
 	CALL       _loadEnHeighLow+0
-;Menu.c,605 :: 		}
+;Menu.c,604 :: 		}
 L_checkKey194:
-;Menu.c,606 :: 		break;
+;Menu.c,605 :: 		break;
 	GOTO       L_checkKey171
-;Menu.c,608 :: 		}
+;Menu.c,607 :: 		}
 L_checkKey170:
 	MOVF       _subMenu+0, 0
 	XORLW      0
@@ -2008,27 +2006,27 @@ L_checkKey170:
 	BTFSC      STATUS+0, 2
 	GOTO       L_checkKey186
 L_checkKey171:
-;Menu.c,609 :: 		}
+;Menu.c,608 :: 		}
 L_checkKey169:
-;Menu.c,610 :: 		break;
+;Menu.c,609 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,611 :: 		default:
+;Menu.c,610 :: 		default:
 L_checkKey195:
-;Menu.c,612 :: 		if(crntMenu<(OnOFFTime+7))
-	MOVLW      13
+;Menu.c,611 :: 		if(crntMenu<OnOFFTimeDay9)
+	MOVLW      22
 	SUBWF      _crntMenu+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey196
-;Menu.c,614 :: 		if (cMENU == ON)
-	BTFSC      _cashedPortD+0, 7
+;Menu.c,613 :: 		if (cMENU == ON)
+	BTFSS      _cashedPortD+0, 7
 	GOTO       L_checkKey197
-;Menu.c,616 :: 		subMenu = OnOFFTimeEditEnable;
-	MOVLW      3
+;Menu.c,615 :: 		subMenu = OnOFFTimeDaySun;
+	MOVLW      1
 	MOVWF      _subMenu+0
-;Menu.c,617 :: 		timeEEAddr += 2;
-	MOVLW      2
+;Menu.c,616 :: 		timeEEAddr += 5;
+	MOVLW      5
 	ADDWF      _timeEEAddr+0, 1
-;Menu.c,618 :: 		strcpy(lcdrow1,codetxt_to_ramtxt("SuMoTuWeThFrSa"));
+;Menu.c,617 :: 		strcpy(lcdrow1,codetxt_to_ramtxt("1)"));
 	MOVLW      ?lstr_4_Menu+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_4_Menu+0)
@@ -2039,7 +2037,27 @@ L_checkKey195:
 	MOVLW      _lcdrow1+0
 	MOVWF      FARG_strcpy_to+0
 	CALL       _strcpy+0
-;Menu.c,620 :: 		Lcd_Out(1,1,lcdrow1);
+;Menu.c,618 :: 		lcdrow1[0]= ((crntMenu - OnOFFTimeDay1) >> 1) + '0' + 1;
+	MOVLW      6
+	SUBWF      _crntMenu+0, 0
+	MOVWF      R3+0
+	CLRF       R3+1
+	BTFSS      STATUS+0, 0
+	DECF       R3+1, 1
+	MOVF       R3+0, 0
+	MOVWF      R0+0
+	MOVF       R3+1, 0
+	MOVWF      R0+1
+	RRF        R0+1, 1
+	RRF        R0+0, 1
+	BCF        R0+1, 7
+	BTFSC      R0+1, 6
+	BSF        R0+1, 7
+	MOVLW      48
+	ADDWF      R0+0, 0
+	MOVWF      _lcdrow1+0
+	INCF       _lcdrow1+0, 1
+;Menu.c,619 :: 		Lcd_Out(1,1,lcdrow1);
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_row+0
 	MOVLW      1
@@ -2047,7 +2065,22 @@ L_checkKey195:
 	MOVLW      _lcdrow1+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;Menu.c,621 :: 		editValue = ee_read(timeEEAddr);
+;Menu.c,620 :: 		editValue = EEPROM_Read(timeEEAddr);
+	MOVF       _timeEEAddr+0, 0
+	MOVWF      FARG_EEPROM_Read_Address+0
+	CALL       _EEPROM_Read+0
+	MOVF       R0+0, 0
+	MOVWF      _editValue+0
+	CLRF       _editValue+1
+;Menu.c,622 :: 		Lcd_Out(1,1,lcdrow1);
+	MOVLW      1
+	MOVWF      FARG_Lcd_Out_row+0
+	MOVLW      1
+	MOVWF      FARG_Lcd_Out_column+0
+	MOVLW      _lcdrow1+0
+	MOVWF      FARG_Lcd_Out_text+0
+	CALL       _Lcd_Out+0
+;Menu.c,623 :: 		editValue = ee_read(timeEEAddr);
 	MOVF       _timeEEAddr+0, 0
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -2055,377 +2088,26 @@ L_checkKey195:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;Menu.c,622 :: 		loadEnDayHrMin();
+;Menu.c,624 :: 		loadEnDayHrMin();
 	CALL       _loadEnDayHrMin+0
-;Menu.c,623 :: 		}
+;Menu.c,625 :: 		}
 	GOTO       L_checkKey198
 L_checkKey197:
-;Menu.c,626 :: 		switch (subMenu) {
-	GOTO       L_checkKey199
-;Menu.c,627 :: 		case OnOFFTimeEditEnable:
-L_checkKey201:
-;Menu.c,628 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
-	GOTO       L_checkKey202
-;Menu.c,630 :: 		if (isEnabled)
-	BTFSS      _isEnabled+0, BitPos(_isEnabled+0)
-	GOTO       L_checkKey203
-;Menu.c,632 :: 		subMenu = OnOFFTimeEditHour;
-	MOVLW      8
-	MOVWF      _subMenu+0
-;Menu.c,633 :: 		}
-L_checkKey203:
-;Menu.c,635 :: 		}
-L_checkKey202:
-;Menu.c,636 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey251
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey251
-	GOTO       L_checkKey206
-L__checkKey251:
-;Menu.c,638 :: 		isEnabled = !isEnabled;
-	MOVLW
-	XORWF      _isEnabled+0, 1
-;Menu.c,639 :: 		loadEnDayHrMin();
-	CALL       _loadEnDayHrMin+0
-;Menu.c,640 :: 		}
-L_checkKey206:
-;Menu.c,641 :: 		break;
-	GOTO       L_checkKey200
-;Menu.c,642 :: 		case OnOFFTimeEditOnOff:
-L_checkKey207:
-;Menu.c,643 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
-	GOTO       L_checkKey208
-;Menu.c,645 :: 		subMenu = OnOFFTimeEditWeekDay;
-	MOVLW      6
-	MOVWF      _subMenu+0
-;Menu.c,646 :: 		}
-L_checkKey208:
-;Menu.c,647 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey250
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey250
-	GOTO       L_checkKey211
-L__checkKey250:
-;Menu.c,649 :: 		shouldON = !shouldON;
-	MOVLW
-	XORWF      _shouldON+0, 1
-;Menu.c,650 :: 		loadEnDayHrMin();
-	CALL       _loadEnDayHrMin+0
-;Menu.c,651 :: 		}
-L_checkKey211:
-;Menu.c,652 :: 		break;
-	GOTO       L_checkKey200
-;Menu.c,653 :: 		case OnOFFTimeEditWeekDay:
-L_checkKey212:
-;Menu.c,654 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
-	GOTO       L_checkKey213
-;Menu.c,656 :: 		subMenu = OnOFFTimeEditHour;
-	MOVLW      8
-	MOVWF      _subMenu+0
-;Menu.c,657 :: 		}
-L_checkKey213:
-;Menu.c,659 :: 		timeEditTemp = editValue;
-	MOVF       _editValue+0, 0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVF       _editValue+1, 0
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,660 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
-	GOTO       L_checkKey214
-;Menu.c,662 :: 		timeEditTemp += 4;
-	MOVLW      4
-	ADDWF      checkKey_timeEditTemp_L0+0, 1
-	BTFSC      STATUS+0, 0
-	INCF       checkKey_timeEditTemp_L0+1, 1
-;Menu.c,663 :: 		}
-L_checkKey214:
-;Menu.c,664 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
-	GOTO       L_checkKey215
-;Menu.c,666 :: 		timeEditTemp -= 4;
-	MOVLW      4
-	SUBWF      checkKey_timeEditTemp_L0+0, 1
-	BTFSS      STATUS+0, 0
-	DECF       checkKey_timeEditTemp_L0+1, 1
-;Menu.c,667 :: 		}
-L_checkKey215:
-;Menu.c,668 :: 		if (cPLUS == ON || cMINUS == ON) {
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey249
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey249
-	GOTO       L_checkKey218
-L__checkKey249:
-;Menu.c,669 :: 		editValue = (editValue & 0xFFE3) | (timeEditTemp & 0x001C);
-	MOVLW      227
-	ANDWF      _editValue+0, 1
-	MOVLW      255
-	ANDWF      _editValue+1, 1
-	MOVLW      28
-	ANDWF      checkKey_timeEditTemp_L0+0, 0
-	MOVWF      R0+0
-	MOVF       checkKey_timeEditTemp_L0+1, 0
-	MOVWF      R0+1
-	MOVLW      0
-	ANDWF      R0+1, 1
-	MOVF       R0+0, 0
-	IORWF      _editValue+0, 1
-	MOVF       R0+1, 0
-	IORWF      _editValue+1, 1
-;Menu.c,670 :: 		loadEnDayHrMin();
-	CALL       _loadEnDayHrMin+0
-;Menu.c,671 :: 		}
-L_checkKey218:
-;Menu.c,672 :: 		break;
-	GOTO       L_checkKey200
-;Menu.c,673 :: 		case OnOFFTimeEditHour:
-L_checkKey219:
-;Menu.c,674 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
-	GOTO       L_checkKey220
-;Menu.c,676 :: 		subMenu = OnOFFTimeEditMint;
-	MOVLW      11
-	MOVWF      _subMenu+0
-;Menu.c,677 :: 		}
-L_checkKey220:
-;Menu.c,678 :: 		timeEditTemp = editValue & 0x03E0;
-	MOVLW      224
-	ANDWF      _editValue+0, 0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVF       _editValue+1, 0
-	ANDLW      3
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,679 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
-	GOTO       L_checkKey221
-;Menu.c,681 :: 		timeEditTemp += 32;
-	MOVLW      32
-	ADDWF      checkKey_timeEditTemp_L0+0, 0
-	MOVWF      R1+0
-	MOVF       checkKey_timeEditTemp_L0+1, 0
-	BTFSC      STATUS+0, 0
-	ADDLW      1
-	MOVWF      R1+1
-	MOVF       R1+0, 0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVF       R1+1, 0
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,682 :: 		if (timeEditTemp > 736)
-	MOVF       R1+1, 0
-	SUBLW      2
-	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey303
-	MOVF       R1+0, 0
-	SUBLW      224
-L__checkKey303:
-	BTFSC      STATUS+0, 0
-	GOTO       L_checkKey222
-;Menu.c,684 :: 		timeEditTemp = 0;
-	CLRF       checkKey_timeEditTemp_L0+0
-	CLRF       checkKey_timeEditTemp_L0+1
-;Menu.c,685 :: 		}
-L_checkKey222:
-;Menu.c,686 :: 		}
-L_checkKey221:
-;Menu.c,687 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
-	GOTO       L_checkKey223
-;Menu.c,689 :: 		if(timeEditTemp == 0)
-	MOVLW      0
-	XORWF      checkKey_timeEditTemp_L0+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey304
-	MOVLW      0
-	XORWF      checkKey_timeEditTemp_L0+0, 0
-L__checkKey304:
-	BTFSS      STATUS+0, 2
-	GOTO       L_checkKey224
-;Menu.c,691 :: 		timeEditTemp = 736;
-	MOVLW      224
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVLW      2
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,692 :: 		}
-	GOTO       L_checkKey225
-L_checkKey224:
-;Menu.c,695 :: 		timeEditTemp -= 32;
-	MOVLW      32
-	SUBWF      checkKey_timeEditTemp_L0+0, 1
-	BTFSS      STATUS+0, 0
-	DECF       checkKey_timeEditTemp_L0+1, 1
-;Menu.c,696 :: 		}
-L_checkKey225:
-;Menu.c,698 :: 		}
-L_checkKey223:
-;Menu.c,699 :: 		if (cPLUS == ON || cMINUS == ON) {
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey248
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey248
-	GOTO       L_checkKey228
-L__checkKey248:
-;Menu.c,700 :: 		editValue = (editValue & 0xFC1F) | timeEditTemp;
-	MOVLW      31
-	ANDWF      _editValue+0, 1
-	MOVLW      252
-	ANDWF      _editValue+1, 1
-	MOVF       checkKey_timeEditTemp_L0+0, 0
-	IORWF      _editValue+0, 1
-	MOVF       checkKey_timeEditTemp_L0+1, 0
-	IORWF      _editValue+1, 1
-;Menu.c,701 :: 		loadEnDayHrMin();
-	CALL       _loadEnDayHrMin+0
-;Menu.c,702 :: 		}
-L_checkKey228:
-;Menu.c,704 :: 		break;
-	GOTO       L_checkKey200
-;Menu.c,705 :: 		case OnOFFTimeEditMint:
-L_checkKey229:
-;Menu.c,706 :: 		if(cSELECT == ON )
-	BTFSC      _cashedPortD+0, 6
-	GOTO       L_checkKey230
-;Menu.c,708 :: 		subMenu = OnOFFTimeEditEnable;
-	MOVLW      3
-	MOVWF      _subMenu+0
-;Menu.c,709 :: 		}
-L_checkKey230:
-;Menu.c,710 :: 		timeEditTemp = editValue & 0xFC00;
-	MOVLW      0
-	ANDWF      _editValue+0, 0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVF       _editValue+1, 0
-	ANDLW      252
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,711 :: 		if (cPLUS == ON)
-	BTFSC      _cashedPortD+0, 5
-	GOTO       L_checkKey231
-;Menu.c,713 :: 		timeEditTemp += 1024;
-	MOVLW      0
-	ADDWF      checkKey_timeEditTemp_L0+0, 0
-	MOVWF      R1+0
-	MOVF       checkKey_timeEditTemp_L0+1, 0
-	BTFSC      STATUS+0, 0
-	ADDLW      1
-	ADDLW      4
-	MOVWF      R1+1
-	MOVF       R1+0, 0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVF       R1+1, 0
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,714 :: 		if (timeEditTemp > 60416)
-	MOVF       R1+1, 0
-	SUBLW      236
-	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey305
-	MOVF       R1+0, 0
-	SUBLW      0
-L__checkKey305:
-	BTFSC      STATUS+0, 0
-	GOTO       L_checkKey232
-;Menu.c,716 :: 		timeEditTemp = 0;
-	CLRF       checkKey_timeEditTemp_L0+0
-	CLRF       checkKey_timeEditTemp_L0+1
-;Menu.c,717 :: 		}
-L_checkKey232:
-;Menu.c,718 :: 		}
-L_checkKey231:
-;Menu.c,719 :: 		if (cMINUS == ON)
-	BTFSC      _cashedPortD+0, 4
-	GOTO       L_checkKey233
-;Menu.c,721 :: 		if(timeEditTemp == 0)
-	MOVLW      0
-	XORWF      checkKey_timeEditTemp_L0+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey306
-	MOVLW      0
-	XORWF      checkKey_timeEditTemp_L0+0, 0
-L__checkKey306:
-	BTFSS      STATUS+0, 2
-	GOTO       L_checkKey234
-;Menu.c,723 :: 		timeEditTemp = 60416;
-	MOVLW      0
-	MOVWF      checkKey_timeEditTemp_L0+0
-	MOVLW      236
-	MOVWF      checkKey_timeEditTemp_L0+1
-;Menu.c,724 :: 		}
-	GOTO       L_checkKey235
-L_checkKey234:
-;Menu.c,727 :: 		timeEditTemp -= 1024;
-	MOVLW      0
-	SUBWF      checkKey_timeEditTemp_L0+0, 1
-	BTFSS      STATUS+0, 0
-	DECF       checkKey_timeEditTemp_L0+1, 1
-	MOVLW      4
-	SUBWF      checkKey_timeEditTemp_L0+1, 1
-;Menu.c,728 :: 		}
-L_checkKey235:
-;Menu.c,730 :: 		}
-L_checkKey233:
-;Menu.c,731 :: 		if (cPLUS == ON || cMINUS == ON) {
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey247
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey247
-	GOTO       L_checkKey238
-L__checkKey247:
-;Menu.c,732 :: 		editValue = (editValue & 0x03FF) | timeEditTemp;
-	MOVLW      255
-	ANDWF      _editValue+0, 1
-	MOVLW      3
-	ANDWF      _editValue+1, 1
-	MOVF       checkKey_timeEditTemp_L0+0, 0
-	IORWF      _editValue+0, 1
-	MOVF       checkKey_timeEditTemp_L0+1, 0
-	IORWF      _editValue+1, 1
-;Menu.c,733 :: 		loadEnDayHrMin();
-	CALL       _loadEnDayHrMin+0
-;Menu.c,734 :: 		}
-L_checkKey238:
-;Menu.c,736 :: 		break;
-	GOTO       L_checkKey200
-;Menu.c,737 :: 		}
-L_checkKey199:
-	MOVF       _subMenu+0, 0
-	XORLW      3
-	BTFSC      STATUS+0, 2
-	GOTO       L_checkKey201
-	MOVF       _subMenu+0, 0
-	XORLW      7
-	BTFSC      STATUS+0, 2
-	GOTO       L_checkKey207
-	MOVF       _subMenu+0, 0
-	XORLW      6
-	BTFSC      STATUS+0, 2
-	GOTO       L_checkKey212
-	MOVF       _subMenu+0, 0
-	XORLW      8
-	BTFSC      STATUS+0, 2
-	GOTO       L_checkKey219
-	MOVF       _subMenu+0, 0
-	XORLW      11
-	BTFSC      STATUS+0, 2
-	GOTO       L_checkKey229
-L_checkKey200:
-;Menu.c,738 :: 		}
+;Menu.c,740 :: 		}
 L_checkKey198:
-;Menu.c,742 :: 		}
-	GOTO       L_checkKey239
+;Menu.c,744 :: 		}
+	GOTO       L_checkKey199
 L_checkKey196:
-;Menu.c,745 :: 		waitCount = 500;
+;Menu.c,747 :: 		waitCount = 500;
 	MOVLW      244
 	MOVWF      _waitCount+0
 	MOVLW      1
 	MOVWF      _waitCount+1
-;Menu.c,746 :: 		}
-L_checkKey239:
-;Menu.c,748 :: 		break;
+;Menu.c,748 :: 		}
+L_checkKey199:
+;Menu.c,750 :: 		break;
 	GOTO       L_checkKey47
-;Menu.c,749 :: 		}
+;Menu.c,751 :: 		}
 L_checkKey46:
 	MOVF       _crntMenu+0, 0
 	XORLW      0
@@ -2453,77 +2135,78 @@ L_checkKey46:
 	GOTO       L_checkKey167
 	GOTO       L_checkKey195
 L_checkKey47:
-;Menu.c,750 :: 		if(cashedPortD > 0){
+;Menu.c,752 :: 		if(cashedPortD > 0){
 	MOVF       _cashedPortD+0, 0
 	SUBLW      0
 	BTFSC      STATUS+0, 0
-	GOTO       L_checkKey240
-;Menu.c,751 :: 		setCursorPosition(subMenu);
+	GOTO       L_checkKey200
+;Menu.c,753 :: 		setCursorPosition(subMenu);
 	MOVF       _subMenu+0, 0
 	MOVWF      FARG_setCursorPosition_position+0
 	CALL       _setCursorPosition+0
-;Menu.c,752 :: 		}
-L_checkKey240:
-;Menu.c,753 :: 		if (cPLUS == ON || cMINUS == ON)
-	BTFSS      _cashedPortD+0, 5
-	GOTO       L__checkKey246
-	BTFSS      _cashedPortD+0, 4
-	GOTO       L__checkKey246
-	GOTO       L_checkKey243
-L__checkKey246:
-;Menu.c,755 :: 		isEdited = 1;
+;Menu.c,754 :: 		}
+L_checkKey200:
+;Menu.c,755 :: 		if (cPLUS == ON || cMINUS == ON)
+	BTFSC      _cashedPortD+0, 5
+	GOTO       L__checkKey206
+	BTFSC      _cashedPortD+0, 4
+	GOTO       L__checkKey206
+	GOTO       L_checkKey203
+L__checkKey206:
+;Menu.c,757 :: 		isEdited = 1;
 	BSF        _isEdited+0, BitPos(_isEdited+0)
-;Menu.c,756 :: 		}
-L_checkKey243:
-;Menu.c,758 :: 		delay_ms(100);
-	MOVLW      2
+;Menu.c,758 :: 		}
+L_checkKey203:
+;Menu.c,760 :: 		delay_ms(100);
+	MOVLW      3
 	MOVWF      R11+0
-	MOVLW      4
+	MOVLW      138
 	MOVWF      R12+0
-	MOVLW      186
+	MOVLW      85
 	MOVWF      R13+0
-L_checkKey244:
+L_checkKey204:
 	DECFSZ     R13+0, 1
-	GOTO       L_checkKey244
+	GOTO       L_checkKey204
 	DECFSZ     R12+0, 1
-	GOTO       L_checkKey244
+	GOTO       L_checkKey204
 	DECFSZ     R11+0, 1
-	GOTO       L_checkKey244
+	GOTO       L_checkKey204
 	NOP
-;Menu.c,759 :: 		waitCount++;
+	NOP
+;Menu.c,761 :: 		waitCount++;
 	INCF       _waitCount+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _waitCount+1, 1
-;Menu.c,760 :: 		if(waitCount>200){
+;Menu.c,762 :: 		if(waitCount>200){
 	MOVF       _waitCount+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__checkKey307
+	GOTO       L__checkKey258
 	MOVF       _waitCount+0, 0
 	SUBLW      200
-L__checkKey307:
+L__checkKey258:
 	BTFSC      STATUS+0, 0
-	GOTO       L_checkKey245
-;Menu.c,761 :: 		crntMenu = None;
+	GOTO       L_checkKey205
+;Menu.c,763 :: 		crntMenu = None;
 	CLRF       _crntMenu+0
-;Menu.c,762 :: 		subMenu = NoEdit;
+;Menu.c,764 :: 		subMenu = NoEdit;
 	CLRF       _subMenu+0
-;Menu.c,763 :: 		initLCDRaws();
+;Menu.c,765 :: 		initLCDRaws();
 	CALL       _initLCDRaws+0
-;Menu.c,764 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);
+;Menu.c,766 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);
 	MOVLW      12
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;Menu.c,765 :: 		}
-L_checkKey245:
-;Menu.c,768 :: 		}while(crntMenu != None);
+;Menu.c,767 :: 		}
+L_checkKey205:
+;Menu.c,770 :: 		}while(crntMenu != None);
 	MOVF       _crntMenu+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey36
-;Menu.c,769 :: 		saveValue();
+;Menu.c,771 :: 		saveValue();
 	CALL       _saveValue+0
-;Menu.c,771 :: 		}
+;Menu.c,773 :: 		}
 L_end_checkKey:
 	RETURN
 ; end of _checkKey

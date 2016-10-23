@@ -1,5 +1,5 @@
-#line 1 "D:/SolarTimer/rtc.c"
-#line 27 "D:/SolarTimer/rtc.c"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/rtc.c"
+#line 27 "E:/PROGAMS/hussian/SolarTimer/rtc.c"
 extern unsigned short second;
 extern unsigned short minute;
 extern unsigned short hour;
@@ -66,5 +66,5 @@ void loadTimeAndDate(){
  month =I2C1_Rd(1);
  year =I2C1_Rd(0);
  I2C1_Stop();
-#line 109 "D:/SolarTimer/rtc.c"
+#line 109 "E:/PROGAMS/hussian/SolarTimer/rtc.c"
 }
