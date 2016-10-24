@@ -1,9 +1,11 @@
-
+#include "Enums.h"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
 
 extern unsigned short crntMenu;
+extern unsigned short subMenu;
+
 extern unsigned short second;
 extern unsigned short minute;
 extern unsigned short hour;
@@ -28,6 +30,7 @@ short _LCD_CLEAR;
 short _LCD_CURSOR_OFF;
 short _LCD_UNDERLINE_ON;
 short _LCD_SECOND_ROW;
+short _LCD_FIRST_ROW;
 short _LCD_MOVE_CURSOR_RIGHT;
 short _LCD_BLINK_CURSOR_ON;
 void Lcd_Init(){
@@ -51,10 +54,33 @@ void Lcd_Chr_CP(char  chr)
     
 }
 extern short isEnabled;
+extern short shouldAlamSunday;
+extern short shouldAlamMonday;
+extern short shouldAlamTuesday;
+extern short shouldAlamWednesday;
+extern short shouldAlamThursday;
+extern short shouldAlamFriday;
+extern short shouldAlamSaturday;
+#define Lo(param) ((char *)&param)[0]
+#define Hi(param) ((char *)&param)[1]
+
+
+char swap(char input)
+{
+    return  'a';
+}
  #else
 #include <built_in.h>
 extern sbit isEnabled;
 extern sbit shouldON;
+
+extern sbit shouldAlamSunday;
+extern sbit shouldAlamMonday;
+extern sbit shouldAlamTuesday;
+extern sbit shouldAlamWednesday;
+extern sbit shouldAlamThursday;
+extern sbit shouldAlamFriday;
+extern sbit shouldAlamSaturday;
 #endif
 
 void initLCDRaws()
@@ -71,11 +97,12 @@ void initLCD(){
 }
 unsigned char BCD2HignerCh(unsigned int bcd)
 {
-  return (((bcd >> 8) & 0x0F)+ '0');
+    
+  return ((Hi(bcd) & 0x0F)+ '0');
 }
 unsigned char BCD2UpperCh(unsigned char bcd)
 {
-  return (((bcd >> 4) & 0x0F) + '0');
+  return ((swap(bcd) & 0x0F) + '0');
 }
 
 unsigned char BCD2LowerCh(unsigned char bcd)
@@ -170,91 +197,72 @@ void loadDateEdit(){
 }
 void setCursorPosition(unsigned short position){
     unsigned short indx;
-    Lcd_Cmd(_LCD_SECOND_ROW);
+    if ((crntMenu > LDRVal ) && ((subMenu - OnOFFTimeDay)%2 == 0)) {
+        Lcd_Cmd(_LCD_FIRST_ROW);
+    }
+    else{
+        Lcd_Cmd(_LCD_SECOND_ROW);
+    }
+    
     for (indx=0; indx<position; indx++) {
          Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
     }
 }
 void loadEnabledDay()
 {
+    unsigned short tmp = editValue;
+    unsigned short indx = 2;
+    unsigned short i = 0;
+    
+    lcdrow1[0]= ((crntMenu - OnOFFTimeDay) >> 1) + '0' + 1;
+    lcdrow1[1] = ')';
+    for (i = 0 ; i < 8; i++)
+    {
+        if ((tmp & 1) != 0)
+        {
+            loadDay(&lcdrow1[indx],i+1);
+        }else
+        {
+            loadDay(&lcdrow1[indx],0);
+        }
+        tmp = tmp >> 1;
+        indx += 2;
+    }
+    lcdrow1[16] = '\0';
+    Lcd_Out(1, 1, lcdrow1);
 }
-void loadEnDayHrMin()
-{
-  unsigned short indx = 0;
-  unsigned val = editValue >> 2;
-  unsigned short dday = Lo(val) & 0x07;
-  unsigned int dis;
-  switch(crntMenu-5)
-  {
-        case 1:
-             lcdrow2[indx++]='1';
-             break;
-        case 2:
-             lcdrow2[indx++]='2';
-             break;
-        case 3:
-             lcdrow2[indx++]='3';
-             break;
-        case 4:
-             lcdrow2[indx++]='4';
-             break;
-        case 5:
-             lcdrow2[indx++]='5';
-             break;
-        case 6:
-             lcdrow2[indx++]='6';
-             break;
-        case 7:
-             lcdrow2[indx++]='7';
-             break;
-  }
-  lcdrow2[indx++]=')';
-  lcdrow2[indx++]=' ';
-  if(isEnabled)
-  {
-        lcdrow2[indx++] = 'O';
-        lcdrow2[indx++] = 'N';
-        lcdrow2[indx++] = ' ';
-  }
-  else
-  {
-        lcdrow2[indx++] = 'O';
-        lcdrow2[indx++] = 'F';
-        lcdrow2[indx++] = 'F';
-  }
-  lcdrow2[indx++] = ' ';
 
-  //if (shouldON)
-  //{
-  //   lcdrow2[indx++] = '1';
-  //}
- // else
-  //{
-  //  lcdrow2[indx++] = '0';
-  //}
-  //lcdrow2[indx++] = ' ';
-  //loadDay(&lcdrow2[indx],dday);
-  //indx += 3;
-  //lcdrow2[indx++] = ' ';
-  //lcdrow2[indx++] = ' ';
-  val = (val >> 3);
-  dday =  val & 0x1F;
-  dis =   Binary2BCD(dday);
-  lcdrow2[indx++] = BCD2UpperCh(dis);
-  lcdrow2[indx++] = BCD2LowerCh(dis);
-  lcdrow2[indx++] = ':';
-  val = (val >> 5);
-  dday =  val & 0x3F;
-  dis =   Binary2BCD(dday);
-  lcdrow2[indx++] = BCD2UpperCh(dis);
-  lcdrow2[indx++] = BCD2LowerCh(dis);
-  lcdrow2[indx] = '\0';
-  Lcd_Out(2,1, lcdrow2);
+void loadOnOffTime()
+{
+    unsigned short mi = editValue;
+    unsigned short hr = editValue >> 8;
+    unsigned int disVal;
+    unsigned int tmp;
+    if (subMenu == OnOFFTimeOnHr || subMenu == OnOFFTimeOnMin) {
+        tmp = OnOFFTimeOnHr;
+        lcdrow1[0] = 'N';
+    }else
+    {
+        tmp = OnOFFTimeOffHr;
+        lcdrow1[0] = 'F';
+    }
+    lcdrow1[1] = '>';
+    disVal = Binary2BCD(hr);
+    lcdrow2[2] = BCD2UpperCh(disVal);
+    lcdrow2[3] = BCD2LowerCh(disVal);
+    lcdrow2[4] = ':';
+    disVal = Binary2BCD(mi);
+    lcdrow2[5] = BCD2UpperCh(disVal);
+    lcdrow2[6] = BCD2LowerCh(disVal);
+    lcdrow2[7] = '\0';
+    Lcd_Out(2, tmp, lcdrow2);
+    
 }
+
 void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
 {
     unsigned int disVolt;// = Binary2BCD(heigh);
-    unsigned int discrr= Binary2BCD(low);
+    unsigned int discrr = Binary2BCD(low);
     unsigned short indx = 0;
     if (heigh>0) {
         lcdrow2[indx++] = 'O';

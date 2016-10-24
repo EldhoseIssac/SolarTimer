@@ -17,13 +17,18 @@ void Lcd_Out(int row,int col,char  *sting);
 short Lo(unsigned int val);
 void Lcd_Chr(int row,int col,char  chr);
 void Lcd_Chr_CP(char  chr);
-
+unsigned short EEPROM_Read(unsigned short addr){
+    return addr;
+}
+void EEPROM_write(unsigned short addr,unsigned int value);
+#define Lo(param) ((char *)&param)[0]
+#define Hi(param) ((char *)&param)[1]
 #else
 #define MENU PORTD.F7
 #define SELECT PORTD.F6
 #define PLUS PORTD.F5
 #define MINUS PORTD.F4
-
+#include <built_in.h>
 
 #endif
 
@@ -45,14 +50,16 @@ extern unsigned short year;
 extern short _LCD_BLINK_CURSOR_ON;
 //unsigned char  editStr[10];
 extern unsigned int editValue;
-void loadEnDayHrMin();
+void loadOnOffTime();
+void loadEnabledDay();
 #if DEBUG
 short isEnabled;
 short lowDay;
 short MidleDay;
 short HeighDay;
 
-
+short shouldON;
+short isEdited;
 
 #else
 extern sbit isEnabled;
@@ -137,7 +144,7 @@ unsigned short timeEEAddr;
                    }
                    break;
                     case Voltage:
-                      switch(submenu){
+                      switch(subMenu){
                             case VoltageLow:
                                  ee_write(EEPADDR_VoltageLow,editValue);
                                  break;
@@ -147,7 +154,7 @@ unsigned short timeEEAddr;
                       }
                    break;
                    case Current:
-                        switch(submenu){
+                        switch(subMenu){
                               case CurrentHeigh:
                                    ee_write(EEPADDR_CurrentHeigh,editValue);
                                    break;
@@ -157,19 +164,28 @@ unsigned short timeEEAddr;
                         }
                    break;
                    case LDRVal:
-                        switch(submenu){
+                        switch(subMenu){
                               case LDRValLow:
-                                   ee_write(EEPADDR_LDRvalLow,editValue);
+                                   ee_write(EEPADDR_LDRValLow,editValue);
                                    break;
                               case LDRValHeigh:
-                                   ee_write(EEPADDR_LDRvalHeigh,editValue);
+                                   ee_write(EEPADDR_LDRValHeigh,editValue);
                                    break;
                         }
                    break;
                    default:
-                      if(crntMenu<OnOFFTimeDay9)
+                      if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+                          EEPROM_write(timeEEAddr,editValue);
+                      }
+                      else
                       {
-                          ee_write(timeEEAddr,editValue);
+                          if (subMenu == OnOFFTimeOnHr || subMenu == OnOFFTimeOnMin) {
+                              ee_write(timeEEAddr+1,editValue);
+                          }
+                          else if (subMenu == OnOFFTimeOffHr || subMenu == OnOFFTimeOffMin)
+                          {
+                              ee_write(timeEEAddr+3,editValue);
+                          }
                       }
                       break;
                    
@@ -187,7 +203,8 @@ sbit cMENU at cashedPortD.B7;
 sbit cSELECT at cashedPortD.B6;
 sbit cPLUS at cashedPortD.B5;
 sbit cMINUS at cashedPortD.B4;
-void loadEnDayHrMin();
+void loadOnOffTime();
+void loadEnabledDay();
 
 #endif
 
@@ -195,6 +212,7 @@ void loadEnDayHrMin();
 
 void checkKey(){
 
+    unsigned short tmp=0;
     timeEEAddr = EEPADDR_OnOFFTimeDay1-5;
 do{
     cMENU = MENU;
@@ -219,7 +237,7 @@ do{
             saveValue();
         }
         crntMenu ++;
-        if(crntMenu>OnOFFTime8)
+        if(crntMenu > (OnOFFTime + 8))
         {
            waitCount = 500;
         }
@@ -265,7 +283,7 @@ do{
                     }
                     if(cMINUS == ON)
                     {
-                       if(editValue == 0) editValue = 0x31;
+                       if(editValue == 0x0) editValue = 0x31;
                     }
                     break;
                     case DateMonth:
@@ -608,135 +626,171 @@ do{
            }
            break;
      default:
-          if(crntMenu<OnOFFTimeDay9)
+          if(crntMenu<(OnOFFTimeDay + 8))
           {
              if (cMENU == ON)
              {
-                subMenu = OnOFFTimeDaySun;
+                
+                 
                 timeEEAddr += 5;
-                strcpy(lcdrow1,codetxt_to_ramtxt("1)"));
-                lcdrow1[0]= ((crntMenu - OnOFFTimeDay1) >> 1) + '0' + 1;
-                Lcd_Out(1,1,lcdrow1);
+                subMenu = OnOFFTimeOnHr;
+                editValue = ee_read(timeEEAddr+1);
+                loadOnOffTime();
+                subMenu = OnOFFTimeOffHr;
+                editValue = ee_read(timeEEAddr+3);
+                loadOnOffTime();
+                subMenu = OnOFFTimeDaySun;
                 editValue = EEPROM_Read(timeEEAddr);
-
-                Lcd_Out(1,1,lcdrow1);
-                editValue = ee_read(timeEEAddr);
-                loadEnDayHrMin();
+                loadEnabledDay();
+                 tmp = 0;
+                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 ) {
+                     subMenu = OnOFFTimeOnHr;
+                     editValue = ee_read(timeEEAddr+1);
+                     tmp = Hi(editValue);
+                 }
+                 
              }
              else
              {
-                /*switch (subMenu) {
-                     case OnOFFTimeEditEnable:
-                         if(cSELECT == ON )
-                         {
-                             if (isEnabled)
+                 if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+                    
+                     if (cSELECT == ON)
+                     {
+                         subMenu +=2;
+                         tmp++;
+                         if (subMenu>OnOFFTimeDaySat) {
+                             subMenu = OnOFFTimeDaySun;
+                             tmp = 0;
+                         }
+                     }
+                     if (cPLUS == ON || cMINUS == ON)
+                     {
+                         editValue = editValue ^ (1<<tmp);
+                         loadEnabledDay();
+                     }
+
+                 }
+                 else
+                 {
+                     if(cPLUS == ON)
+                     {
+                         tmp++;
+                         if((tmp & 0x0F )>9) tmp += 6;
+                     }
+                     if (cMINUS == ON)
+                     {
+                         tmp--;
+                         if((tmp & 0x0F )>9) tmp -= 6;
+                     }
+                     switch (subMenu) {
+                             
+                         case OnOFFTimeOnHr:
+                             if(cSELECT == ON )
                              {
-                               subMenu = OnOFFTimeEditHour;
+                                 subMenu = OnOFFTimeOnMin;
+                                 tmp = Lo(editValue);
                              }
 
-                         }
-                         if (cPLUS == ON || cMINUS == ON)
-                         {
-                             isEnabled = !isEnabled;
-                             loadEnDayHrMin();
-                         }
-                         break;
-                      case OnOFFTimeEditOnOff:
-                         if(cSELECT == ON )
-                         {
-                            subMenu = OnOFFTimeEditWeekDay;
-                         }
-                         if (cPLUS == ON || cMINUS == ON)
-                         {
-                             shouldON = !shouldON;
-                             loadEnDayHrMin();
-                         }
-                         break;
-                     case OnOFFTimeEditWeekDay:
-                         if(cSELECT == ON )
-                         {
-                             subMenu = OnOFFTimeEditHour;
-                         }
-                         // no need to check overflow
-                         timeEditTemp = editValue;
-                         if (cPLUS == ON)
-                         {
-                             timeEditTemp += 4;
-                         }
-                         if (cMINUS == ON)
-                         {
-                             timeEditTemp -= 4;
-                         }
-                         if (cPLUS == ON || cMINUS == ON) {
-                             editValue = (editValue & 0xFFE3) | (timeEditTemp & 0x001C);
-                             loadEnDayHrMin();
-                         }
-                         break;
-                     case OnOFFTimeEditHour:
-                         if(cSELECT == ON )
-                         {
-                             subMenu = OnOFFTimeEditMint;
-                         }
-                         timeEditTemp = editValue & 0x03E0;
-                         if (cPLUS == ON)
-                         {
-                             timeEditTemp += 32;
-                             if (timeEditTemp > 736)
+                             if (cPLUS == ON )
                              {
-                               timeEditTemp = 0;
+                                 if (tmp > 0x23) {
+                                     tmp = 0;
+                                 }
+                                 Lo(editValue) = tmp;
+                                 
                              }
-                         }
-                         if (cMINUS == ON)
-                         {
-                             if(timeEditTemp == 0)
+                             if (cMINUS == ON)
                              {
-                                 timeEditTemp = 736;
+                                 if (!tmp) {
+                                     tmp = 0x23;
+                                 }
+                                 Lo(editValue) = tmp;
                              }
-                             else
+                             break;
+                         case OnOFFTimeOnMin:
+                             if(cSELECT == ON )
                              {
-                               timeEditTemp -= 32;
+                                 subMenu = OnOFFTimeOffHr;
+                                 editValue = ee_read(timeEEAddr+3);
+                                 tmp = Hi(editValue);
                              }
+                             if (cPLUS == ON )
+                             {
+                                 
+                                 if (tmp > 0x59)
+                                 {
+                                     tmp = 0;
+                                 }
+                                 Hi(editValue) = tmp;
+                                 
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp)
+                                 {
+                                     tmp = 0x59;
+                                 }
+                                 Hi(editValue) = tmp;
+                             }
+                             break;
+                         case OnOFFTimeOffHr:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOffMin;
+                                 tmp = Lo(editValue);
+                             }
+                             if (cPLUS == ON )
+                             {
+                                 if (tmp > 0x23) {
+                                     tmp = 0;
+                                 }
+                                 Lo(editValue) = tmp;
+                                 
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp) {
+                                     tmp = 0x23;
+                                 }
+                                 Lo(editValue) = tmp;
+                             }
+                             break;
+                         case OnOFFTimeOffMin:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOnHr;
+                                 editValue = ee_read(timeEEAddr+1);
+                                 tmp = editValue>>8;
 
-                         }
-                         if (cPLUS == ON || cMINUS == ON) {
-                             editValue = (editValue & 0xFC1F) | timeEditTemp;
-                             loadEnDayHrMin();
-                         }
-
-                         break;
-                     case OnOFFTimeEditMint:
-                         if(cSELECT == ON )
-                         {
-                             subMenu = OnOFFTimeEditEnable;
-                         }
-                         timeEditTemp = editValue & 0xFC00;
-                         if (cPLUS == ON)
-                         {
-                             timeEditTemp += 1024;
-                             if (timeEditTemp > 60416)
-                             {
-                               timeEditTemp = 0;
                              }
-                         }
-                         if (cMINUS == ON)
-                         {
-                             if(timeEditTemp == 0)
+                             if (cPLUS == ON )
                              {
-                                 timeEditTemp = 60416;
+                                 
+                                 if (tmp > 0x59)
+                                 {
+                                     tmp = 0;
+                                 }
+                                 Hi(editValue) = tmp;
+                                 
                              }
-                             else
+                             if (cMINUS == ON)
                              {
-                               timeEditTemp -= 1024;
+                                 if (!tmp)
+                                 {
+                                     tmp = 0x59;
+                                 }
+                                 Hi(editValue) = tmp;
                              }
-
-                         }
-                         if (cPLUS == ON || cMINUS == ON) {
-                             editValue = (editValue & 0x03FF) | timeEditTemp;
-                             loadEnDayHrMin();
-                         }
-
-                         break;
-                 }*/
+                             
+                             break;
+                     }
+                     if(cPLUS == ON || cMINUS == ON)
+                     {
+                         loadEnabledDay();
+                     }
+                 }
+                 
+                
              }
                  
               

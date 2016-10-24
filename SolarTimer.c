@@ -11,9 +11,12 @@ short trisd;
 void ADC_Init(){
     
 }
-
+unsigned short EEPROM_Read(unsigned short addr);
+unsigned ee_read(unsigned short addr);
 void delay_ms(unsigned int del);
-
+void Lcd_Out(int row,int col,char  *sting);
+#define Lo(param) ((char *)&param)[0]
+#define Hi(param) ((char *)&param)[1]
 #endif
 
 #include "Deff.h"
@@ -46,8 +49,8 @@ void main()
 {
 
 #endif
-//      unsigned short index;
-//      unsigned short tmp;
+      unsigned short index;
+      unsigned short tmp;
       lastTimeCheckValue = 0;
     //osccon = 0x70;
     //ansel  = 7;
@@ -61,6 +64,8 @@ void main()
     menuPortPinInt();
 
     shouldLoadDisp = 1;
+    Lcd_Out(1,1,"Welcome");
+    delay_ms(1000);
     while(1)
     {
        readVoltage();
@@ -74,6 +79,38 @@ void main()
          displayTimeDate();
          loadRamToDisp();
          shouldLoadDisp = 0;
+         for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
+         {
+           editValue = EEPROM_Read(index);
+             tmp = editValue & (1 << (dday-1));
+             if(tmp)
+             {
+                 editValue = ee_read(index+1);
+                 if(editValue != lastTimeCheckValue)
+                 {
+                     if(Hi(editValue) == hour)
+                     {
+                         if(Lo(editValue) == minute)
+                         {
+                             
+                         }
+                     }
+                 }else
+                 {
+                     editValue = ee_read(index+3);
+                     if(editValue != lastTimeCheckValue)
+                     {
+                         if(Hi(editValue) == hour)
+                         {
+                             
+                         }
+                     }
+
+                 }
+                 
+                 
+             }
+            }
        }
 
      }

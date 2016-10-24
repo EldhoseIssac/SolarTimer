@@ -8,25 +8,8 @@ enum menus {
     Current,
     LDRVal,
     //OnOFFTimerCnt,
-    OnOFFTimeDay1,
-    OnOFFTime1,
-    OnOFFTimeDay2,
-    OnOFFTime2,
-    OnOFFTimeDay3,
-    OnOFFTime3,
-    OnOFFTimeDay4,
-    OnOFFTime4,
-    OnOFFTimeDay5,
-    OnOFFTime5,
-    OnOFFTimeDay6,
-    OnOFFTime6,
-    OnOFFTimeDay7,
-    OnOFFTime7,
-    OnOFFTimeDay8,
-    OnOFFTime8,
-    OnOFFTimeDay9,
-    OnOFFTime9
-
+    OnOFFTimeDay,
+    OnOFFTime
 };
 
 

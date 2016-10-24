@@ -32,7 +32,7 @@
 /* Begin PBXFileReference section */
 		4D0035301DA5225400E7731F /* eeprom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eeprom.c; path = ../../eeprom.c; sourceTree = "<group>"; };
 		4D3ABD661DA631E400F84B3C /* Enums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Enums.h; path = ../../Enums.h; sourceTree = "<group>"; };
-		4D71C1121DA4B11E009ADA50 /* SolarTmr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SolarTmr; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D71C1121DA4B11E009ADA50 /* Crypto */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Crypto; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D71C1151DA4B11E009ADA50 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		4D71C11C1DA4B165009ADA50 /* Deff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Deff.h; path = ../../Deff.h; sourceTree = "<group>"; };
 		4D71C11D1DA4B165009ADA50 /* adc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = adc.c; path = ../../adc.c; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 		4D71C1131DA4B11E009ADA50 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4D71C1121DA4B11E009ADA50 /* SolarTmr */,
+				4D71C1121DA4B11E009ADA50 /* Crypto */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,9 +92,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4D71C1111DA4B11E009ADA50 /* SolarTmr */ = {
+		4D71C1111DA4B11E009ADA50 /* Crypto */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "SolarTmr" */;
+			buildConfigurationList = 4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "Crypto" */;
 			buildPhases = (
 				4D71C10E1DA4B11E009ADA50 /* Sources */,
 				4D71C10F1DA4B11E009ADA50 /* Frameworks */,
@@ -104,9 +104,9 @@
 			);
 			dependencies = (
 			);
-			name = SolarTmr;
+			name = Crypto;
 			productName = SolarTmr;
-			productReference = 4D71C1121DA4B11E009ADA50 /* SolarTmr */;
+			productReference = 4D71C1121DA4B11E009ADA50 /* Crypto */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -124,7 +124,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "SolarTmr" */;
+			buildConfigurationList = 4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "Crypto" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -136,7 +136,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4D71C1111DA4B11E009ADA50 /* SolarTmr */,
+				4D71C1111DA4B11E009ADA50 /* Crypto */,
 			);
 		};
 /* End PBXProject section */
@@ -264,7 +264,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "SolarTmr" */ = {
+		4D71C10D1DA4B11E009ADA50 /* Build configuration list for PBXProject "Crypto" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D71C1171DA4B11E009ADA50 /* Debug */,
@@ -273,7 +273,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "SolarTmr" */ = {
+		4D71C1191DA4B11E009ADA50 /* Build configuration list for PBXNativeTarget "Crypto" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D71C11A1DA4B11E009ADA50 /* Debug */,

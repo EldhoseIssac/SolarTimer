@@ -23,11 +23,23 @@ short set;
 unsigned int dispUpdateCount =0;
 unsigned short pgmStatus = 0;
 unsigned int editValue;
+
+
+
 #if !DEBUG
 sbit shouldLoadDisp at pgmStatus.B0;
 sbit isEdited at  pgmStatus.B1;
 sbit isEnabled at editValue.B0;
 sbit shouldON at editValue.B1;
+
+sbit shouldAlamSunday editValue.B0;
+sbit shouldAlamMonday editValue.B1;
+sbit shouldAlamTuesday editValue.B2;
+sbit shouldAlamWednesday editValue.B3;
+sbit shouldAlamThursday editValue.B4;
+sbit shouldAlamFriday editValue.B5;
+sbit shouldAlamSaturday editValue.B6;
+
 // LCD
 sbit LCD_RS at RB4_bit;
 sbit LCD_EN at RB5_bit;
@@ -43,6 +55,13 @@ sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
 #else
+short shouldAlamSunday;
+short shouldAlamMonday;
+short shouldAlamTuesday;
+short shouldAlamWednesday;
+short shouldAlamThursday;
+short shouldAlamFriday;
+short shouldAlamSaturday;
 
 #endif
 void initLCD();
