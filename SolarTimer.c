@@ -17,6 +17,8 @@ void delay_ms(unsigned int del);
 void Lcd_Out(int row,int col,char  *sting);
 #define Lo(param) ((char *)&param)[0]
 #define Hi(param) ((char *)&param)[1]
+#else
+#include <built_in.h>
 #endif
 
 #include "Deff.h"

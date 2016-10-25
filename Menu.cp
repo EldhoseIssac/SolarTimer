@@ -10,25 +10,8 @@ enum menus {
  Current,
  LDRVal,
 
- OnOFFTimeDay1,
- OnOFFTime1,
- OnOFFTimeDay2,
- OnOFFTime2,
- OnOFFTimeDay3,
- OnOFFTime3,
- OnOFFTimeDay4,
- OnOFFTime4,
- OnOFFTimeDay5,
- OnOFFTime5,
- OnOFFTimeDay6,
- OnOFFTime6,
- OnOFFTimeDay7,
- OnOFFTime7,
- OnOFFTimeDay8,
- OnOFFTime8,
- OnOFFTimeDay9,
- OnOFFTime9
-
+ OnOFFTimeDay,
+ OnOFFTime
 };
 
 
@@ -56,13 +39,13 @@ enum subMenu{
  LDRValLow = 13,
 
 
- OnOFFTimeDaySun = 1,
- OnOFFTimeDayMon = 3,
- OnOFFTimeDayTue = 5,
- OnOFFTimeDayWed = 7,
- OnOFFTimeDayThu = 9,
- OnOFFTimeDayFri = 11,
- OnOFFTimeDaySat = 13,
+ OnOFFTimeDaySun = 2,
+ OnOFFTimeDayMon = 4,
+ OnOFFTimeDayTue = 6,
+ OnOFFTimeDayWed = 8,
+ OnOFFTimeDayThu = 10,
+ OnOFFTimeDayFri = 12,
+ OnOFFTimeDaySat = 14,
 
 
  OnOFFTimeOnHr = 3,
@@ -109,7 +92,8 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 33 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
+#line 38 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -125,7 +109,9 @@ extern unsigned short year;
 extern short _LCD_BLINK_CURSOR_ON;
 
 extern unsigned int editValue;
-void loadEnDayHrMin();
+void loadOnOffTime();
+void loadEnabledDay();
+
 
 
 
@@ -217,7 +203,7 @@ unsigned short timeEEAddr;
  }
  break;
  case Voltage:
- switch(submenu){
+ switch(subMenu){
  case VoltageLow:
  ee_write(EEPADDR_VoltageLow,editValue);
  break;
@@ -227,7 +213,7 @@ unsigned short timeEEAddr;
  }
  break;
  case Current:
- switch(submenu){
+ switch(subMenu){
  case CurrentHeigh:
  ee_write(EEPADDR_CurrentHeigh,editValue);
  break;
@@ -237,23 +223,33 @@ unsigned short timeEEAddr;
  }
  break;
  case LDRVal:
- switch(submenu){
+ switch(subMenu){
  case LDRValLow:
- ee_write(EEPADDR_LDRvalLow,editValue);
+ ee_write(EEPADDR_LDRValLow,editValue);
  break;
  case LDRValHeigh:
- ee_write(EEPADDR_LDRvalHeigh,editValue);
+ ee_write(EEPADDR_LDRValHeigh,editValue);
  break;
  }
  break;
  default:
- if(crntMenu<OnOFFTimeDay9)
+ if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+ EEPROM_write(timeEEAddr,editValue);
+ }
+ else
  {
- ee_write(timeEEAddr,editValue);
+ if (subMenu == OnOFFTimeOnHr || subMenu == OnOFFTimeOnMin) {
+ ee_write(timeEEAddr+1,editValue);
+ }
+ else if (subMenu == OnOFFTimeOffHr || subMenu == OnOFFTimeOffMin)
+ {
+ ee_write(timeEEAddr+3,editValue);
+ }
  }
  break;
 
  }
+ delay_ms(100);
  }
 unsigned short cashedPortD = 0;
 
@@ -267,7 +263,8 @@ sbit cMENU at cashedPortD.B7;
 sbit cSELECT at cashedPortD.B6;
 sbit cPLUS at cashedPortD.B5;
 sbit cMINUS at cashedPortD.B4;
-void loadEnDayHrMin();
+void loadOnOffTime();
+void loadEnabledDay();
 
 
 
@@ -275,6 +272,7 @@ void loadEnDayHrMin();
 
 void checkKey(){
 
+ unsigned short tmp=0;
  timeEEAddr = EEPADDR_OnOFFTimeDay1-5;
 do{
  cMENU =  PORTD.F7 ;
@@ -283,7 +281,7 @@ do{
  cMINUS =  PORTD.F4 ;
 
  if(cashedPortD > 0)
-#line 210 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 229 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
  {
  waitCount = 0;
  delay_ms(100);
@@ -296,7 +294,7 @@ do{
  saveValue();
  }
  crntMenu ++;
- if(crntMenu>OnOFFTime8)
+ if(crntMenu > (OnOFFTime + 16))
  {
  waitCount = 500;
  }
@@ -342,7 +340,7 @@ do{
  }
  if(cMINUS ==  1 )
  {
- if(editValue == 0) editValue = 0x31;
+ if(editValue == 0x0) editValue = 0x31;
  }
  break;
  case DateMonth:
@@ -685,24 +683,174 @@ do{
  }
  break;
  default:
- if(crntMenu<OnOFFTimeDay9)
+ if(crntMenu<(OnOFFTimeDay + 16))
  {
  if (cMENU ==  1 )
  {
- subMenu = OnOFFTimeDaySun;
- timeEEAddr += 5;
- strcpy(lcdrow1,codetxt_to_ramtxt("1)"));
- lcdrow1[0]= ((crntMenu - OnOFFTimeDay1) >> 1) + '0' + 1;
- Lcd_Out(1,1,lcdrow1);
- editValue = EEPROM_Read(timeEEAddr);
 
- Lcd_Out(1,1,lcdrow1);
- editValue = ee_read(timeEEAddr);
- loadEnDayHrMin();
+ if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
+ {
+ timeEEAddr += 5;
+ }
+ subMenu = OnOFFTimeOnHr;
+ editValue = ee_read(timeEEAddr+1);
+ loadOnOffTime();
+ subMenu = OnOFFTimeOffHr;
+ editValue = ee_read(timeEEAddr+3);
+ loadOnOffTime();
+ subMenu = OnOFFTimeDaySun;
+ editValue = EEPROM_Read(timeEEAddr);
+ loadEnabledDay();
+ tmp = 0;
+ if ((crntMenu - OnOFFTimeDay) % 2 == 1 )
+ {
+ subMenu = OnOFFTimeOnHr;
+ editValue = ee_read(timeEEAddr+1);
+ tmp =  ((char *)&editValue)[1] ;
+ }
+
  }
  else
  {
-#line 740 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+ if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+
+ if (cSELECT ==  1 )
+ {
+ subMenu +=2;
+ tmp++;
+ if (subMenu>OnOFFTimeDaySat) {
+ subMenu = OnOFFTimeDaySun;
+ tmp = 0;
+ }
+ }
+ if (cPLUS ==  1  || cMINUS ==  1 )
+ {
+ editValue = editValue ^ (1<<tmp);
+ loadEnabledDay();
+ }
+
+ }
+ else
+ {
+ if(cPLUS ==  1 )
+ {
+ tmp++;
+ if((tmp & 0x0F )>9) tmp += 6;
+ }
+ if (cMINUS ==  1 )
+ {
+ tmp--;
+ if((tmp & 0x0F )>9) tmp -= 6;
+ }
+ switch (subMenu) {
+
+ case OnOFFTimeOnHr:
+ if(cSELECT ==  1  )
+ {
+ subMenu = OnOFFTimeOnMin;
+ tmp =  ((char *)&editValue)[1] ;
+ }
+
+ if (cPLUS ==  1  )
+ {
+ if (tmp > 0x23) {
+ tmp = 0;
+ }
+  ((char *)&editValue)[0]  = tmp;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ if (!tmp) {
+ tmp = 0x23;
+ }
+  ((char *)&editValue)[0]  = tmp;
+ }
+ break;
+ case OnOFFTimeOnMin:
+ if(cSELECT ==  1  )
+ {
+ subMenu = OnOFFTimeOffHr;
+ editValue = ee_read(timeEEAddr+3);
+ tmp =  ((char *)&editValue)[0] ;
+ }
+ if (cPLUS ==  1  )
+ {
+
+ if (tmp > 0x59)
+ {
+ tmp = 0;
+ }
+  ((char *)&editValue)[1]  = tmp;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ if (!tmp)
+ {
+ tmp = 0x59;
+ }
+  ((char *)&editValue)[1]  = tmp;
+ }
+ break;
+ case OnOFFTimeOffHr:
+ if(cSELECT ==  1  )
+ {
+ subMenu = OnOFFTimeOffMin;
+ tmp =  ((char *)&editValue)[1] ;
+ }
+ if (cPLUS ==  1  )
+ {
+ if (tmp > 0x23) {
+ tmp = 0;
+ }
+  ((char *)&editValue)[0]  = tmp;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ if (!tmp) {
+ tmp = 0x23;
+ }
+  ((char *)&editValue)[0]  = tmp;
+ }
+ break;
+ case OnOFFTimeOffMin:
+ if(cSELECT ==  1  )
+ {
+ subMenu = OnOFFTimeOnHr;
+ editValue = ee_read(timeEEAddr+1);
+ tmp =  ((char *)&editValue)[0] ;
+
+ }
+ if (cPLUS ==  1  )
+ {
+
+ if (tmp > 0x59)
+ {
+ tmp = 0;
+ }
+  ((char *)&editValue)[1]  = tmp;
+
+ }
+ if (cMINUS ==  1 )
+ {
+ if (!tmp)
+ {
+ tmp = 0x59;
+ }
+  ((char *)&editValue)[1]  = tmp;
+ }
+
+ break;
+ }
+ if(cPLUS ==  1  || cMINUS ==  1 )
+ {
+ loadOnOffTime();
+ }
+ }
+
+
  }
 
 

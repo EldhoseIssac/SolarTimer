@@ -197,7 +197,7 @@ void loadDateEdit(){
 }
 void setCursorPosition(unsigned short position){
     unsigned short indx;
-    if ((crntMenu > LDRVal ) && ((subMenu - OnOFFTimeDay)%2 == 0)) {
+    if ((crntMenu > LDRVal)   && (crntMenu - OnOFFTimeDay) % 2 == 0 ) {
         Lcd_Cmd(_LCD_FIRST_ROW);
     }
     else{
@@ -214,7 +214,7 @@ void loadEnabledDay()
     unsigned short indx = 2;
     unsigned short i = 0;
     
-    lcdrow1[0]= ((crntMenu - OnOFFTimeDay) >> 1) + '0' + 1;
+    lcdrow1[0]= ((crntMenu - OnOFFTimeDay)>> 1) + '0' + 1;
     lcdrow1[1] = ')';
     for (i = 0 ; i < 8; i++)
     {
@@ -234,26 +234,23 @@ void loadEnabledDay()
 
 void loadOnOffTime()
 {
-    unsigned short mi = editValue;
-    unsigned short hr = editValue >> 8;
-    unsigned int disVal;
+    unsigned short mi = Hi(editValue);
+    unsigned short hr = Lo(editValue);
     unsigned int tmp;
     if (subMenu == OnOFFTimeOnHr || subMenu == OnOFFTimeOnMin) {
-        tmp = OnOFFTimeOnHr;
-        lcdrow1[0] = 'N';
+        tmp = OnOFFTimeOnHr-2;
+        lcdrow2[0] = 'N';
     }else
     {
-        tmp = OnOFFTimeOffHr;
-        lcdrow1[0] = 'F';
+        tmp = OnOFFTimeOffHr-2;
+        lcdrow2[0] = 'F';
     }
-    lcdrow1[1] = '>';
-    disVal = Binary2BCD(hr);
-    lcdrow2[2] = BCD2UpperCh(disVal);
-    lcdrow2[3] = BCD2LowerCh(disVal);
+    lcdrow2[1] = '>';
+    lcdrow2[2] = BCD2UpperCh(hr);
+    lcdrow2[3] = BCD2LowerCh(hr);
     lcdrow2[4] = ':';
-    disVal = Binary2BCD(mi);
-    lcdrow2[5] = BCD2UpperCh(disVal);
-    lcdrow2[6] = BCD2LowerCh(disVal);
+    lcdrow2[5] = BCD2UpperCh(mi);
+    lcdrow2[6] = BCD2LowerCh(mi);
     lcdrow2[7] = '\0';
     Lcd_Out(2, tmp, lcdrow2);
     

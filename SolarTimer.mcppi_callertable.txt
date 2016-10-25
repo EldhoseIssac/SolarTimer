@@ -18,6 +18,16 @@ main
 		I2C1_Init
 	initTmr1
 	menuPortPinInt
+	Lcd_Out
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
 	readVoltage
 		ADC_Read
 			Delay_22us
@@ -37,6 +47,9 @@ main
 				I2C1_Stop
 			ee_write
 				EEPROM_Write
+			Div_16x16_S
+				Div_16x16_S_L
+			EEPROM_Write
 		loadDateEdit
 			codetxt_to_ramtxt
 				____DoICP
@@ -51,6 +64,7 @@ main
 						Delay_5500us
 						Delay_50us
 			BCD2UpperCh
+				Swap
 			BCD2LowerCh
 			loadDay
 		loadDay
@@ -65,6 +79,7 @@ main
 					Delay_5500us
 					Delay_50us
 		BCD2UpperCh
+			Swap
 		Lcd_Chr
 			Lcd_Cmd
 				Delay_1us
@@ -90,6 +105,7 @@ main
 						Delay_5500us
 						Delay_50us
 			BCD2UpperCh
+				Swap
 			BCD2LowerCh
 		codetxt_to_ramtxt
 			____DoICP
@@ -101,6 +117,7 @@ main
 					Div_16x16_S_L
 			BCD2HignerCh
 			BCD2UpperCh
+				Swap
 			BCD2LowerCh
 			Lcd_Out
 				Lcd_Cmd
@@ -114,13 +131,11 @@ main
 						Delay_50us
 			codetxt_to_ramtxt
 				____DoICP
-		strcpy
-		EEPROM_Read
-		loadEnDayHrMin
-			Binary2BCD
-				Div_16x16_S
-					Div_16x16_S_L
+		Div_16x16_S
+			Div_16x16_S_L
+		loadOnOffTime
 			BCD2UpperCh
+				Swap
 			BCD2LowerCh
 			Lcd_Out
 				Lcd_Cmd
@@ -132,7 +147,22 @@ main
 						Delay_1us
 						Delay_5500us
 						Delay_50us
+		EEPROM_Read
+		loadEnabledDay
+			loadDay
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 		setCursorPosition
+			Div_16x16_S
+				Div_16x16_S_L
 			Lcd_Cmd
 				Delay_1us
 				Delay_5500us
@@ -147,6 +177,7 @@ main
 				Div_16x16_S_L
 		BCD2HignerCh
 		BCD2UpperCh
+			Swap
 		BCD2LowerCh
 	loadTimeAndDate
 		I2C1_Start
@@ -163,6 +194,7 @@ main
 		I2C1_Stop
 	displayTimeDate
 		BCD2UpperCh
+			Swap
 		BCD2LowerCh
 		loadDay
 	loadRamToDisp
@@ -176,4 +208,7 @@ main
 					Delay_1us
 					Delay_5500us
 					Delay_50us
+	EEPROM_Read
+	ee_read
+		EEPROM_Read
 interrupt

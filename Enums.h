@@ -37,13 +37,13 @@ enum subMenu{
     LDRValLow = 13,
     
     //OnOFFTimerCntEdit,
-    OnOFFTimeDaySun = 1,
-    OnOFFTimeDayMon = 3,
-    OnOFFTimeDayTue = 5,
-    OnOFFTimeDayWed = 7,
-    OnOFFTimeDayThu = 9,
-    OnOFFTimeDayFri = 11,
-    OnOFFTimeDaySat = 13,
+    OnOFFTimeDaySun = 2,
+    OnOFFTimeDayMon = 4,
+    OnOFFTimeDayTue = 6,
+    OnOFFTimeDayWed = 8,
+    OnOFFTimeDayThu = 10,
+    OnOFFTimeDayFri = 12,
+    OnOFFTimeDaySat = 14,
     
     //N>10:10 F>10:10
     OnOFFTimeOnHr = 3,

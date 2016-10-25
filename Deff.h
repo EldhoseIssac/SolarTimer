@@ -32,13 +32,13 @@ sbit isEdited at  pgmStatus.B1;
 sbit isEnabled at editValue.B0;
 sbit shouldON at editValue.B1;
 
-sbit shouldAlamSunday editValue.B0;
-sbit shouldAlamMonday editValue.B1;
-sbit shouldAlamTuesday editValue.B2;
-sbit shouldAlamWednesday editValue.B3;
-sbit shouldAlamThursday editValue.B4;
-sbit shouldAlamFriday editValue.B5;
-sbit shouldAlamSaturday editValue.B6;
+sbit shouldAlamSunday at editValue.B0;
+sbit shouldAlamMonday at editValue.B1;
+sbit shouldAlamTuesday at editValue.B2;
+sbit shouldAlamWednesday at editValue.B3;
+sbit shouldAlamThursday at editValue.B4;
+sbit shouldAlamFriday at editValue.B5;
+sbit shouldAlamSaturday at editValue.B6;
 
 // LCD
 sbit LCD_RS at RB4_bit;

@@ -1,10 +1,105 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "e:/progams/hussian/solartimer/enums.h"
 
+
+enum menus {
+ None,
+ Date,
+ Time,
+ Voltage,
+ Current,
+ LDRVal,
+
+ OnOFFTimeDay,
+ OnOFFTime
+};
+
+
+enum subMenu{
+ NoEdit,
+
+ DateDay = 0,
+ DateMonth = 3,
+ DateYear = 6,
+ DateWeekDay = 9,
+
+ TimeHour = 0,
+ TimeMinute = 3,
+
+ VoltageEnable = 0,
+ VoltageHigh = 7,
+ VoltageLow = 13,
+
+ CurrentEnable = 0,
+ CurrentHeigh = 8,
+ CurrentLow = 13,
+
+ LDRValEnable = 0,
+ LDRValHeigh = 8,
+ LDRValLow = 13,
+
+
+ OnOFFTimeDaySun = 2,
+ OnOFFTimeDayMon = 4,
+ OnOFFTimeDayTue = 6,
+ OnOFFTimeDayWed = 8,
+ OnOFFTimeDayThu = 10,
+ OnOFFTimeDayFri = 12,
+ OnOFFTimeDaySat = 14,
+
+
+ OnOFFTimeOnHr = 3,
+ OnOFFTimeOnMin = 6,
+ OnOFFTimeOffHr = 11,
+ OnOFFTimeOffMin = 14
+
+
+};
+
+enum EEPADDR
+{
+ EEPADDR_VoltageHigh = 0x02,
+ EEPADDR_VoltageLow = 0x04,
+
+ EEPADDR_CurrentHeigh = 0x06,
+ EEPADDR_CurrentLow = 0x08,
+
+ EEPADDR_LDRValHeigh = 10,
+ EEPADDR_LDRValLow = 12,
+
+ EEPADDR_OnOFFTimerCntEdit = 14,
+
+ EEPADDR_OnOFFTimeDay1 = 20,
+ EEPADDR_OnOFFTimeDay2 = 25,
+ EEPADDR_OnOFFTimeDay3 = 30,
+ EEPADDR_OnOFFTimeDay4 = 35,
+ EEPADDR_OnOFFTimeDay5 = 40,
+ EEPADDR_OnOFFTimeDay6 = 45,
+ EEPADDR_OnOFFTimeDay7 = 50,
+ EEPADDR_OnOFFTimeDay8 = 55,
+ EEPADDR_OnOFFTimeDay9 = 60,
+ EEPADDR_OnOFFTimeDay10 = 65,
+ EEPADDR_OnOFFTimeDay11 = 70,
+ EEPADDR_OnOFFTimeDay12 = 75,
+ EEPADDR_OnOFFTimeDay13 = 80,
+ EEPADDR_OnOFFTimeDay14 = 85
+};
+enum TIMERMEM
+{
+ TIMERMEMDays = 0,
+ TIMERMEMOnHour = 1,
+ TIMERMEMOnMin = 2,
+ TIMERMEMOffHour = 3,
+ TIMERMEMOffMin = 4
+};
+#line 2 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
 
 extern unsigned short crntMenu;
+extern unsigned short subMenu;
+
 extern unsigned short second;
 extern unsigned short minute;
 extern unsigned short hour;
@@ -20,9 +115,17 @@ extern unsigned int editValue;
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 56 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 74 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern sbit isEnabled;
 extern sbit shouldON;
+
+extern sbit shouldAlamSunday;
+extern sbit shouldAlamMonday;
+extern sbit shouldAlamTuesday;
+extern sbit shouldAlamWednesday;
+extern sbit shouldAlamThursday;
+extern sbit shouldAlamFriday;
+extern sbit shouldAlamSaturday;
 
 
 void initLCDRaws()
@@ -39,11 +142,12 @@ void initLCD(){
 }
 unsigned char BCD2HignerCh(unsigned int bcd)
 {
- return (((bcd >> 8) & 0x0F)+ '0');
+
+ return (( ((char *)&bcd)[1]  & 0x0F)+ '0');
 }
 unsigned char BCD2UpperCh(unsigned char bcd)
 {
- return (((bcd >> 4) & 0x0F) + '0');
+ return ((swap(bcd) & 0x0F) + '0');
 }
 
 unsigned char BCD2LowerCh(unsigned char bcd)
@@ -138,78 +242,69 @@ void loadDateEdit(){
 }
 void setCursorPosition(unsigned short position){
  unsigned short indx;
+ if ((crntMenu > LDRVal) && (crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+ Lcd_Cmd(_LCD_FIRST_ROW);
+ }
+ else{
  Lcd_Cmd(_LCD_SECOND_ROW);
+ }
+
  for (indx=0; indx<position; indx++) {
  Lcd_Cmd(_LCD_MOVE_CURSOR_RIGHT);
  }
 }
 void loadEnabledDay()
 {
+ unsigned short tmp = editValue;
+ unsigned short indx = 2;
+ unsigned short i = 0;
+
+ lcdrow1[0]= ((crntMenu - OnOFFTimeDay)>> 1) + '0' + 1;
+ lcdrow1[1] = ')';
+ for (i = 0 ; i < 8; i++)
+ {
+ if ((tmp & 1) != 0)
+ {
+ loadDay(&lcdrow1[indx],i+1);
+ }else
+ {
+ loadDay(&lcdrow1[indx],0);
+ }
+ tmp = tmp >> 1;
+ indx += 2;
+ }
+ lcdrow1[16] = '\0';
+ Lcd_Out(1, 1, lcdrow1);
 }
-void loadEnDayHrMin()
+
+void loadOnOffTime()
 {
- unsigned short indx = 0;
- unsigned val = editValue >> 2;
- unsigned short dday =  ((char *)&val)[0]  & 0x07;
- unsigned int dis;
- switch(crntMenu-5)
+ unsigned short mi =  ((char *)&editValue)[1] ;
+ unsigned short hr =  ((char *)&editValue)[0] ;
+ unsigned int tmp;
+ if (subMenu == OnOFFTimeOnHr || subMenu == OnOFFTimeOnMin) {
+ tmp = OnOFFTimeOnHr-2;
+ lcdrow2[0] = 'N';
+ }else
  {
- case 1:
- lcdrow2[indx++]='1';
- break;
- case 2:
- lcdrow2[indx++]='2';
- break;
- case 3:
- lcdrow2[indx++]='3';
- break;
- case 4:
- lcdrow2[indx++]='4';
- break;
- case 5:
- lcdrow2[indx++]='5';
- break;
- case 6:
- lcdrow2[indx++]='6';
- break;
- case 7:
- lcdrow2[indx++]='7';
- break;
+ tmp = OnOFFTimeOffHr-2;
+ lcdrow2[0] = 'F';
  }
- lcdrow2[indx++]=')';
- lcdrow2[indx++]=' ';
- if(isEnabled)
- {
- lcdrow2[indx++] = 'O';
- lcdrow2[indx++] = 'N';
- lcdrow2[indx++] = ' ';
- }
- else
- {
- lcdrow2[indx++] = 'O';
- lcdrow2[indx++] = 'F';
- lcdrow2[indx++] = 'F';
- }
- lcdrow2[indx++] = ' ';
-#line 240 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
- val = (val >> 3);
- dday = val & 0x1F;
- dis = Binary2BCD(dday);
- lcdrow2[indx++] = BCD2UpperCh(dis);
- lcdrow2[indx++] = BCD2LowerCh(dis);
- lcdrow2[indx++] = ':';
- val = (val >> 5);
- dday = val & 0x3F;
- dis = Binary2BCD(dday);
- lcdrow2[indx++] = BCD2UpperCh(dis);
- lcdrow2[indx++] = BCD2LowerCh(dis);
- lcdrow2[indx] = '\0';
- Lcd_Out(2,1, lcdrow2);
+ lcdrow2[1] = '>';
+ lcdrow2[2] = BCD2UpperCh(hr);
+ lcdrow2[3] = BCD2LowerCh(hr);
+ lcdrow2[4] = ':';
+ lcdrow2[5] = BCD2UpperCh(mi);
+ lcdrow2[6] = BCD2LowerCh(mi);
+ lcdrow2[7] = '\0';
+ Lcd_Out(2, tmp, lcdrow2);
+
 }
+
 void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short shouldUseDecimal)
 {
  unsigned int disVolt;
- unsigned int discrr= Binary2BCD(low);
+ unsigned int discrr = Binary2BCD(low);
  unsigned short indx = 0;
  if (heigh>0) {
  lcdrow2[indx++] = 'O';

@@ -1,4 +1,5 @@
 #line 1 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
 #line 1 "e:/progams/hussian/solartimer/deff.h"
 #line 1 "e:/progams/hussian/solartimer/enums.h"
 
@@ -11,25 +12,8 @@ enum menus {
  Current,
  LDRVal,
 
- OnOFFTimeDay1,
- OnOFFTime1,
- OnOFFTimeDay2,
- OnOFFTime2,
- OnOFFTimeDay3,
- OnOFFTime3,
- OnOFFTimeDay4,
- OnOFFTime4,
- OnOFFTimeDay5,
- OnOFFTime5,
- OnOFFTimeDay6,
- OnOFFTime6,
- OnOFFTimeDay7,
- OnOFFTime7,
- OnOFFTimeDay8,
- OnOFFTime8,
- OnOFFTimeDay9,
- OnOFFTime9
-
+ OnOFFTimeDay,
+ OnOFFTime
 };
 
 
@@ -57,13 +41,13 @@ enum subMenu{
  LDRValLow = 13,
 
 
- OnOFFTimeDaySun = 1,
- OnOFFTimeDayMon = 3,
- OnOFFTimeDayTue = 5,
- OnOFFTimeDayWed = 7,
- OnOFFTimeDayThu = 9,
- OnOFFTimeDayFri = 11,
- OnOFFTimeDaySat = 13,
+ OnOFFTimeDaySun = 2,
+ OnOFFTimeDayMon = 4,
+ OnOFFTimeDayTue = 6,
+ OnOFFTimeDayWed = 8,
+ OnOFFTimeDayThu = 10,
+ OnOFFTimeDayFri = 12,
+ OnOFFTimeDaySat = 14,
 
 
  OnOFFTimeOnHr = 3,
@@ -133,10 +117,22 @@ unsigned int dispUpdateCount =0;
 unsigned short pgmStatus = 0;
 unsigned int editValue;
 
+
+
+
 sbit shouldLoadDisp at pgmStatus.B0;
 sbit isEdited at pgmStatus.B1;
 sbit isEnabled at editValue.B0;
 sbit shouldON at editValue.B1;
+
+sbit shouldAlamSunday at editValue.B0;
+sbit shouldAlamMonday at editValue.B1;
+sbit shouldAlamTuesday at editValue.B2;
+sbit shouldAlamWednesday at editValue.B3;
+sbit shouldAlamThursday at editValue.B4;
+sbit shouldAlamFriday at editValue.B5;
+sbit shouldAlamSaturday at editValue.B6;
+
 
 sbit LCD_RS at RB4_bit;
 sbit LCD_EN at RB5_bit;
@@ -151,7 +147,7 @@ sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
-#line 48 "e:/progams/hussian/solartimer/deff.h"
+#line 67 "e:/progams/hussian/solartimer/deff.h"
 void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
@@ -171,7 +167,7 @@ void loadTimeAndDate();
 
 void menuPortPinInt();
 void checkKey();
-#line 20 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+#line 25 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
 void interrupt()
 {
 
@@ -216,6 +212,8 @@ void main()
  menuPortPinInt();
 
  shouldLoadDisp = 1;
+ Lcd_Out(1,1,"Welcome");
+ delay_ms(1000);
  while(1)
  {
  readVoltage();
@@ -229,6 +227,38 @@ void main()
  displayTimeDate();
  loadRamToDisp();
  shouldLoadDisp = 0;
+ for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
+ {
+ editValue = EEPROM_Read(index);
+ tmp = editValue & (1 << (dday-1));
+ if(tmp)
+ {
+ editValue = ee_read(index+1);
+ if(editValue != lastTimeCheckValue)
+ {
+ if( ((char *)&editValue)[1]  == hour)
+ {
+ if( ((char *)&editValue)[0]  == minute)
+ {
+
+ }
+ }
+ }else
+ {
+ editValue = ee_read(index+3);
+ if(editValue != lastTimeCheckValue)
+ {
+ if( ((char *)&editValue)[1]  == hour)
+ {
+
+ }
+ }
+
+ }
+
+
+ }
+ }
  }
 
  }

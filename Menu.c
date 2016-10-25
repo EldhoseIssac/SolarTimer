@@ -190,6 +190,7 @@ unsigned short timeEEAddr;
                       break;
                    
       }
+      delay_ms(100);
  }
 unsigned short cashedPortD = 0;
 #if DEBUG
@@ -237,7 +238,7 @@ do{
             saveValue();
         }
         crntMenu ++;
-        if(crntMenu > (OnOFFTime + 8))
+        if(crntMenu > (OnOFFTime + 16))
         {
            waitCount = 500;
         }
@@ -626,13 +627,15 @@ do{
            }
            break;
      default:
-          if(crntMenu<(OnOFFTimeDay + 8))
+          if(crntMenu<(OnOFFTimeDay + 16))
           {
              if (cMENU == ON)
              {
                 
-                 
-                timeEEAddr += 5;
+                if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
+                {
+                   timeEEAddr += 5;
+                }
                 subMenu = OnOFFTimeOnHr;
                 editValue = ee_read(timeEEAddr+1);
                 loadOnOffTime();
@@ -643,7 +646,8 @@ do{
                 editValue = EEPROM_Read(timeEEAddr);
                 loadEnabledDay();
                  tmp = 0;
-                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 ) {
+                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 ) 
+                 {
                      subMenu = OnOFFTimeOnHr;
                      editValue = ee_read(timeEEAddr+1);
                      tmp = Hi(editValue);
@@ -688,7 +692,7 @@ do{
                              if(cSELECT == ON )
                              {
                                  subMenu = OnOFFTimeOnMin;
-                                 tmp = Lo(editValue);
+                                 tmp = Hi(editValue);
                              }
 
                              if (cPLUS == ON )
@@ -712,7 +716,7 @@ do{
                              {
                                  subMenu = OnOFFTimeOffHr;
                                  editValue = ee_read(timeEEAddr+3);
-                                 tmp = Hi(editValue);
+                                 tmp = Lo(editValue);
                              }
                              if (cPLUS == ON )
                              {
@@ -737,7 +741,7 @@ do{
                              if(cSELECT == ON )
                              {
                                  subMenu = OnOFFTimeOffMin;
-                                 tmp = Lo(editValue);
+                                 tmp = Hi(editValue);
                              }
                              if (cPLUS == ON )
                              {
@@ -760,7 +764,7 @@ do{
                              {
                                  subMenu = OnOFFTimeOnHr;
                                  editValue = ee_read(timeEEAddr+1);
-                                 tmp = editValue>>8;
+                                 tmp =  Lo(editValue);
 
                              }
                              if (cPLUS == ON )
@@ -786,7 +790,7 @@ do{
                      }
                      if(cPLUS == ON || cMINUS == ON)
                      {
-                         loadEnabledDay();
+                         loadOnOffTime();
                      }
                  }
                  

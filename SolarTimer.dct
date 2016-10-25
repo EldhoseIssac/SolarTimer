@@ -344,8 +344,8 @@ lcdrow2
 loaddateedit
 loadday
 loadenabledday
-loadendayhrmin
 loadenheighlow
+loadonofftime
 loadramtodisp
 loadtimeanddate
 loadtimeedit
@@ -595,6 +595,13 @@ setfun32
 setiov3224
 shorttohex
 shorttostr
+shouldalamfriday
+shouldalammonday
+shouldalamsaturday
+shouldalamsunday
+shouldalamthursday
+shouldalamtuesday
+shouldalamwednesday
 shouldloaddisp
 shouldon
 smp
