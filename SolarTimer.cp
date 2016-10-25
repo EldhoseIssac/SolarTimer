@@ -1,7 +1,7 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 1 "e:/progams/hussian/solartimer/deff.h"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "D:/SolarTimer/SolarTimer.c"
+#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
+#line 1 "d:/solartimer/deff.h"
+#line 1 "d:/solartimer/enums.h"
 
 
 enum menus {
@@ -94,7 +94,7 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 5 "e:/progams/hussian/solartimer/deff.h"
+#line 5 "d:/solartimer/deff.h"
 unsigned lastReadVoltage;
 unsigned lastReadCurrent;
 
@@ -147,7 +147,7 @@ sbit LCD_D4_Direction at TRISB0_bit;
 sbit LCD_D5_Direction at TRISB1_bit;
 sbit LCD_D6_Direction at TRISB2_bit;
 sbit LCD_D7_Direction at TRISB3_bit;
-#line 67 "e:/progams/hussian/solartimer/deff.h"
+#line 67 "d:/solartimer/deff.h"
 void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
@@ -167,7 +167,7 @@ void loadTimeAndDate();
 
 void menuPortPinInt();
 void checkKey();
-#line 25 "E:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+#line 25 "D:/SolarTimer/SolarTimer.c"
 void interrupt()
 {
 
@@ -200,9 +200,9 @@ void main()
  unsigned short index;
  unsigned short tmp;
  lastTimeCheckValue = 0;
-
-
-
+ osccon = 0x70;
+ ansel = 7;
+ anselh = 0;
  trisb = 0;
  trisd = 0;
  ADC_Init();

@@ -55,6 +55,14 @@ _main:
 ;SolarTimer.c,56 :: 		lastTimeCheckValue = 0;
 	CLRF       _lastTimeCheckValue+0
 	CLRF       _lastTimeCheckValue+1
+;SolarTimer.c,57 :: 		osccon = 0x70;
+	MOVLW      112
+	MOVWF      OSCCON+0
+;SolarTimer.c,58 :: 		ansel  = 7;
+	MOVLW      7
+	MOVWF      ANSEL+0
+;SolarTimer.c,59 :: 		anselh  = 0;
+	CLRF       ANSELH+0
 ;SolarTimer.c,60 :: 		trisb = 0;
 	CLRF       TRISB+0
 ;SolarTimer.c,61 :: 		trisd = 0;
@@ -80,11 +88,11 @@ _main:
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
 ;SolarTimer.c,70 :: 		delay_ms(1000);
-	MOVLW      26
+	MOVLW      11
 	MOVWF      R11+0
-	MOVLW      94
+	MOVLW      38
 	MOVWF      R12+0
-	MOVLW      110
+	MOVLW      93
 	MOVWF      R13+0
 L_main2:
 	DECFSZ     R13+0, 1
@@ -93,6 +101,7 @@ L_main2:
 	GOTO       L_main2
 	DECFSZ     R11+0, 1
 	GOTO       L_main2
+	NOP
 	NOP
 ;SolarTimer.c,71 :: 		while(1)
 L_main3:

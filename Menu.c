@@ -33,8 +33,8 @@ void EEPROM_write(unsigned short addr,unsigned int value);
 #endif
 
 
-#define ON  1
-#define OFF 0
+#define ON  0
+#define OFF 1
 extern char lcdrow1[];
 extern char lcdrow2[];
 

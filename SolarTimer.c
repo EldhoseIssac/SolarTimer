@@ -54,9 +54,9 @@ void main()
       unsigned short index;
       unsigned short tmp;
       lastTimeCheckValue = 0;
-    //osccon = 0x70;
-    //ansel  = 7;
-    //anselh  = 0;
+    osccon = 0x70;
+    ansel  = 7;
+    anselh  = 0;
     trisb = 0;
     trisd = 0;
     ADC_Init();
@@ -83,7 +83,7 @@ void main()
          shouldLoadDisp = 0;
          for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
          {
-           editValue = EEPROM_Read(index);
+             editValue = EEPROM_Read(index);
              tmp = editValue & (1 << (dday-1));
              if(tmp)
              {

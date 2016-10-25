@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "D:/SolarTimer/Menu.c"
+#line 1 "d:/solartimer/enums.h"
 
 
 enum menus {
@@ -92,8 +92,8 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 38 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
+#line 38 "D:/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -280,13 +280,16 @@ do{
  cPLUS =  PORTD.F5 ;
  cMINUS =  PORTD.F4 ;
 
- if(cashedPortD > 0)
-#line 229 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+
+
+ if(cashedPortD < 0xF0)
+
+
  {
  waitCount = 0;
  delay_ms(100);
  }
- if(cMENU ==  1 ){
+ if(cMENU ==  0 ){
  Lcd_Cmd(_LCD_CLEAR);
  if(crntMenu == None){
  Lcd_Cmd(_LCD_BLINK_CURSOR_ON);
@@ -299,7 +302,7 @@ do{
  waitCount = 500;
  }
  }
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  saveValue();
  }
@@ -308,7 +311,7 @@ do{
  case None:
  break;
  case Date:
- if (cMENU ==  1 )
+ if (cMENU ==  0 )
  {
  subMenu = DateDay;
  loadDateEdit();
@@ -316,12 +319,12 @@ do{
  }
  else
  {
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  editValue++;
  if((editValue & 0x0F )>9) editValue += 6;
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue--;
  if((editValue & 0x0F )>9) editValue -= 6;
@@ -330,69 +333,69 @@ do{
  {
 
  case DateDay:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = DateMonth;
  editValue = month;
  }
- if(cPLUS ==  1 ){
+ if(cPLUS ==  0 ){
  if(editValue>0x31) editValue = 1;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue == 0x0) editValue = 0x31;
  }
  break;
  case DateMonth:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = DateYear;
  editValue = year;
  }
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  if(editValue>0x12) editValue = 1;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue == 0) editValue = 0x01;
  }
 
  break;
  case DateYear:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = DateWeekDay;
  editValue = dday;
  }
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  if(editValue>0x99) editValue = 1;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue == 0) editValue = 0x99;
  }
 
  break;
  case DateWeekDay:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = DateDay;
  editValue = day;
  }
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  if(editValue>0x07) editValue = 1;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue == 0) editValue = 0x07;
  }
  break;
 
  }
- if(cPLUS ==  1  || cMINUS ==  1 )
+ if(cPLUS ==  0  || cMINUS ==  0 )
  {
  if (subMenu == DateWeekDay)
  {
@@ -410,7 +413,7 @@ do{
  }
  break;
  case Time:
- if (cMENU ==  1 )
+ if (cMENU ==  0 )
  {
  subMenu = TimeHour;
  loadTimeEdit();
@@ -418,12 +421,12 @@ do{
  }
  else
  {
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  editValue++;
  if((editValue & 0x0F )>9) editValue += 6;
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue--;
  if((editValue & 0x0F )>9) editValue -= 6;
@@ -431,37 +434,37 @@ do{
  switch(subMenu)
  {
  case TimeHour:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = TimeMinute;
  editValue = minute;
  }
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  if(editValue>0x23) editValue = 0;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue > 0x23) editValue = 0x23;
  }
  break;
  case TimeMinute:
- if(cSELECT ==  1 )
+ if(cSELECT ==  0 )
  {
  subMenu = TimeHour;
  editValue = hour;
  }
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  if(editValue>0x59) editValue = 0;
  }
- if(cMINUS ==  1 )
+ if(cMINUS ==  0 )
  {
  if(editValue > 0x59) editValue = 0x59;
  }
  break;
  }
- if(cPLUS ==  1  || cMINUS ==  1 )
+ if(cPLUS ==  0  || cMINUS ==  0 )
  {
  Lcd_Chr(2,subMenu+1,BCD2UpperCh(editValue));
  Lcd_Chr_CP(BCD2LowerCh(editValue));
@@ -469,7 +472,7 @@ do{
  }
  break;
  case Voltage:
- if(cMENU ==  1 )
+ if(cMENU ==  0 )
  {
  subMenu = VoltageEnable;
  Lcd_Out(1,1, codetxt_to_ramtxt("Volt Heigh  Low"));
@@ -481,56 +484,56 @@ do{
  switch(subMenu)
  {
  case VoltageEnable:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = VoltageHigh;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  isEnabled = !isEnabled;
  loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
  }
  break;
  case VoltageHigh:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = VoltageLow;
  editValue = ee_read(EEPADDR_VoltageLow);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 2;
  if (editValue > 441) editValue = 81;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 2;
  if (editValue < 81) editValue = 441;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(editValue,ee_read(EEPADDR_VoltageLow),0);
  }
  break;
  case VoltageLow:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = VoltageEnable;
  editValue = ee_read(EEPADDR_VoltageHigh);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 1;
  if (editValue > 220) editValue = 80;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 1;
  if (editValue < 80) editValue = 220;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(ee_read(EEPADDR_VoltageHigh),editValue,0);
  }
@@ -540,7 +543,7 @@ do{
  }
  break;
  case Current:
- if(cMENU ==  1 )
+ if(cMENU ==  0 )
  {
  subMenu = CurrentEnable;
  Lcd_Out(1,1, codetxt_to_ramtxt("Amp  Heigh  Low"));
@@ -552,11 +555,11 @@ do{
  switch(subMenu)
  {
  case CurrentEnable:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = CurrentHeigh;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  isEnabled = !isEnabled;
  loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
@@ -564,45 +567,45 @@ do{
  }
  break;
  case CurrentHeigh:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = CurrentLow;
  editValue = ee_read(EEPADDR_CurrentLow);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 2;
  if (editValue > 201) editValue = 11;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 2;
  if (editValue < 11) editValue = 201;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(editValue,ee_read(EEPADDR_CurrentLow),1);
  }
  break;
  case CurrentLow:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = CurrentEnable;
  editValue = ee_read(EEPADDR_CurrentHeigh);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 1;
  if (editValue > 220) editValue = 80;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 1;
  if (editValue < 80) editValue = 220;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(ee_read(EEPADDR_CurrentHeigh),editValue,1);
  }
@@ -612,7 +615,7 @@ do{
  }
  break;
  case LDRVal:
- if(cMENU ==  1 )
+ if(cMENU ==  0 )
  {
  subMenu = LDRValEnable;
  editValue = ee_read(EEPADDR_LDRValHeigh);
@@ -624,56 +627,56 @@ do{
  switch(subMenu)
  {
  case LDRValEnable:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = LDRValHeigh;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  isEnabled = !isEnabled;
  loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
  }
  break;
  case LDRValHeigh:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = LDRValLow;
  editValue = ee_read(EEPADDR_LDRValLow);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 2;
  if (editValue > 441) editValue = 81;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 2;
  if (editValue < 81) editValue = 441;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(editValue,ee_read(EEPADDR_LDRValLow),0);
  }
  break;
  case LDRValLow:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = LDRValEnable;
  editValue = ee_read(EEPADDR_LDRValHeigh);
  }
- if (cPLUS ==  1 )
+ if (cPLUS ==  0 )
  {
  editValue += 1;
  if (editValue > 220) editValue = 80;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  editValue -= 1;
  if (editValue < 80) editValue = 220;
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  loadEnHeighLow(ee_read(EEPADDR_LDRValHeigh),editValue,0);
  }
@@ -685,7 +688,7 @@ do{
  default:
  if(crntMenu<(OnOFFTimeDay + 16))
  {
- if (cMENU ==  1 )
+ if (cMENU ==  0 )
  {
 
  if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
@@ -714,7 +717,7 @@ do{
  {
  if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
 
- if (cSELECT ==  1 )
+ if (cSELECT ==  0 )
  {
  subMenu +=2;
  tmp++;
@@ -723,7 +726,7 @@ do{
  tmp = 0;
  }
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  editValue = editValue ^ (1<<tmp);
  loadEnabledDay();
@@ -732,12 +735,12 @@ do{
  }
  else
  {
- if(cPLUS ==  1 )
+ if(cPLUS ==  0 )
  {
  tmp++;
  if((tmp & 0x0F )>9) tmp += 6;
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  tmp--;
  if((tmp & 0x0F )>9) tmp -= 6;
@@ -745,13 +748,13 @@ do{
  switch (subMenu) {
 
  case OnOFFTimeOnHr:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = OnOFFTimeOnMin;
  tmp =  ((char *)&editValue)[1] ;
  }
 
- if (cPLUS ==  1  )
+ if (cPLUS ==  0  )
  {
  if (tmp > 0x23) {
  tmp = 0;
@@ -759,7 +762,7 @@ do{
   ((char *)&editValue)[0]  = tmp;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  if (!tmp) {
  tmp = 0x23;
@@ -768,13 +771,13 @@ do{
  }
  break;
  case OnOFFTimeOnMin:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = OnOFFTimeOffHr;
  editValue = ee_read(timeEEAddr+3);
  tmp =  ((char *)&editValue)[0] ;
  }
- if (cPLUS ==  1  )
+ if (cPLUS ==  0  )
  {
 
  if (tmp > 0x59)
@@ -784,7 +787,7 @@ do{
   ((char *)&editValue)[1]  = tmp;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  if (!tmp)
  {
@@ -794,12 +797,12 @@ do{
  }
  break;
  case OnOFFTimeOffHr:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = OnOFFTimeOffMin;
  tmp =  ((char *)&editValue)[1] ;
  }
- if (cPLUS ==  1  )
+ if (cPLUS ==  0  )
  {
  if (tmp > 0x23) {
  tmp = 0;
@@ -807,7 +810,7 @@ do{
   ((char *)&editValue)[0]  = tmp;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  if (!tmp) {
  tmp = 0x23;
@@ -816,14 +819,14 @@ do{
  }
  break;
  case OnOFFTimeOffMin:
- if(cSELECT ==  1  )
+ if(cSELECT ==  0  )
  {
  subMenu = OnOFFTimeOnHr;
  editValue = ee_read(timeEEAddr+1);
  tmp =  ((char *)&editValue)[0] ;
 
  }
- if (cPLUS ==  1  )
+ if (cPLUS ==  0  )
  {
 
  if (tmp > 0x59)
@@ -833,7 +836,7 @@ do{
   ((char *)&editValue)[1]  = tmp;
 
  }
- if (cMINUS ==  1 )
+ if (cMINUS ==  0 )
  {
  if (!tmp)
  {
@@ -844,7 +847,7 @@ do{
 
  break;
  }
- if(cPLUS ==  1  || cMINUS ==  1 )
+ if(cPLUS ==  0  || cMINUS ==  0 )
  {
  loadOnOffTime();
  }
@@ -866,7 +869,7 @@ do{
  if(cashedPortD > 0){
  setCursorPosition(subMenu);
  }
- if (cPLUS ==  1  || cMINUS ==  1 )
+ if (cPLUS ==  0  || cMINUS ==  0 )
  {
  isEdited = 1;
  }

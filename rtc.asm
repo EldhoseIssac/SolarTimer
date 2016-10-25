@@ -3,7 +3,7 @@ _InitRTC:
 
 ;rtc.c,39 :: 		void InitRTC(){
 ;rtc.c,40 :: 		I2C1_Init(100000); //DS1307 I2C is running at 100KHz
-	MOVLW      50
+	MOVLW      20
 	MOVWF      SSPADD+0
 	CALL       _I2C1_Init+0
 ;rtc.c,41 :: 		}
