@@ -250,17 +250,17 @@ _BCD2Binary:
 	MOVF       R3+1, 0
 	MOVWF      R0+1
 	MOVF       R2+0, 0
-L__BCD2Binary39:
+L__BCD2Binary40:
 	BTFSC      STATUS+0, 2
-	GOTO       L__BCD2Binary40
+	GOTO       L__BCD2Binary41
 	RRF        R0+1, 1
 	RRF        R0+0, 1
 	BCF        R0+1, 7
 	BTFSC      R0+1, 6
 	BSF        R0+1, 7
 	ADDLW      255
-	GOTO       L__BCD2Binary39
-L__BCD2Binary40:
+	GOTO       L__BCD2Binary40
+L__BCD2Binary41:
 ;lcd.c,139 :: 		t = 0x0F & t;
 	MOVLW      15
 	ANDWF      R0+0, 1
@@ -683,7 +683,7 @@ L_end_loadDateEdit:
 _setCursorPosition:
 
 ;lcd.c,198 :: 		void setCursorPosition(unsigned short position){
-;lcd.c,200 :: 		if ((crntMenu > LDRVal)   && (crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+;lcd.c,200 :: 		if ((crntMenu > LDRVal)   && (crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
 	MOVF       _crntMenu+0, 0
 	SUBLW      5
 	BTFSC      STATUS+0, 0
@@ -706,13 +706,13 @@ _setCursorPosition:
 	MOVLW      0
 	XORWF      R0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__setCursorPosition46
+	GOTO       L__setCursorPosition47
 	MOVLW      0
 	XORWF      R0+0, 0
-L__setCursorPosition46:
+L__setCursorPosition47:
 	BTFSS      STATUS+0, 2
 	GOTO       L_setCursorPosition12
-L__setCursorPosition30:
+L__setCursorPosition31:
 ;lcd.c,201 :: 		Lcd_Cmd(_LCD_FIRST_ROW);
 	MOVLW      128
 	MOVWF      FARG_Lcd_Cmd_out_char+0
@@ -757,7 +757,7 @@ _loadEnabledDay:
 	MOVLW      2
 	MOVWF      loadEnabledDay_indx_L0+0
 	CLRF       loadEnabledDay_i_L0+0
-;lcd.c,217 :: 		lcdrow1[0]= ((crntMenu - OnOFFTimeDay)>> 1) + '0' + 1;
+;lcd.c,217 :: 		lcdrow1[0]= ((crntMenu - OnOFFTimeDay1)>> 1) + '0' + 1;
 	MOVLW      6
 	SUBWF      _crntMenu+0, 0
 	MOVWF      R3+0
@@ -852,13 +852,13 @@ _loadOnOffTime:
 	MOVF       _subMenu+0, 0
 	XORLW      3
 	BTFSC      STATUS+0, 2
-	GOTO       L__loadOnOffTime31
+	GOTO       L__loadOnOffTime32
 	MOVF       _subMenu+0, 0
 	XORLW      6
 	BTFSC      STATUS+0, 2
-	GOTO       L__loadOnOffTime31
+	GOTO       L__loadOnOffTime32
 	GOTO       L_loadOnOffTime24
-L__loadOnOffTime31:
+L__loadOnOffTime32:
 ;lcd.c,241 :: 		tmp = OnOFFTimeOnHr-2;
 	MOVLW      1
 	MOVWF      loadOnOffTime_tmp_L0+0
@@ -944,10 +944,10 @@ _loadEnHeighLow:
 	MOVF       FARG_loadEnHeighLow_heigh+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__loadEnHeighLow50
+	GOTO       L__loadEnHeighLow51
 	MOVF       FARG_loadEnHeighLow_heigh+0, 0
 	SUBLW      0
-L__loadEnHeighLow50:
+L__loadEnHeighLow51:
 	BTFSC      STATUS+0, 0
 	GOTO       L_loadEnHeighLow26
 ;lcd.c,265 :: 		lcdrow2[indx++] = 'O';
@@ -1257,3 +1257,40 @@ _loadRamToDisp:
 L_end_loadRamToDisp:
 	RETURN
 ; end of _loadRamToDisp
+
+_showWelome:
+
+;lcd.c,314 :: 		void showWelome()
+;lcd.c,316 :: 		Lcd_Out(2,1, codetxt_to_ramtxt("Welcome"));
+	MOVLW      ?lstr_6_lcd+0
+	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
+	MOVLW      hi_addr(?lstr_6_lcd+0)
+	MOVWF      FARG_codetxt_to_ramtxt_ctxt+1
+	CALL       _codetxt_to_ramtxt+0
+	MOVF       R0+0, 0
+	MOVWF      FARG_Lcd_Out_text+0
+	MOVLW      2
+	MOVWF      FARG_Lcd_Out_row+0
+	MOVLW      1
+	MOVWF      FARG_Lcd_Out_column+0
+	CALL       _Lcd_Out+0
+;lcd.c,317 :: 		Delay_ms(1000);
+	MOVLW      11
+	MOVWF      R11+0
+	MOVLW      38
+	MOVWF      R12+0
+	MOVLW      93
+	MOVWF      R13+0
+L_showWelome30:
+	DECFSZ     R13+0, 1
+	GOTO       L_showWelome30
+	DECFSZ     R12+0, 1
+	GOTO       L_showWelome30
+	DECFSZ     R11+0, 1
+	GOTO       L_showWelome30
+	NOP
+	NOP
+;lcd.c,318 :: 		}
+L_end_showWelome:
+	RETURN
+; end of _showWelome

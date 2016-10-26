@@ -1,5 +1,5 @@
-#line 1 "D:/SolarTimer/lcd.c"
-#line 1 "d:/solartimer/enums.h"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "e:/progams/hussian/solartimer/enums.h"
 
 
 enum menus {
@@ -10,8 +10,23 @@ enum menus {
  Current,
  LDRVal,
 
- OnOFFTimeDay,
- OnOFFTime
+ OnOFFTimeDay1,
+ OnOFFTime1,
+ OnOFFTimeDay2,
+ OnOFFTime2,
+ OnOFFTimeDay3,
+ OnOFFTime3,
+ OnOFFTimeDay4,
+ OnOFFTime4,
+ OnOFFTimeDay5,
+ OnOFFTime5,
+ OnOFFTimeDay6,
+ OnOFFTime6,
+ OnOFFTimeDay7,
+ OnOFFTime7,
+ OnOFFTimeDay8,
+ OnOFFTime8
+
 };
 
 
@@ -92,7 +107,7 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 2 "D:/SolarTimer/lcd.c"
+#line 2 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -114,8 +129,8 @@ extern unsigned int editValue;
 
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
-#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
-#line 74 "D:/SolarTimer/lcd.c"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
+#line 74 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern sbit isEnabled;
 extern sbit shouldON;
 
@@ -242,7 +257,7 @@ void loadDateEdit(){
 }
 void setCursorPosition(unsigned short position){
  unsigned short indx;
- if ((crntMenu > LDRVal) && (crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+ if ((crntMenu > LDRVal) && (crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
  Lcd_Cmd(_LCD_FIRST_ROW);
  }
  else{
@@ -259,7 +274,7 @@ void loadEnabledDay()
  unsigned short indx = 2;
  unsigned short i = 0;
 
- lcdrow1[0]= ((crntMenu - OnOFFTimeDay)>> 1) + '0' + 1;
+ lcdrow1[0]= ((crntMenu - OnOFFTimeDay1)>> 1) + '0' + 1;
  lcdrow1[1] = ')';
  for (i = 0 ; i < 8; i++)
  {
@@ -355,4 +370,9 @@ void displayVoltageCurrent(){
  void loadRamToDisp(){
  Lcd_Out(1, 1, lcdrow1);
  Lcd_Out(2, 1, lcdrow2);
+ }
+ void showWelome()
+ {
+ Lcd_Out(2,1, codetxt_to_ramtxt("Welcome"));
+ Delay_ms(1000);
  }

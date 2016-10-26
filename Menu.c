@@ -175,7 +175,7 @@ void menuPortPinInt(){
                         }
                    break;
                    default:
-                      if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+                      if ((crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
                           EEPROM_write(timeEEAddr,editValue);
                       }
                       else
@@ -230,7 +230,7 @@ void OnOFFTimeDayDisplay(){
                 editValue = EEPROM_Read(timeEEAddr);
                 loadEnabledDay();
                  tmp = 0;
-                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 )
+                 if ((crntMenu - OnOFFTimeDay1) % 2 == 1 )
                  {
                      subMenu = OnOFFTimeOnHr;
                      editValue = ee_read(timeEEAddr+1);
@@ -240,7 +240,7 @@ void OnOFFTimeDayDisplay(){
              }
              else
              {
-                 if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+                 if ((crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
 
                      if (cSELECT == ON)
                      {
@@ -410,7 +410,7 @@ do{
             saveValue();
         }
         crntMenu ++;
-        if(crntMenu > (OnOFFTime + 16))
+        if(crntMenu > OnOFFTime8)
         {
            waitCount = 500;
         }
@@ -798,70 +798,71 @@ do{
                 }
            }
            break;
-     case OnOFFTimeDay:
-           timeEEAddr=20;
+     case OnOFFTimeDay1:
+           timeEEAddr=EEPADDR_OnOFFTimeDay1;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+1:
-           timeEEAddr=20;
+     case OnOFFTime1:
+           timeEEAddr=EEPADDR_OnOFFTimeDay1;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+2:
-           timeEEAddr=25;
+     case OnOFFTimeDay2:
+           timeEEAddr=EEPADDR_OnOFFTimeDay2;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+3:
-           timeEEAddr=25;
+     case OnOFFTime2:
+           timeEEAddr=EEPADDR_OnOFFTimeDay2;
            OnOFFTimeDayDisplay();
            break;
-      case OnOFFTimeDay+4:
-           timeEEAddr=30;
+     case OnOFFTimeDay3:
+           timeEEAddr=EEPADDR_OnOFFTimeDay3;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+5:
-           timeEEAddr=30;
+     case OnOFFTime3:
+           timeEEAddr=EEPADDR_OnOFFTimeDay3;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+6:
-           timeEEAddr=35;
+     case OnOFFTimeDay4:
+           timeEEAddr=EEPADDR_OnOFFTimeDay4;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+7:
-           timeEEAddr=35;
+     case OnOFFTime4:
+           timeEEAddr=EEPADDR_OnOFFTimeDay4;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+8:
-           timeEEAddr=40;
+     case OnOFFTimeDay5:
+           timeEEAddr=EEPADDR_OnOFFTimeDay5;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+9:
-           timeEEAddr=40;
+     case OnOFFTime5:
+           timeEEAddr=EEPADDR_OnOFFTimeDay5;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+10:
-           timeEEAddr=45;
+     case OnOFFTimeDay6:
+           timeEEAddr=EEPADDR_OnOFFTimeDay6;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+11:
-           timeEEAddr=45;
+     case OnOFFTime6:
+           timeEEAddr=EEPADDR_OnOFFTimeDay6;
            OnOFFTimeDayDisplay();
            break;
-      case OnOFFTimeDay+12:
-           timeEEAddr=50;
+     case OnOFFTimeDay7:
+           timeEEAddr=EEPADDR_OnOFFTimeDay7;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+13:
-           timeEEAddr=50;
+     case OnOFFTime7:
+           timeEEAddr=EEPADDR_OnOFFTimeDay7;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+14:
-           timeEEAddr=55;
+     case OnOFFTimeDay8:
+           timeEEAddr=EEPADDR_OnOFFTimeDay8;
            OnOFFTimeDayDisplay();
            break;
-     case OnOFFTimeDay+15:
-           timeEEAddr=55;
+     case OnOFFTime8:
+           timeEEAddr=EEPADDR_OnOFFTimeDay8;
            OnOFFTimeDayDisplay();
            break;
+
      default:
             waitCount = 500;
             break;

@@ -54,7 +54,7 @@ void main()
       unsigned short index;
       unsigned short tmp;
       lastTimeCheckValue = 0;
-    osccon = 0x70;
+    osccon = 0x71;
     ansel  = 7;
     anselh  = 0;
     trisb = 0;
@@ -66,8 +66,7 @@ void main()
     menuPortPinInt();
 
     shouldLoadDisp = 1;
-    Lcd_Out(1,1,"Welcome");
-    delay_ms(1000);
+    showWelome();
     while(1)
     {
        readVoltage();

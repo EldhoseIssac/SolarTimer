@@ -324,7 +324,7 @@ L_saveValue31:
 	GOTO       L_saveValue5
 ;Menu.c,177 :: 		default:
 L_saveValue34:
-;Menu.c,178 :: 		if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+;Menu.c,178 :: 		if ((crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
 	MOVLW      6
 	SUBWF      _crntMenu+0, 0
 	MOVWF      R0+0
@@ -502,7 +502,7 @@ _OnOFFTimeDayDisplay:
 	CALL       _loadEnabledDay+0
 ;Menu.c,232 :: 		tmp = 0;
 	CLRF       _tmp+0
-;Menu.c,233 :: 		if ((crntMenu - OnOFFTimeDay) % 2 == 1 )
+;Menu.c,233 :: 		if ((crntMenu - OnOFFTimeDay1) % 2 == 1 )
 	MOVLW      6
 	SUBWF      _crntMenu+0, 0
 	MOVWF      R0+0
@@ -546,7 +546,7 @@ L_OnOFFTimeDayDisplay46:
 ;Menu.c,240 :: 		}
 	GOTO       L_OnOFFTimeDayDisplay47
 L_OnOFFTimeDayDisplay45:
-;Menu.c,243 :: 		if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+;Menu.c,243 :: 		if ((crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
 	MOVLW      6
 	SUBWF      _crntMenu+0, 0
 	MOVWF      R0+0
@@ -1011,9 +1011,9 @@ L_checkKey94:
 L_checkKey95:
 ;Menu.c,412 :: 		crntMenu ++;
 	INCF       _crntMenu+0, 1
-;Menu.c,413 :: 		if(crntMenu > (OnOFFTime + 16))
+;Menu.c,413 :: 		if(crntMenu > OnOFFTime8)
 	MOVF       _crntMenu+0, 0
-	SUBLW      23
+	SUBLW      21
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey96
 ;Menu.c,415 :: 		waitCount = 500;
@@ -2556,160 +2556,160 @@ L_checkKey223:
 L_checkKey221:
 ;Menu.c,800 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,801 :: 		case OnOFFTimeDay:
+;Menu.c,801 :: 		case OnOFFTimeDay1:
 L_checkKey247:
-;Menu.c,802 :: 		timeEEAddr=20;
+;Menu.c,802 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay1;
 	MOVLW      20
 	MOVWF      _timeEEAddr+0
 ;Menu.c,803 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,804 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,805 :: 		case OnOFFTimeDay+1:
+;Menu.c,805 :: 		case OnOFFTime1:
 L_checkKey248:
-;Menu.c,806 :: 		timeEEAddr=20;
+;Menu.c,806 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay1;
 	MOVLW      20
 	MOVWF      _timeEEAddr+0
 ;Menu.c,807 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,808 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,809 :: 		case OnOFFTimeDay+2:
+;Menu.c,809 :: 		case OnOFFTimeDay2:
 L_checkKey249:
-;Menu.c,810 :: 		timeEEAddr=25;
+;Menu.c,810 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay2;
 	MOVLW      25
 	MOVWF      _timeEEAddr+0
 ;Menu.c,811 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,812 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,813 :: 		case OnOFFTimeDay+3:
+;Menu.c,813 :: 		case OnOFFTime2:
 L_checkKey250:
-;Menu.c,814 :: 		timeEEAddr=25;
+;Menu.c,814 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay2;
 	MOVLW      25
 	MOVWF      _timeEEAddr+0
 ;Menu.c,815 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,816 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,817 :: 		case OnOFFTimeDay+4:
+;Menu.c,817 :: 		case OnOFFTimeDay3:
 L_checkKey251:
-;Menu.c,818 :: 		timeEEAddr=30;
+;Menu.c,818 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay3;
 	MOVLW      30
 	MOVWF      _timeEEAddr+0
 ;Menu.c,819 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,820 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,821 :: 		case OnOFFTimeDay+5:
+;Menu.c,821 :: 		case OnOFFTime3:
 L_checkKey252:
-;Menu.c,822 :: 		timeEEAddr=30;
+;Menu.c,822 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay3;
 	MOVLW      30
 	MOVWF      _timeEEAddr+0
 ;Menu.c,823 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,824 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,825 :: 		case OnOFFTimeDay+6:
+;Menu.c,825 :: 		case OnOFFTimeDay4:
 L_checkKey253:
-;Menu.c,826 :: 		timeEEAddr=35;
+;Menu.c,826 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay4;
 	MOVLW      35
 	MOVWF      _timeEEAddr+0
 ;Menu.c,827 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,828 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,829 :: 		case OnOFFTimeDay+7:
+;Menu.c,829 :: 		case OnOFFTime4:
 L_checkKey254:
-;Menu.c,830 :: 		timeEEAddr=35;
+;Menu.c,830 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay4;
 	MOVLW      35
 	MOVWF      _timeEEAddr+0
 ;Menu.c,831 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,832 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,833 :: 		case OnOFFTimeDay+8:
+;Menu.c,833 :: 		case OnOFFTimeDay5:
 L_checkKey255:
-;Menu.c,834 :: 		timeEEAddr=40;
+;Menu.c,834 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay5;
 	MOVLW      40
 	MOVWF      _timeEEAddr+0
 ;Menu.c,835 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,836 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,837 :: 		case OnOFFTimeDay+9:
+;Menu.c,837 :: 		case OnOFFTime5:
 L_checkKey256:
-;Menu.c,838 :: 		timeEEAddr=40;
+;Menu.c,838 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay5;
 	MOVLW      40
 	MOVWF      _timeEEAddr+0
 ;Menu.c,839 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,840 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,841 :: 		case OnOFFTimeDay+10:
+;Menu.c,841 :: 		case OnOFFTimeDay6:
 L_checkKey257:
-;Menu.c,842 :: 		timeEEAddr=45;
+;Menu.c,842 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay6;
 	MOVLW      45
 	MOVWF      _timeEEAddr+0
 ;Menu.c,843 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,844 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,845 :: 		case OnOFFTimeDay+11:
+;Menu.c,845 :: 		case OnOFFTime6:
 L_checkKey258:
-;Menu.c,846 :: 		timeEEAddr=45;
+;Menu.c,846 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay6;
 	MOVLW      45
 	MOVWF      _timeEEAddr+0
 ;Menu.c,847 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,848 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,849 :: 		case OnOFFTimeDay+12:
+;Menu.c,849 :: 		case OnOFFTimeDay7:
 L_checkKey259:
-;Menu.c,850 :: 		timeEEAddr=50;
+;Menu.c,850 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay7;
 	MOVLW      50
 	MOVWF      _timeEEAddr+0
 ;Menu.c,851 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,852 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,853 :: 		case OnOFFTimeDay+13:
+;Menu.c,853 :: 		case OnOFFTime7:
 L_checkKey260:
-;Menu.c,854 :: 		timeEEAddr=50;
+;Menu.c,854 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay7;
 	MOVLW      50
 	MOVWF      _timeEEAddr+0
 ;Menu.c,855 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,856 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,857 :: 		case OnOFFTimeDay+14:
+;Menu.c,857 :: 		case OnOFFTimeDay8:
 L_checkKey261:
-;Menu.c,858 :: 		timeEEAddr=55;
+;Menu.c,858 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay8;
 	MOVLW      55
 	MOVWF      _timeEEAddr+0
 ;Menu.c,859 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,860 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,861 :: 		case OnOFFTimeDay+15:
+;Menu.c,861 :: 		case OnOFFTime8:
 L_checkKey262:
-;Menu.c,862 :: 		timeEEAddr=55;
+;Menu.c,862 :: 		timeEEAddr=EEPADDR_OnOFFTimeDay8;
 	MOVLW      55
 	MOVWF      _timeEEAddr+0
 ;Menu.c,863 :: 		OnOFFTimeDayDisplay();
 	CALL       _OnOFFTimeDayDisplay+0
 ;Menu.c,864 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,865 :: 		default:
+;Menu.c,866 :: 		default:
 L_checkKey263:
-;Menu.c,866 :: 		waitCount = 500;
+;Menu.c,867 :: 		waitCount = 500;
 	MOVLW      244
 	MOVWF      _waitCount+0
 	MOVLW      1
 	MOVWF      _waitCount+1
-;Menu.c,867 :: 		break;
+;Menu.c,868 :: 		break;
 	GOTO       L_checkKey99
-;Menu.c,868 :: 		}
+;Menu.c,869 :: 		}
 L_checkKey98:
 	MOVF       _crntMenu+0, 0
 	XORLW      0
@@ -2801,29 +2801,29 @@ L_checkKey98:
 	GOTO       L_checkKey262
 	GOTO       L_checkKey263
 L_checkKey99:
-;Menu.c,869 :: 		if(cashedPortD > 0){
+;Menu.c,870 :: 		if(cashedPortD > 0){
 	MOVF       _cashedPortD+0, 0
 	SUBLW      0
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey264
-;Menu.c,870 :: 		setCursorPosition(subMenu);
+;Menu.c,871 :: 		setCursorPosition(subMenu);
 	MOVF       _subMenu+0, 0
 	MOVWF      FARG_setCursorPosition_position+0
 	CALL       _setCursorPosition+0
-;Menu.c,871 :: 		}
+;Menu.c,872 :: 		}
 L_checkKey264:
-;Menu.c,872 :: 		if (cPLUS == ON || cMINUS == ON)
+;Menu.c,873 :: 		if (cPLUS == ON || cMINUS == ON)
 	BTFSS      _cashedPortD+0, 5
 	GOTO       L__checkKey274
 	BTFSS      _cashedPortD+0, 4
 	GOTO       L__checkKey274
 	GOTO       L_checkKey267
 L__checkKey274:
-;Menu.c,874 :: 		isEdited = 1;
+;Menu.c,875 :: 		isEdited = 1;
 	BSF        _isEdited+0, BitPos(_isEdited+0)
-;Menu.c,875 :: 		}
+;Menu.c,876 :: 		}
 L_checkKey267:
-;Menu.c,877 :: 		delay_ms(100);
+;Menu.c,878 :: 		delay_ms(100);
 	MOVLW      2
 	MOVWF      R11+0
 	MOVLW      4
@@ -2838,11 +2838,11 @@ L_checkKey268:
 	DECFSZ     R11+0, 1
 	GOTO       L_checkKey268
 	NOP
-;Menu.c,878 :: 		waitCount++;
+;Menu.c,879 :: 		waitCount++;
 	INCF       _waitCount+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _waitCount+1, 1
-;Menu.c,879 :: 		if(waitCount>200){
+;Menu.c,880 :: 		if(waitCount>200){
 	MOVF       _waitCount+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -2852,26 +2852,26 @@ L_checkKey268:
 L__checkKey332:
 	BTFSC      STATUS+0, 0
 	GOTO       L_checkKey269
-;Menu.c,880 :: 		crntMenu = None;
+;Menu.c,881 :: 		crntMenu = None;
 	CLRF       _crntMenu+0
-;Menu.c,881 :: 		subMenu = NoEdit;
+;Menu.c,882 :: 		subMenu = NoEdit;
 	CLRF       _subMenu+0
-;Menu.c,882 :: 		initLCDRaws();
+;Menu.c,883 :: 		initLCDRaws();
 	CALL       _initLCDRaws+0
-;Menu.c,883 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);
+;Menu.c,884 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);
 	MOVLW      12
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;Menu.c,884 :: 		}
+;Menu.c,885 :: 		}
 L_checkKey269:
-;Menu.c,887 :: 		}while(crntMenu != None);
+;Menu.c,888 :: 		}while(crntMenu != None);
 	MOVF       _crntMenu+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L_checkKey88
-;Menu.c,888 :: 		saveValue();
+;Menu.c,889 :: 		saveValue();
 	CALL       _saveValue+0
-;Menu.c,890 :: 		}
+;Menu.c,891 :: 		}
 L_end_checkKey:
 	RETURN
 ; end of _checkKey

@@ -18,16 +18,19 @@ main
 		I2C1_Init
 	initTmr1
 	menuPortPinInt
-	Lcd_Out
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
-		Lcd_Chr_CP
+	showWelome
+		codetxt_to_ramtxt
+			____DoICP
+		Lcd_Out
 			Lcd_Cmd
 				Delay_1us
 				Delay_5500us
 				Delay_50us
+			Lcd_Chr_CP
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
 	readVoltage
 		ADC_Read
 			Delay_22us

@@ -22,10 +22,10 @@ _interrupt:
 	MOVF       _dispUpdateCount+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__interrupt18
+	GOTO       L__interrupt17
 	MOVF       _dispUpdateCount+0, 0
 	SUBLW      2
-L__interrupt18:
+L__interrupt17:
 	BTFSC      STATUS+0, 0
 	GOTO       L_interrupt1
 ;SolarTimer.c,39 :: 		shouldLoadDisp = 1;
@@ -39,7 +39,7 @@ L_interrupt1:
 L_interrupt0:
 ;SolarTimer.c,43 :: 		}
 L_end_interrupt:
-L__interrupt17:
+L__interrupt16:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -55,8 +55,8 @@ _main:
 ;SolarTimer.c,56 :: 		lastTimeCheckValue = 0;
 	CLRF       _lastTimeCheckValue+0
 	CLRF       _lastTimeCheckValue+1
-;SolarTimer.c,57 :: 		osccon = 0x70;
-	MOVLW      112
+;SolarTimer.c,57 :: 		osccon = 0x71;
+	MOVLW      113
 	MOVWF      OSCCON+0
 ;SolarTimer.c,58 :: 		ansel  = 7;
 	MOVLW      7
@@ -79,67 +79,45 @@ _main:
 	CALL       _menuPortPinInt+0
 ;SolarTimer.c,68 :: 		shouldLoadDisp = 1;
 	BSF        _pgmStatus+0, 0
-;SolarTimer.c,69 :: 		Lcd_Out(1,1,"Welcome");
-	MOVLW      1
-	MOVWF      FARG_Lcd_Out_row+0
-	MOVLW      1
-	MOVWF      FARG_Lcd_Out_column+0
-	MOVLW      ?lstr1_SolarTimer+0
-	MOVWF      FARG_Lcd_Out_text+0
-	CALL       _Lcd_Out+0
-;SolarTimer.c,70 :: 		delay_ms(1000);
-	MOVLW      11
-	MOVWF      R11+0
-	MOVLW      38
-	MOVWF      R12+0
-	MOVLW      93
-	MOVWF      R13+0
+;SolarTimer.c,69 :: 		showWelome();
+	CALL       _showWelome+0
+;SolarTimer.c,70 :: 		while(1)
 L_main2:
-	DECFSZ     R13+0, 1
-	GOTO       L_main2
-	DECFSZ     R12+0, 1
-	GOTO       L_main2
-	DECFSZ     R11+0, 1
-	GOTO       L_main2
-	NOP
-	NOP
-;SolarTimer.c,71 :: 		while(1)
-L_main3:
-;SolarTimer.c,73 :: 		readVoltage();
+;SolarTimer.c,72 :: 		readVoltage();
 	CALL       _readVoltage+0
-;SolarTimer.c,74 :: 		readCurrent();
+;SolarTimer.c,73 :: 		readCurrent();
 	CALL       _readCurrent+0
-;SolarTimer.c,75 :: 		checkKey();
+;SolarTimer.c,74 :: 		checkKey();
 	CALL       _checkKey+0
-;SolarTimer.c,77 :: 		if(shouldLoadDisp)
+;SolarTimer.c,76 :: 		if(shouldLoadDisp)
 	BTFSS      _pgmStatus+0, 0
-	GOTO       L_main5
-;SolarTimer.c,79 :: 		displayVoltageCurrent();
+	GOTO       L_main4
+;SolarTimer.c,78 :: 		displayVoltageCurrent();
 	CALL       _displayVoltageCurrent+0
-;SolarTimer.c,80 :: 		loadTimeAndDate();
+;SolarTimer.c,79 :: 		loadTimeAndDate();
 	CALL       _loadTimeAndDate+0
-;SolarTimer.c,81 :: 		displayTimeDate();
+;SolarTimer.c,80 :: 		displayTimeDate();
 	CALL       _displayTimeDate+0
-;SolarTimer.c,82 :: 		loadRamToDisp();
+;SolarTimer.c,81 :: 		loadRamToDisp();
 	CALL       _loadRamToDisp+0
-;SolarTimer.c,83 :: 		shouldLoadDisp = 0;
+;SolarTimer.c,82 :: 		shouldLoadDisp = 0;
 	BCF        _pgmStatus+0, 0
-;SolarTimer.c,84 :: 		for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
+;SolarTimer.c,83 :: 		for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
 	MOVLW      20
 	MOVWF      main_index_L0+0
-L_main6:
+L_main5:
 	MOVLW      60
 	SUBWF      main_index_L0+0, 0
 	BTFSC      STATUS+0, 0
-	GOTO       L_main7
-;SolarTimer.c,86 :: 		editValue = EEPROM_Read(index);
+	GOTO       L_main6
+;SolarTimer.c,85 :: 		editValue = EEPROM_Read(index);
 	MOVF       main_index_L0+0, 0
 	MOVWF      FARG_EEPROM_Read_Address+0
 	CALL       _EEPROM_Read+0
 	MOVF       R0+0, 0
 	MOVWF      _editValue+0
 	CLRF       _editValue+1
-;SolarTimer.c,87 :: 		tmp = editValue & (1 << (dday-1));
+;SolarTimer.c,86 :: 		tmp = editValue & (1 << (dday-1));
 	DECF       _dday+0, 0
 	MOVWF      R0+0
 	MOVF       R0+0, 0
@@ -147,20 +125,20 @@ L_main6:
 	MOVLW      1
 	MOVWF      R0+0
 	MOVF       R1+0, 0
-L__main20:
+L__main19:
 	BTFSC      STATUS+0, 2
-	GOTO       L__main21
+	GOTO       L__main20
 	RLF        R0+0, 1
 	BCF        R0+0, 0
 	ADDLW      255
-	GOTO       L__main20
-L__main21:
+	GOTO       L__main19
+L__main20:
 	MOVF       _editValue+0, 0
 	ANDWF      R0+0, 1
-;SolarTimer.c,88 :: 		if(tmp)
+;SolarTimer.c,87 :: 		if(tmp)
 	BTFSC      STATUS+0, 2
-	GOTO       L_main9
-;SolarTimer.c,90 :: 		editValue = ee_read(index+1);
+	GOTO       L_main8
+;SolarTimer.c,89 :: 		editValue = ee_read(index+1);
 	INCF       main_index_L0+0, 0
 	MOVWF      FARG_ee_read_addr+0
 	CALL       _ee_read+0
@@ -168,34 +146,34 @@ L__main21:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;SolarTimer.c,91 :: 		if(editValue != lastTimeCheckValue)
+;SolarTimer.c,90 :: 		if(editValue != lastTimeCheckValue)
 	MOVF       R0+1, 0
 	XORWF      _lastTimeCheckValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main22
+	GOTO       L__main21
 	MOVF       _lastTimeCheckValue+0, 0
 	XORWF      R0+0, 0
-L__main22:
+L__main21:
 	BTFSC      STATUS+0, 2
-	GOTO       L_main10
-;SolarTimer.c,93 :: 		if(Hi(editValue) == hour)
+	GOTO       L_main9
+;SolarTimer.c,92 :: 		if(Hi(editValue) == hour)
 	MOVF       _editValue+1, 0
 	XORWF      _hour+0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L_main11
-;SolarTimer.c,95 :: 		if(Lo(editValue) == minute)
+	GOTO       L_main10
+;SolarTimer.c,94 :: 		if(Lo(editValue) == minute)
 	MOVF       _editValue+0, 0
 	XORWF      _minute+0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L_main12
-;SolarTimer.c,98 :: 		}
-L_main12:
-;SolarTimer.c,99 :: 		}
+	GOTO       L_main11
+;SolarTimer.c,97 :: 		}
 L_main11:
-;SolarTimer.c,100 :: 		}else
-	GOTO       L_main13
+;SolarTimer.c,98 :: 		}
 L_main10:
-;SolarTimer.c,102 :: 		editValue = ee_read(index+3);
+;SolarTimer.c,99 :: 		}else
+	GOTO       L_main12
+L_main9:
+;SolarTimer.c,101 :: 		editValue = ee_read(index+3);
 	MOVLW      3
 	ADDWF      main_index_L0+0, 0
 	MOVWF      FARG_ee_read_addr+0
@@ -204,40 +182,40 @@ L_main10:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;SolarTimer.c,103 :: 		if(editValue != lastTimeCheckValue)
+;SolarTimer.c,102 :: 		if(editValue != lastTimeCheckValue)
 	MOVF       R0+1, 0
 	XORWF      _lastTimeCheckValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main23
+	GOTO       L__main22
 	MOVF       _lastTimeCheckValue+0, 0
 	XORWF      R0+0, 0
-L__main23:
+L__main22:
 	BTFSC      STATUS+0, 2
-	GOTO       L_main14
-;SolarTimer.c,105 :: 		if(Hi(editValue) == hour)
+	GOTO       L_main13
+;SolarTimer.c,104 :: 		if(Hi(editValue) == hour)
 	MOVF       _editValue+1, 0
 	XORWF      _hour+0, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L_main15
-;SolarTimer.c,108 :: 		}
-L_main15:
-;SolarTimer.c,109 :: 		}
+	GOTO       L_main14
+;SolarTimer.c,107 :: 		}
 L_main14:
-;SolarTimer.c,111 :: 		}
+;SolarTimer.c,108 :: 		}
 L_main13:
-;SolarTimer.c,114 :: 		}
-L_main9:
-;SolarTimer.c,84 :: 		for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
+;SolarTimer.c,110 :: 		}
+L_main12:
+;SolarTimer.c,113 :: 		}
+L_main8:
+;SolarTimer.c,83 :: 		for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
 	MOVLW      5
 	ADDWF      main_index_L0+0, 1
+;SolarTimer.c,114 :: 		}
+	GOTO       L_main5
+L_main6:
 ;SolarTimer.c,115 :: 		}
-	GOTO       L_main6
-L_main7:
-;SolarTimer.c,116 :: 		}
-L_main5:
+L_main4:
+;SolarTimer.c,117 :: 		}
+	GOTO       L_main2
 ;SolarTimer.c,118 :: 		}
-	GOTO       L_main3
-;SolarTimer.c,119 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

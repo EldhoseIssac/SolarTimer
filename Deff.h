@@ -68,6 +68,7 @@ void initLCD();
 void displayTimeDate();
 void displayVoltageCurrent();
 void loadRamToDisp();
+ void showWelome();
 
 // ADC
 void adcInit();

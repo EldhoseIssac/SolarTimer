@@ -1,5 +1,5 @@
-#line 1 "D:/SolarTimer/tmr1.c"
-#line 4 "D:/SolarTimer/tmr1.c"
+#line 1 "E:/PROGAMS/hussian/SolarTimer/tmr1.c"
+#line 4 "E:/PROGAMS/hussian/SolarTimer/tmr1.c"
 void initTmr1(){
 
  T1CON=0x30;

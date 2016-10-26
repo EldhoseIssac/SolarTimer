@@ -197,7 +197,7 @@ void loadDateEdit(){
 }
 void setCursorPosition(unsigned short position){
     unsigned short indx;
-    if ((crntMenu > LDRVal)   && (crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+    if ((crntMenu > LDRVal)   && (crntMenu - OnOFFTimeDay1) % 2 == 0 ) {
         Lcd_Cmd(_LCD_FIRST_ROW);
     }
     else{
@@ -214,7 +214,7 @@ void loadEnabledDay()
     unsigned short indx = 2;
     unsigned short i = 0;
     
-    lcdrow1[0]= ((crntMenu - OnOFFTimeDay)>> 1) + '0' + 1;
+    lcdrow1[0]= ((crntMenu - OnOFFTimeDay1)>> 1) + '0' + 1;
     lcdrow1[1] = ')';
     for (i = 0 ; i < 8; i++)
     {
@@ -310,4 +310,9 @@ void displayVoltageCurrent(){
  void loadRamToDisp(){
       Lcd_Out(1, 1, lcdrow1);
       Lcd_Out(2, 1, lcdrow2);
+ }
+ void showWelome()
+ {
+   Lcd_Out(2,1, codetxt_to_ramtxt("Welcome"));
+   Delay_ms(1000);
  }
