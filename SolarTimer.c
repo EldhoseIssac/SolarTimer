@@ -93,7 +93,8 @@ void main()
                      {
                          if(Lo(editValue) == minute)
                          {
-                             
+                             lastTimeCheckValue = editValue;
+                              MOTOR = 1;
                          }
                      }
                  }else
@@ -103,7 +104,8 @@ void main()
                      {
                          if(Hi(editValue) == hour)
                          {
-                             
+                              lastTimeCheckValue = editValue;
+                              MOTOR = 0;
                          }
                      }
 

@@ -255,7 +255,8 @@ void main()
  {
  if( ((char *)&editValue)[0]  == minute)
  {
-
+ lastTimeCheckValue = editValue;
+  PORTC.F0  = 1;
  }
  }
  }else
@@ -265,7 +266,8 @@ void main()
  {
  if( ((char *)&editValue)[1]  == hour)
  {
-
+ lastTimeCheckValue = editValue;
+  PORTC.F0  = 0;
  }
  }
 

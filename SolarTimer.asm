@@ -166,14 +166,21 @@ L__main21:
 	XORWF      _minute+0, 0
 	BTFSS      STATUS+0, 2
 	GOTO       L_main11
-;SolarTimer.c,97 :: 		}
-L_main11:
+;SolarTimer.c,96 :: 		lastTimeCheckValue = editValue;
+	MOVF       _editValue+0, 0
+	MOVWF      _lastTimeCheckValue+0
+	MOVF       _editValue+1, 0
+	MOVWF      _lastTimeCheckValue+1
+;SolarTimer.c,97 :: 		MOTOR = 1;
+	BSF        PORTC+0, 0
 ;SolarTimer.c,98 :: 		}
+L_main11:
+;SolarTimer.c,99 :: 		}
 L_main10:
-;SolarTimer.c,99 :: 		}else
+;SolarTimer.c,100 :: 		}else
 	GOTO       L_main12
 L_main9:
-;SolarTimer.c,101 :: 		editValue = ee_read(index+3);
+;SolarTimer.c,102 :: 		editValue = ee_read(index+3);
 	MOVLW      3
 	ADDWF      main_index_L0+0, 0
 	MOVWF      FARG_ee_read_addr+0
@@ -182,7 +189,7 @@ L_main9:
 	MOVWF      _editValue+0
 	MOVF       R0+1, 0
 	MOVWF      _editValue+1
-;SolarTimer.c,102 :: 		if(editValue != lastTimeCheckValue)
+;SolarTimer.c,103 :: 		if(editValue != lastTimeCheckValue)
 	MOVF       R0+1, 0
 	XORWF      _lastTimeCheckValue+1, 0
 	BTFSS      STATUS+0, 2
@@ -192,30 +199,37 @@ L_main9:
 L__main22:
 	BTFSC      STATUS+0, 2
 	GOTO       L_main13
-;SolarTimer.c,104 :: 		if(Hi(editValue) == hour)
+;SolarTimer.c,105 :: 		if(Hi(editValue) == hour)
 	MOVF       _editValue+1, 0
 	XORWF      _hour+0, 0
 	BTFSS      STATUS+0, 2
 	GOTO       L_main14
-;SolarTimer.c,107 :: 		}
+;SolarTimer.c,107 :: 		lastTimeCheckValue = editValue;
+	MOVF       _editValue+0, 0
+	MOVWF      _lastTimeCheckValue+0
+	MOVF       _editValue+1, 0
+	MOVWF      _lastTimeCheckValue+1
+;SolarTimer.c,108 :: 		MOTOR = 0;
+	BCF        PORTC+0, 0
+;SolarTimer.c,109 :: 		}
 L_main14:
-;SolarTimer.c,108 :: 		}
-L_main13:
 ;SolarTimer.c,110 :: 		}
+L_main13:
+;SolarTimer.c,112 :: 		}
 L_main12:
-;SolarTimer.c,113 :: 		}
+;SolarTimer.c,115 :: 		}
 L_main8:
 ;SolarTimer.c,83 :: 		for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
 	MOVLW      5
 	ADDWF      main_index_L0+0, 1
-;SolarTimer.c,114 :: 		}
+;SolarTimer.c,116 :: 		}
 	GOTO       L_main5
 L_main6:
-;SolarTimer.c,115 :: 		}
-L_main4:
 ;SolarTimer.c,117 :: 		}
+L_main4:
+;SolarTimer.c,119 :: 		}
 	GOTO       L_main2
-;SolarTimer.c,118 :: 		}
+;SolarTimer.c,120 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main
