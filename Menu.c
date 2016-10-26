@@ -104,10 +104,11 @@ void menuPortPinInt(){
 #endif
     
 }
-unsigned short timeEEAddr;
+ unsigned short timeEEAddr;
  unsigned waitCount ;
  unsigned char BCD2UpperCh(unsigned char bcd);
  unsigned char BCD2LowerCh(unsigned char bcd);
+
  void loadDay(char *arr,unsigned short theIndx);
  void saveValue(){
       if (!isEdited){
@@ -193,6 +194,7 @@ unsigned short timeEEAddr;
       delay_ms(100);
  }
 unsigned short cashedPortD = 0;
+unsigned short tmp=0;
 #if DEBUG
 short cMENU;
 short cSELECT;
@@ -209,12 +211,182 @@ void loadEnabledDay();
 
 #endif
 
+void OnOFFTimeDayDisplay(){
+     if (cMENU == ON)
+             {
 
+                /*if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
+                {
+                   timeEEAddr += 5;
+                }*/
+
+                subMenu = OnOFFTimeOnHr;
+                editValue = ee_read(timeEEAddr+1);
+                loadOnOffTime();
+                subMenu = OnOFFTimeOffHr;
+                editValue = ee_read(timeEEAddr+3);
+                loadOnOffTime();
+                subMenu = OnOFFTimeDaySun;
+                editValue = EEPROM_Read(timeEEAddr);
+                loadEnabledDay();
+                 tmp = 0;
+                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 )
+                 {
+                     subMenu = OnOFFTimeOnHr;
+                     editValue = ee_read(timeEEAddr+1);
+                     tmp = Hi(editValue);
+                 }
+
+             }
+             else
+             {
+                 if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
+
+                     if (cSELECT == ON)
+                     {
+                         subMenu +=2;
+                         tmp++;
+                         if (subMenu>OnOFFTimeDaySat) {
+                             subMenu = OnOFFTimeDaySun;
+                             tmp = 0;
+                         }
+                     }
+                     if (cPLUS == ON || cMINUS == ON)
+                     {
+                         editValue = editValue ^ (1<<tmp);
+                         loadEnabledDay();
+                     }
+
+                 }
+                 else
+                 {
+                     if(cPLUS == ON)
+                     {
+                         tmp++;
+                         if((tmp & 0x0F )>9) tmp += 6;
+                     }
+                     if (cMINUS == ON)
+                     {
+                         tmp--;
+                         if((tmp & 0x0F )>9) tmp -= 6;
+                     }
+                     switch (subMenu) {
+
+                         case OnOFFTimeOnHr:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOnMin;
+                                 tmp = Hi(editValue);
+                             }
+
+                             if (cPLUS == ON )
+                             {
+                                 if (tmp > 0x23) {
+                                     tmp = 0;
+                                 }
+                                 Lo(editValue) = tmp;
+
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp) {
+                                     tmp = 0x23;
+                                 }
+                                 Lo(editValue) = tmp;
+                             }
+                             break;
+                         case OnOFFTimeOnMin:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOffHr;
+                                 editValue = ee_read(timeEEAddr+3);
+                                 tmp = Lo(editValue);
+                             }
+                             if (cPLUS == ON )
+                             {
+
+                                 if (tmp > 0x59)
+                                 {
+                                     tmp = 0;
+                                 }
+                                 Hi(editValue) = tmp;
+
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp)
+                                 {
+                                     tmp = 0x59;
+                                 }
+                                 Hi(editValue) = tmp;
+                             }
+                             break;
+                         case OnOFFTimeOffHr:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOffMin;
+                                 tmp = Hi(editValue);
+                             }
+                             if (cPLUS == ON )
+                             {
+                                 if (tmp > 0x23) {
+                                     tmp = 0;
+                                 }
+                                 Lo(editValue) = tmp;
+
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp) {
+                                     tmp = 0x23;
+                                 }
+                                 Lo(editValue) = tmp;
+                             }
+                             break;
+                         case OnOFFTimeOffMin:
+                             if(cSELECT == ON )
+                             {
+                                 subMenu = OnOFFTimeOnHr;
+                                 editValue = ee_read(timeEEAddr+1);
+                                 tmp =  Lo(editValue);
+
+                             }
+                             if (cPLUS == ON )
+                             {
+
+                                 if (tmp > 0x59)
+                                 {
+                                     tmp = 0;
+                                 }
+                                 Hi(editValue) = tmp;
+
+                             }
+                             if (cMINUS == ON)
+                             {
+                                 if (!tmp)
+                                 {
+                                     tmp = 0x59;
+                                 }
+                                 Hi(editValue) = tmp;
+                             }
+
+                             break;
+                     }
+                     if(cPLUS == ON || cMINUS == ON)
+                     {
+                         loadOnOffTime();
+                     }
+                 }
+
+
+             }
+
+}
 
 void checkKey(){
 
-    unsigned short tmp=0;
-    timeEEAddr = EEPADDR_OnOFFTimeDay1-5;
+
+    timeEEAddr =30 ;              //EEPADDR_OnOFFTimeDay1-5
 do{
     cMENU = MENU;
     cSELECT = SELECT;
@@ -626,186 +798,73 @@ do{
                 }
            }
            break;
+     case OnOFFTimeDay:
+           timeEEAddr=20;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+1:
+           timeEEAddr=20;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+2:
+           timeEEAddr=25;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+3:
+           timeEEAddr=25;
+           OnOFFTimeDayDisplay();
+           break;
+      case OnOFFTimeDay+4:
+           timeEEAddr=30;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+5:
+           timeEEAddr=30;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+6:
+           timeEEAddr=35;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+7:
+           timeEEAddr=35;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+8:
+           timeEEAddr=40;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+9:
+           timeEEAddr=40;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+10:
+           timeEEAddr=45;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+11:
+           timeEEAddr=45;
+           OnOFFTimeDayDisplay();
+           break;
+      case OnOFFTimeDay+12:
+           timeEEAddr=50;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+13:
+           timeEEAddr=50;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+14:
+           timeEEAddr=55;
+           OnOFFTimeDayDisplay();
+           break;
+     case OnOFFTimeDay+15:
+           timeEEAddr=55;
+           OnOFFTimeDayDisplay();
+           break;
      default:
-          if(crntMenu<(OnOFFTimeDay + 16))
-          {
-             if (cMENU == ON)
-             {
-                
-                if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
-                {
-                   timeEEAddr += 5;
-                }
-                subMenu = OnOFFTimeOnHr;
-                editValue = ee_read(timeEEAddr+1);
-                loadOnOffTime();
-                subMenu = OnOFFTimeOffHr;
-                editValue = ee_read(timeEEAddr+3);
-                loadOnOffTime();
-                subMenu = OnOFFTimeDaySun;
-                editValue = EEPROM_Read(timeEEAddr);
-                loadEnabledDay();
-                 tmp = 0;
-                 if ((crntMenu - OnOFFTimeDay) % 2 == 1 ) 
-                 {
-                     subMenu = OnOFFTimeOnHr;
-                     editValue = ee_read(timeEEAddr+1);
-                     tmp = Hi(editValue);
-                 }
-                 
-             }
-             else
-             {
-                 if ((crntMenu - OnOFFTimeDay) % 2 == 0 ) {
-                    
-                     if (cSELECT == ON)
-                     {
-                         subMenu +=2;
-                         tmp++;
-                         if (subMenu>OnOFFTimeDaySat) {
-                             subMenu = OnOFFTimeDaySun;
-                             tmp = 0;
-                         }
-                     }
-                     if (cPLUS == ON || cMINUS == ON)
-                     {
-                         editValue = editValue ^ (1<<tmp);
-                         loadEnabledDay();
-                     }
-
-                 }
-                 else
-                 {
-                     if(cPLUS == ON)
-                     {
-                         tmp++;
-                         if((tmp & 0x0F )>9) tmp += 6;
-                     }
-                     if (cMINUS == ON)
-                     {
-                         tmp--;
-                         if((tmp & 0x0F )>9) tmp -= 6;
-                     }
-                     switch (subMenu) {
-                             
-                         case OnOFFTimeOnHr:
-                             if(cSELECT == ON )
-                             {
-                                 subMenu = OnOFFTimeOnMin;
-                                 tmp = Hi(editValue);
-                             }
-
-                             if (cPLUS == ON )
-                             {
-                                 if (tmp > 0x23) {
-                                     tmp = 0;
-                                 }
-                                 Lo(editValue) = tmp;
-                                 
-                             }
-                             if (cMINUS == ON)
-                             {
-                                 if (!tmp) {
-                                     tmp = 0x23;
-                                 }
-                                 Lo(editValue) = tmp;
-                             }
-                             break;
-                         case OnOFFTimeOnMin:
-                             if(cSELECT == ON )
-                             {
-                                 subMenu = OnOFFTimeOffHr;
-                                 editValue = ee_read(timeEEAddr+3);
-                                 tmp = Lo(editValue);
-                             }
-                             if (cPLUS == ON )
-                             {
-                                 
-                                 if (tmp > 0x59)
-                                 {
-                                     tmp = 0;
-                                 }
-                                 Hi(editValue) = tmp;
-                                 
-                             }
-                             if (cMINUS == ON)
-                             {
-                                 if (!tmp)
-                                 {
-                                     tmp = 0x59;
-                                 }
-                                 Hi(editValue) = tmp;
-                             }
-                             break;
-                         case OnOFFTimeOffHr:
-                             if(cSELECT == ON )
-                             {
-                                 subMenu = OnOFFTimeOffMin;
-                                 tmp = Hi(editValue);
-                             }
-                             if (cPLUS == ON )
-                             {
-                                 if (tmp > 0x23) {
-                                     tmp = 0;
-                                 }
-                                 Lo(editValue) = tmp;
-                                 
-                             }
-                             if (cMINUS == ON)
-                             {
-                                 if (!tmp) {
-                                     tmp = 0x23;
-                                 }
-                                 Lo(editValue) = tmp;
-                             }
-                             break;
-                         case OnOFFTimeOffMin:
-                             if(cSELECT == ON )
-                             {
-                                 subMenu = OnOFFTimeOnHr;
-                                 editValue = ee_read(timeEEAddr+1);
-                                 tmp =  Lo(editValue);
-
-                             }
-                             if (cPLUS == ON )
-                             {
-                                 
-                                 if (tmp > 0x59)
-                                 {
-                                     tmp = 0;
-                                 }
-                                 Hi(editValue) = tmp;
-                                 
-                             }
-                             if (cMINUS == ON)
-                             {
-                                 if (!tmp)
-                                 {
-                                     tmp = 0x59;
-                                 }
-                                 Hi(editValue) = tmp;
-                             }
-                             
-                             break;
-                     }
-                     if(cPLUS == ON || cMINUS == ON)
-                     {
-                         loadOnOffTime();
-                     }
-                 }
-                 
-                
-             }
-                 
-              
-             
-          }
-          else
-          {
             waitCount = 500;
-          }
-
-          break;
+            break;
    }
    if(cashedPortD > 0){
      setCursorPosition(subMenu);

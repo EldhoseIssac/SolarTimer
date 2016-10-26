@@ -550,6 +550,7 @@ nrm3232
 nrm4032
 oerr
 oerr_bit
+onofftimedaydisplay
 option_reg
 osccon
 osctune
@@ -885,6 +886,7 @@ t2ckps1
 t2ckps1_bit
 t2con
 timeeeaddr
+tmp
 tmr0
 tmr0ie
 tmr0ie_bit

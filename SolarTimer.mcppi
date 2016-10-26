@@ -30,7 +30,7 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=7
+Count=8
 File0=Enums.h
 File1=SolarTimer.c
 File2=lcd.c
@@ -38,6 +38,7 @@ File3=Deff.h
 File4=rtc.c
 File5=eeprom.c
 File6=Menu.c
+File7=C:\Program Files (x86)\mikroC PRO for PIC\Uses\P16\__Lib_Delays.c
 [EEPROM]
 Count=1
 File0=SolarTimer.ihex
@@ -46,13 +47,13 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=6
+Count=3
 Path0=C:\Program Files (x86)\mikroC PRO for PIC\Defs\
 Path1=C:\Program Files (x86)\mikroC PRO for PIC\Uses\P16\
 Path2=D:\SolarTimer\
 [HEADER_PATH]
-Count=2
-Path1=D:\SolarTimer\
+Count=1
+Path0=D:\SolarTimer\
 [HEADERS]
 Count=2
 File0=Deff.h
