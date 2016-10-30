@@ -215,11 +215,6 @@ void OnOFFTimeDayDisplay(){
      if (cMENU == ON)
              {
 
-                /*if ((crntMenu - OnOFFTimeDay) % 2 == 0 )
-                {
-                   timeEEAddr += 5;
-                }*/
-
                 subMenu = OnOFFTimeOnHr;
                 editValue = ee_read(timeEEAddr+1);
                 loadOnOffTime();

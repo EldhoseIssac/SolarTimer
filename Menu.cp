@@ -288,7 +288,7 @@ void loadEnabledDay();
 void OnOFFTimeDayDisplay(){
  if (cMENU ==  0 )
  {
-#line 223 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+
  subMenu = OnOFFTimeOnHr;
  editValue = ee_read(timeEEAddr+1);
  loadOnOffTime();
