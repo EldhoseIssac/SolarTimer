@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "F:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "f:/progams/hussian/solartimer/enums.h"
 
 
 enum menus {
@@ -107,7 +107,7 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 2 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 2 "F:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -129,8 +129,8 @@ extern unsigned int editValue;
 
 extern unsigned lastReadVoltage,lastReadCurrent;
 char * codetxt_to_ramtxt(const char* ctxt);
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 74 "E:/PROGAMS/hussian/SolarTimer/lcd.c"
+#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
+#line 74 "F:/PROGAMS/hussian/SolarTimer/lcd.c"
 extern sbit isEnabled;
 extern sbit shouldON;
 
