@@ -57,9 +57,9 @@ void main()
       unsigned short index;
       unsigned short tmp;
       lastTimeCheckValue = 0;
-    osccon = 0x71;
-    ansel  = 7;
-    anselh  = 0;
+    //osccon = 0x71;
+    //ansel  = 7;
+    //anselh  = 0;
     trisb = 0;
     trisd = 0;
     ADC_Init();

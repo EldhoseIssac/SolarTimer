@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/adc.c"
-#line 12 "E:/PROGAMS/hussian/SolarTimer/adc.c"
+#line 1 "F:/PROGAMS/hussian/SolarTimer/adc.c"
+#line 12 "F:/PROGAMS/hussian/SolarTimer/adc.c"
 extern unsigned lastReadVoltage,lastReadCurrent;
 void adcInit()
 {

@@ -1,5 +1,5 @@
-#line 1 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
-#line 1 "e:/progams/hussian/solartimer/enums.h"
+#line 1 "F:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 1 "f:/progams/hussian/solartimer/enums.h"
 
 
 enum menus {
@@ -107,8 +107,8 @@ enum TIMERMEM
  TIMERMEMOffHour = 3,
  TIMERMEMOffMin = 4
 };
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 38 "E:/PROGAMS/hussian/SolarTimer/Menu.c"
+#line 1 "c:/program files (x86)/mikroc pro for pic/include/built_in.h"
+#line 38 "F:/PROGAMS/hussian/SolarTimer/Menu.c"
 extern char lcdrow1[];
 extern char lcdrow2[];
 
