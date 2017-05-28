@@ -43,10 +43,13 @@ void interrupt()
 }
 unsigned ee_read(unsigned short addr);
 unsigned int lastTimeCheckValue;
- #define MOTOR PORTC.F0
+ 
 #if DEBUG
 void SOLARmain() {
+    unsigned short PORTC0 = 0;
+    #define MOTOR PORTC0
 #else
+    #define MOTOR PORTC.F0
 void main() 
 {
 
