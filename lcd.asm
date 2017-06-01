@@ -212,17 +212,17 @@ _BCD2Binary:
 	MOVF       R3+1, 0
 	MOVWF      R0+1
 	MOVF       R2+0, 0
-L__BCD2Binary40:
+L__BCD2Binary42:
 	BTFSC      STATUS+0, 2
-	GOTO       L__BCD2Binary41
+	GOTO       L__BCD2Binary43
 	RRF        R0+1, 1
 	RRF        R0+0, 1
 	BCF        R0+1, 7
 	BTFSC      R0+1, 6
 	BSF        R0+1, 7
 	ADDLW      255
-	GOTO       L__BCD2Binary40
-L__BCD2Binary41:
+	GOTO       L__BCD2Binary42
+L__BCD2Binary43:
 	MOVLW      15
 	ANDWF      R0+0, 1
 	MOVLW      0
@@ -611,13 +611,13 @@ _setCursorPosition:
 	MOVLW      0
 	XORWF      R0+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__setCursorPosition47
+	GOTO       L__setCursorPosition49
 	MOVLW      0
 	XORWF      R0+0, 0
-L__setCursorPosition47:
+L__setCursorPosition49:
 	BTFSS      STATUS+0, 2
 	GOTO       L_setCursorPosition12
-L__setCursorPosition31:
+L__setCursorPosition33:
 	MOVLW      128
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
@@ -726,13 +726,13 @@ _loadOnOffTime:
 	MOVF       _subMenu+0, 0
 	XORLW      3
 	BTFSC      STATUS+0, 2
-	GOTO       L__loadOnOffTime32
+	GOTO       L__loadOnOffTime34
 	MOVF       _subMenu+0, 0
 	XORLW      6
 	BTFSC      STATUS+0, 2
-	GOTO       L__loadOnOffTime32
+	GOTO       L__loadOnOffTime34
 	GOTO       L_loadOnOffTime24
-L__loadOnOffTime32:
+L__loadOnOffTime34:
 	MOVLW      1
 	MOVWF      loadOnOffTime_tmp_L0+0
 	MOVLW      0
@@ -799,10 +799,10 @@ _loadEnHeighLow:
 	MOVF       FARG_loadEnHeighLow_heigh+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__loadEnHeighLow51
+	GOTO       L__loadEnHeighLow53
 	MOVF       FARG_loadEnHeighLow_heigh+0, 0
 	SUBLW      0
-L__loadEnHeighLow51:
+L__loadEnHeighLow53:
 	BTFSC      STATUS+0, 0
 	GOTO       L_loadEnHeighLow26
 	MOVF       loadEnHeighLow_indx_L0+0, 0
@@ -976,6 +976,9 @@ L_loadEnHeighLow28:
 	CALL       _Lcd_Out+0
 	GOTO       L_loadEnHeighLow29
 L_loadEnHeighLow26:
+	MOVF       FARG_loadEnHeighLow_shouldUseDecimal+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_loadEnHeighLow30
 	MOVLW      ?lstr_5_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
 	MOVLW      hi_addr(?lstr_5_lcd+0)
@@ -988,6 +991,21 @@ L_loadEnHeighLow26:
 	MOVLW      1
 	MOVWF      FARG_Lcd_Out_column+0
 	CALL       _Lcd_Out+0
+	GOTO       L_loadEnHeighLow31
+L_loadEnHeighLow30:
+	MOVLW      ?lstr_6_lcd+0
+	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
+	MOVLW      hi_addr(?lstr_6_lcd+0)
+	MOVWF      FARG_codetxt_to_ramtxt_ctxt+1
+	CALL       _codetxt_to_ramtxt+0
+	MOVF       R0+0, 0
+	MOVWF      FARG_Lcd_Out_text+0
+	MOVLW      2
+	MOVWF      FARG_Lcd_Out_row+0
+	MOVLW      1
+	MOVWF      FARG_Lcd_Out_column+0
+	CALL       _Lcd_Out+0
+L_loadEnHeighLow31:
 L_loadEnHeighLow29:
 L_end_loadEnHeighLow:
 	RETURN
@@ -1073,9 +1091,9 @@ L_end_loadRamToDisp:
 
 _showWelome:
 
-	MOVLW      ?lstr_6_lcd+0
+	MOVLW      ?lstr_7_lcd+0
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+0
-	MOVLW      hi_addr(?lstr_6_lcd+0)
+	MOVLW      hi_addr(?lstr_7_lcd+0)
 	MOVWF      FARG_codetxt_to_ramtxt_ctxt+1
 	CALL       _codetxt_to_ramtxt+0
 	MOVF       R0+0, 0
@@ -1091,13 +1109,13 @@ _showWelome:
 	MOVWF      R12+0
 	MOVLW      110
 	MOVWF      R13+0
-L_showWelome30:
+L_showWelome32:
 	DECFSZ     R13+0, 1
-	GOTO       L_showWelome30
+	GOTO       L_showWelome32
 	DECFSZ     R12+0, 1
-	GOTO       L_showWelome30
+	GOTO       L_showWelome32
 	DECFSZ     R11+0, 1
-	GOTO       L_showWelome30
+	GOTO       L_showWelome32
 	NOP
 L_end_showWelome:
 	RETURN

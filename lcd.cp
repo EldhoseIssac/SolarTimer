@@ -349,7 +349,13 @@ void loadEnHeighLow(unsigned int heigh,unsigned int low,const unsigned short sho
  lcdrow2[indx] = '\0';
  Lcd_Out(2,1, lcdrow2);
  }else{
- Lcd_Out(2,1, codetxt_to_ramtxt("OFF   0.0  0.0"));
+ if (shouldUseDecimal){
+ Lcd_Out(2,1, codetxt_to_ramtxt("OFF  00.0   00.0"));
+ }else{
+ Lcd_Out(2,1, codetxt_to_ramtxt("OFF  000   000 "));
+
+ }
+
  }
 
 }

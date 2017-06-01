@@ -43,6 +43,7 @@ void interrupt()
 }
 unsigned ee_read(unsigned short addr);
 unsigned int lastTimeCheckValue;
+unsigned int Binary2BCD(int a);
  #define MOTOR PORTC.F0
 #if DEBUG
 void SOLARmain() {
@@ -53,10 +54,12 @@ void main()
 #endif
       unsigned short index;
       unsigned short tmp;
+      unsigned int onVal;
+      unsigned int offVal;
       lastTimeCheckValue = 0;
-    //osccon = 0x71;
-    //ansel  = 7;
-    //anselh  = 0;
+    osccon = 0x71;
+    ansel  = 7;
+    anselh  = 0;
     trisb = 0;
     trisd = 0;
     ADC_Init();
@@ -69,9 +72,9 @@ void main()
     showWelome();
     while(1)
     {
-       readVoltage();
-       readCurrent();
-       checkKey();
+      readVoltage();
+      readCurrent();
+      checkKey();
 
        if(shouldLoadDisp)
        {
@@ -82,30 +85,34 @@ void main()
          shouldLoadDisp = 0;
          for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
          {
-             editValue = EEPROM_Read(index);
+            editValue = EEPROM_Read(index);
              tmp = editValue & (1 << (dday-1));
              if(tmp)
              {
-                 editValue = ee_read(index+1);
+                 onVal = ee_read(index+1);
+                 offVal = ee_read(index+3);
                  if(editValue != lastTimeCheckValue)
                  {
-                     if(Hi(editValue) == hour)
+                     if(Hi(onVal) == minute)
                      {
-                         if(Lo(editValue) == minute)
+                         if(Lo(onVal) == hour)
                          {
-                             lastTimeCheckValue = editValue;
+                             lastTimeCheckValue = onVal;
                               MOTOR = 1;
                          }
                      }
                  }else
                  {
-                     editValue = ee_read(index+3);
-                     if(editValue != lastTimeCheckValue)
+
+                     if(offVal != lastTimeCheckValue)
                      {
-                         if(Hi(editValue) == hour)
+                         if(Hi(offVal) == minute)
                          {
-                              lastTimeCheckValue = editValue;
-                              MOTOR = 0;
+                             if(Lo(offVal) == hour)
+                             {
+                                 lastTimeCheckValue = offVal;
+                                  MOTOR = 0;
+                             }
                          }
                      }
 

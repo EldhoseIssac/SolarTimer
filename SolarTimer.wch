@@ -1,4 +1,8 @@
 <WCH v="2">
-  <item n="_editValue" r="0" s="False" e="False" i="355"/>
-  <item n="main_i_L0" r="0" s="True" e="False" i="354"/>
+  <item n="_editValue" r="1" s="False" e="False" i="335"/>
+  <item n="_dday" r="0" s="False" e="False" i="328"/>
+  <item n="_hour" r="1" s="False" e="False" i="326"/>
+  <item n="_minute" r="1" s="False" e="False" i="325"/>
+  <item n="_lastTimeCheckValue" r="0" s="False" e="False" i="359"/>
+  <item n="PORTC" r="0" s="False" e="False" i="65"/>
 </WCH>

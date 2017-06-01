@@ -17,10 +17,10 @@ _interrupt:
 	MOVF       _dispUpdateCount+1, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L__interrupt17
+	GOTO       L__interrupt18
 	MOVF       _dispUpdateCount+0, 0
 	SUBLW      2
-L__interrupt17:
+L__interrupt18:
 	BTFSC      STATUS+0, 0
 	GOTO       L_interrupt1
 	BSF        _pgmStatus+0, 0
@@ -29,7 +29,7 @@ L__interrupt17:
 L_interrupt1:
 L_interrupt0:
 L_end_interrupt:
-L__interrupt16:
+L__interrupt17:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -83,14 +83,14 @@ L_main5:
 	MOVLW      1
 	MOVWF      R0+0
 	MOVF       R1+0, 0
-L__main19:
+L__main20:
 	BTFSC      STATUS+0, 2
-	GOTO       L__main20
+	GOTO       L__main21
 	RLF        R0+0, 1
 	BCF        R0+0, 0
 	ADDLW      255
-	GOTO       L__main19
-L__main20:
+	GOTO       L__main20
+L__main21:
 	MOVF       _editValue+0, 0
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
@@ -105,18 +105,18 @@ L__main20:
 	MOVF       R0+1, 0
 	XORWF      _lastTimeCheckValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main21
+	GOTO       L__main22
 	MOVF       _lastTimeCheckValue+0, 0
 	XORWF      R0+0, 0
-L__main21:
+L__main22:
 	BTFSC      STATUS+0, 2
 	GOTO       L_main9
 	MOVF       _editValue+1, 0
-	XORWF      _hour+0, 0
+	XORWF      _minute+0, 0
 	BTFSS      STATUS+0, 2
 	GOTO       L_main10
 	MOVF       _editValue+0, 0
-	XORWF      _minute+0, 0
+	XORWF      _hour+0, 0
 	BTFSS      STATUS+0, 2
 	GOTO       L_main11
 	MOVF       _editValue+0, 0
@@ -139,21 +139,26 @@ L_main9:
 	MOVF       R0+1, 0
 	XORWF      _lastTimeCheckValue+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main22
+	GOTO       L__main23
 	MOVF       _lastTimeCheckValue+0, 0
 	XORWF      R0+0, 0
-L__main22:
+L__main23:
 	BTFSC      STATUS+0, 2
 	GOTO       L_main13
 	MOVF       _editValue+1, 0
-	XORWF      _hour+0, 0
+	XORWF      _minute+0, 0
 	BTFSS      STATUS+0, 2
 	GOTO       L_main14
+	MOVF       _editValue+0, 0
+	XORWF      _hour+0, 0
+	BTFSS      STATUS+0, 2
+	GOTO       L_main15
 	MOVF       _editValue+0, 0
 	MOVWF      _lastTimeCheckValue+0
 	MOVF       _editValue+1, 0
 	MOVWF      _lastTimeCheckValue+1
 	BCF        PORTC+0, 0
+L_main15:
 L_main14:
 L_main13:
 L_main12:

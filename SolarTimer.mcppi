@@ -46,13 +46,13 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=6
+Count=3
 Path0=C:\Program Files (x86)\mikroC PRO for PIC\Defs\
 Path1=C:\Program Files (x86)\mikroC PRO for PIC\Uses\P16\
 Path2=F:\PROGAMS\hussian\SolarTimer\
 [HEADER_PATH]
-Count=2
-Path1=F:\PROGAMS\hussian\SolarTimer\
+Count=1
+Path0=F:\PROGAMS\hussian\SolarTimer\
 [HEADERS]
 Count=2
 File0=Deff.h

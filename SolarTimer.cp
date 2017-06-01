@@ -205,6 +205,7 @@ void interrupt()
 }
 unsigned ee_read(unsigned short addr);
 unsigned int lastTimeCheckValue;
+unsigned int Binary2BCD(int a);
 
 
 
@@ -215,10 +216,12 @@ void main()
 
  unsigned short index;
  unsigned short tmp;
+ unsigned int onVal;
+ unsigned int offVal;
  lastTimeCheckValue = 0;
-
-
-
+ osccon = 0x71;
+ ansel = 7;
+ anselh = 0;
  trisb = 0;
  trisd = 0;
  ADC_Init();
@@ -248,26 +251,30 @@ void main()
  tmp = editValue & (1 << (dday-1));
  if(tmp)
  {
- editValue = ee_read(index+1);
+ onVal = ee_read(index+1);
+ offVal = ee_read(index+3);
  if(editValue != lastTimeCheckValue)
  {
- if( ((char *)&editValue)[1]  == hour)
+ if( ((char *)&onVal)[1]  == minute)
  {
- if( ((char *)&editValue)[0]  == minute)
+ if( ((char *)&onVal)[0]  == hour)
  {
- lastTimeCheckValue = editValue;
+ lastTimeCheckValue = onVal;
   PORTC.F0  = 1;
  }
  }
  }else
  {
- editValue = ee_read(index+3);
- if(editValue != lastTimeCheckValue)
+
+ if(offVal != lastTimeCheckValue)
  {
- if( ((char *)&editValue)[1]  == hour)
+ if( ((char *)&offVal)[1]  == minute)
  {
- lastTimeCheckValue = editValue;
+ if( ((char *)&offVal)[0]  == hour)
+ {
+ lastTimeCheckValue = offVal;
   PORTC.F0  = 0;
+ }
  }
  }
 

@@ -150,6 +150,7 @@ void menuPortPinInt(){
                                  ee_write(EEPADDR_VoltageLow,editValue);
                                  break;
                             case VoltageHigh:
+                            case VoltageEnable:
                                  ee_write(EEPADDR_VoltageHigh,editValue);
                                  break;
                       }
@@ -157,6 +158,7 @@ void menuPortPinInt(){
                    case Current:
                         switch(subMenu){
                               case CurrentHeigh:
+                              case CurrentEnable:
                                    ee_write(EEPADDR_CurrentHeigh,editValue);
                                    break;
                               case CurrentLow:
@@ -170,6 +172,7 @@ void menuPortPinInt(){
                                    ee_write(EEPADDR_LDRValLow,editValue);
                                    break;
                               case LDRValHeigh:
+                              case LDRValEnable:
                                    ee_write(EEPADDR_LDRValHeigh,editValue);
                                    break;
                         }
