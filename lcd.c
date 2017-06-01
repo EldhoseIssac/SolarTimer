@@ -317,8 +317,11 @@ void displayVoltageCurrent(){
       Lcd_Out(1, 1, lcdrow1);
       Lcd_Out(2, 1, lcdrow2);
  }
+#ifdef DEBUG
+extern void delay_ms(unsigned int del);
+#endif
  void showWelome()
  {
    Lcd_Out(2,1, codetxt_to_ramtxt("Welcome"));
-   Delay_ms(1000);
+   delay_ms(1000);
  }
