@@ -377,8 +377,9 @@ void displayVoltageCurrent(){
  Lcd_Out(1, 1, lcdrow1);
  Lcd_Out(2, 1, lcdrow2);
  }
+#line 323 "F:/PROGAMS/hussian/SolarTimer/lcd.c"
  void showWelome()
  {
  Lcd_Out(2,1, codetxt_to_ramtxt("Welcome"));
- Delay_ms(1000);
+ delay_ms(1000);
  }

@@ -42,9 +42,13 @@ void interrupt()
  }
 }
 unsigned ee_read(unsigned short addr);
-unsigned int lastTimeCheckValue;
+unsigned char BCD2UpperCh(unsigned char bcd);
+unsigned char BCD2LowerCh(unsigned char bcd);
 unsigned int Binary2BCD(int a);
- #define MOTOR PORTC.F0
+unsigned short mStatus;
+unsigned short onIndex = 0; // an invalid Index
+//#define Simulator 1
+#define MOTOR PORTC.F1
 #if DEBUG
 void SOLARmain() {
 #else
@@ -56,12 +60,13 @@ void main()
       unsigned short tmp;
       unsigned int onVal;
       unsigned int offVal;
-      lastTimeCheckValue = 0;
+      unsigned int minHrVal;
     osccon = 0x71;
     ansel  = 7;
     anselh  = 0;
     trisb = 0;
     trisd = 0;
+    trisc = 0;
     ADC_Init();
     initLCD();
     InitRTC();
@@ -70,53 +75,95 @@ void main()
 
     shouldLoadDisp = 1;
     showWelome();
+    mStatus = 0;
+
     while(1)
     {
+#if !Simulator
       readVoltage();
       readCurrent();
       checkKey();
-
+ #endif
        if(shouldLoadDisp)
        {
+ #if Simulator
+
+ #else
          displayVoltageCurrent();
          loadTimeAndDate();
          displayTimeDate();
          loadRamToDisp();
+ #endif
          shouldLoadDisp = 0;
          for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
          {
+            if (mStatus)
+            {
+               if (index != onIndex)
+               {
+                 continue;
+               }
+            }
             editValue = EEPROM_Read(index);
-             tmp = editValue & (1 << (dday-1));
-             if(tmp)
+            tmp = editValue & (1 << (dday-1));
+
+   #if Simulator
+     hour = 0x21;
+     minute = 0x45;
+            if(1)
+             {
+                 onVal = 0x4021;
+                 offVal = 0x5021;
+   #else
+              if(tmp)
              {
                  onVal = ee_read(index+1);
                  offVal = ee_read(index+3);
-                 if(editValue != lastTimeCheckValue)
+  #endif
+                 editValue = onVal;
+                 Hi(onVal) = Lo(editValue);
+                 Lo(onVal) = Hi(editValue);
+                 
+                 editValue = offVal;
+                 Hi(offVal) = Lo(editValue);
+                 Lo(offVal) = Hi(editValue);
+
+                 Hi(minHrVal) = hour;
+                 Lo(minHrVal) = minute;
+                 
+//                 lcdrow2[0] = BCD2UpperCh(Hi(onVal));
+//                 lcdrow2[1] = BCD2LowerCh(Hi(onVal));
+//                 lcdrow2[2] =  ":";
+//                 lcdrow2[3] = BCD2UpperCh(Lo(onVal));
+//                 lcdrow2[4] = BCD2LowerCh(Lo(onVal));
+//                 lcdrow2[5] =  " " ;
+//                 lcdrow2[6] = BCD2UpperCh(Hi(offVal));
+//                 lcdrow2[7] = BCD2LowerCh(Hi(offVal));
+//                 lcdrow2[8] =  ":" ;
+//                 lcdrow2[9] = BCD2UpperCh(Lo(offVal));
+//                 lcdrow2[10] = BCD2LowerCh(Lo(offVal));
+//                 lcdrow2[11] =  " " ;
+
+                 if (minHrVal >= onVal   && minHrVal < offVal )
                  {
-                     if(Hi(onVal) == minute)
-                     {
-                         if(Lo(onVal) == hour)
-                         {
-                             lastTimeCheckValue = onVal;
-                              MOTOR = 1;
-                         }
-                     }
+//                      lcdrow2[12] =  "O" ;
+//                      lcdrow2[13] =  "N" ;
+//                       lcdrow2[14] = '\0' ;
+                     MOTOR = 1;
+                     mStatus = 1;
+                     onIndex = index;
                  }else
                  {
-
-                     if(offVal != lastTimeCheckValue)
-                     {
-                         if(Hi(offVal) == minute)
-                         {
-                             if(Lo(offVal) == hour)
-                             {
-                                 lastTimeCheckValue = offVal;
-                                  MOTOR = 0;
-                             }
-                         }
-                     }
-
+//                      lcdrow2[12] =  "O" ;
+//                      lcdrow2[13] =  "F" ;
+//                       lcdrow2[14] =  "F" ;
+//                       lcdrow2[15] = '\0' ;
+                      MOTOR = 0;
+                      mStatus = 0;
+                      onIndex = 0;
                  }
+//                 loadRamToDisp();
+
                  
                  
              }

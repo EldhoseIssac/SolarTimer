@@ -33,8 +33,8 @@ void EEPROM_write(unsigned short addr,unsigned int value);
 #endif
 
 
-#define ON  0
-#define OFF 1
+#define ON  1
+#define OFF 0
 extern char lcdrow1[];
 extern char lcdrow2[];
 
@@ -100,7 +100,7 @@ void menuPortPinInt(){
     TRISD.F6 = 1;
     TRISD.F5 = 1;
     TRISD.F4 = 1;
-    TRISC.F0 = 0;
+    TRISC.F1 = 0;
 #endif
     
 }

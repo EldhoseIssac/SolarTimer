@@ -1,8 +1,10 @@
 <WCH v="2">
-  <item n="_editValue" r="1" s="False" e="False" i="335"/>
-  <item n="_dday" r="0" s="False" e="False" i="328"/>
-  <item n="_hour" r="1" s="False" e="False" i="326"/>
-  <item n="_minute" r="1" s="False" e="False" i="325"/>
-  <item n="_lastTimeCheckValue" r="0" s="False" e="False" i="359"/>
-  <item n="PORTC" r="0" s="False" e="False" i="65"/>
+  <item n="_editValue" r="1" s="False" e="False" i="477"/>
+  <item n="_dday" r="0" s="False" e="False" i="472"/>
+  <item n="_hour" r="1" s="False" e="False" i="471"/>
+  <item n="_minute" r="1" s="False" e="False" i="470"/>
+  <item n="PORTC" r="0" s="False" e="False" i="83"/>
+  <item n="main_onVal_L0" r="1" s="False" e="False" i="504"/>
+  <item n="main_offVal_L0" r="1" s="False" e="False" i="505"/>
+  <item n="main_minHrVal_L0" r="1" s="False" e="False" i="506"/>
 </WCH>

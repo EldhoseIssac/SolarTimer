@@ -204,8 +204,12 @@ void interrupt()
  }
 }
 unsigned ee_read(unsigned short addr);
-unsigned int lastTimeCheckValue;
+unsigned char BCD2UpperCh(unsigned char bcd);
+unsigned char BCD2LowerCh(unsigned char bcd);
 unsigned int Binary2BCD(int a);
+unsigned short mStatus;
+unsigned short onIndex = 0;
+
 
 
 
@@ -218,12 +222,13 @@ void main()
  unsigned short tmp;
  unsigned int onVal;
  unsigned int offVal;
- lastTimeCheckValue = 0;
+ unsigned int minHrVal;
  osccon = 0x71;
  ansel = 7;
  anselh = 0;
  trisb = 0;
  trisd = 0;
+ trisc = 0;
  ADC_Init();
  initLCD();
  InitRTC();
@@ -232,53 +237,82 @@ void main()
 
  shouldLoadDisp = 1;
  showWelome();
+ mStatus = 0;
+
  while(1)
  {
+
  readVoltage();
  readCurrent();
  checkKey();
 
  if(shouldLoadDisp)
  {
+
+
+
  displayVoltageCurrent();
  loadTimeAndDate();
  displayTimeDate();
  loadRamToDisp();
+
  shouldLoadDisp = 0;
  for (index = EEPADDR_OnOFFTimeDay1;index<EEPADDR_OnOFFTimeDay9; index+=5)
  {
+ if (mStatus)
+ {
+ if (index != onIndex)
+ {
+ continue;
+ }
+ }
  editValue = EEPROM_Read(index);
  tmp = editValue & (1 << (dday-1));
+
+
+
+
+
+
+
+
+
  if(tmp)
  {
  onVal = ee_read(index+1);
  offVal = ee_read(index+3);
- if(editValue != lastTimeCheckValue)
+
+ editValue = onVal;
+  ((char *)&onVal)[1]  =  ((char *)&editValue)[0] ;
+  ((char *)&onVal)[0]  =  ((char *)&editValue)[1] ;
+
+ editValue = offVal;
+  ((char *)&offVal)[1]  =  ((char *)&editValue)[0] ;
+  ((char *)&offVal)[0]  =  ((char *)&editValue)[1] ;
+
+  ((char *)&minHrVal)[1]  = hour;
+  ((char *)&minHrVal)[0]  = minute;
+#line 147 "F:/PROGAMS/hussian/SolarTimer/SolarTimer.c"
+ if (minHrVal >= onVal && minHrVal < offVal )
  {
- if( ((char *)&onVal)[1]  == minute)
- {
- if( ((char *)&onVal)[0]  == hour)
- {
- lastTimeCheckValue = onVal;
-  PORTC.F0  = 1;
- }
- }
+
+
+
+  PORTC.F1  = 1;
+ mStatus = 1;
+ onIndex = index;
  }else
  {
 
- if(offVal != lastTimeCheckValue)
- {
- if( ((char *)&offVal)[1]  == minute)
- {
- if( ((char *)&offVal)[0]  == hour)
- {
- lastTimeCheckValue = offVal;
-  PORTC.F0  = 0;
- }
- }
+
+
+
+  PORTC.F1  = 0;
+ mStatus = 0;
+ onIndex = 0;
  }
 
- }
+
 
 
  }
